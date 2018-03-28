@@ -1,0 +1,39 @@
+<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+    <mat-card fxFlex="80">
+     <form class="example-form" >
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="100">
+          <span>Name: </span><span class="spn_detailField">{{doctor.FullName}}</span>
+        </div>
+      </div>
+        
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="30">
+          <span>Phone Number: </span><span class="spn_detailField">{{doctor.PhoneNumber | slice:0:3}}-{{doctor.PhoneNumber | slice:3:6}}-{{doctor.PhoneNumber| slice:6:10}}</span>
+        </div>
+      
+        <div class="example-full-width" fxFlex="30">
+          <span>Sec. Phone Number: </span><span class="spn_detailField">{{doctor.SecPhoneNumber | slice:0:3}}-{{doctor.SecPhoneNumber | slice:3:6}}-{{doctor.SecPhoneNumber| slice:6:10}}</span>
+        </div>
+
+        <div class="example-full-width" fxFlex="30">
+          <span>EMail: </span><span class="spn_detailField">{{doctor.EmailAddress}}</span>
+        </div>
+      </div>
+
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="30">
+            <span>Graduated From: </span><span class="spn_detailField">{{doctor.GraduatedFrom}}</span>
+        </div>
+        <div class="example-full-width" fxFlex="70">
+          <span>Address: </span><span class="spn_detailField">{{doctor.Address}}</span>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
+    <button mat-raised-button class="btn_side" (click)="Save()">Save</button>
+    <button mat-raised-button class="btn_side" (click)="goTo('doctors')">Back</button>
+  </mat-card>
+</div>

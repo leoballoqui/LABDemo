@@ -1,0 +1,55 @@
+<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+  <mat-card fxFlex="80">
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource">
+    
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+    
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ID}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fullName">
+          <mat-header-cell *matHeaderCellDef fxFlex="30"> Name </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxFlex="30"> {{element.FullName}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="phone">
+          <mat-header-cell *matHeaderCellDef fxFlex="20"> Phone Number </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxFlex="20"> {{element.PhoneNumber | slice:0:3}}-{{element.PhoneNumber | slice:3:6}}-{{element.PhoneNumber| slice:6:10}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="secphone">
+          <mat-header-cell *matHeaderCellDef fxFlex="20"> Sec Phone Number </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxFlex="20"> {{element.SecPhoneNumber | slice:0:3}}-{{element.SecPhoneNumber | slice:3:6}}-{{element.SecPhoneNumber| slice:6:10}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef fxFlex="25"> EMail </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxFlex="25"> {{element.EmailAddress}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef style="text-align: center" fxFlex="15"> Actions </mat-header-cell>
+          <mat-cell *matCellDef="let element"  style="text-align: center" fxFlex="15"> 
+              <mat-icon (click)="goToAction('doctordetails', element)" matTooltip="Details">description</mat-icon>
+              <mat-icon (click)="goToAction('editdoctor', element)" matTooltip="Edit">edit</mat-icon>
+              <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Delete">delete</mat-icon>
+          </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+    <!-- <div class="alert alert-info" role="alert"><b>Sorry!</b> No contributions were processed for that plan/plans during the selected period.</div> -->
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  </mat-card>
+  
+  <mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
+        <!-- (click)="isDarkTheme = !isDarkTheme" -->
+    <button mat-raised-button class="btn_side" (click)="goTo('newdoctor')">Add New Doctor</button>
+  </mat-card>
+</div>

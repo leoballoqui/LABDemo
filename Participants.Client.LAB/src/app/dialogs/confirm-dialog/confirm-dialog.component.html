@@ -1,0 +1,9 @@
+<div id="confirmDialog" class="dialog">
+    <p>{{ title }}</p>
+    <p>{{ message }}</p>
+
+    <button type="button" mat-raised-button  class="dialog_button"
+        (click)="dialogRef.close(true)">OK</button>
+    <button type="button" mat-raised-button class="dialog_button"
+        (click)="dialogRef.close()">Cancel</button>
+</div>

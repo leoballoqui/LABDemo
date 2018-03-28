@@ -1,0 +1,58 @@
+@import '~@angular/material/theming';
+
+$mat-tawn: (
+    50 : #fff7e0,
+    100 : #ffecb3,
+    200 : #ffe080,
+    300 : #ffd34d,
+    400 : #ffc926,
+    500 : #ffc000,
+    600 : #ffba00,
+    700 : #ffb200,
+    800 : #ffaa00,
+    900 : #ff9c00,
+    A100 : #ffffff,
+    A200 : #fff9f2,
+    A400 : #ffe3bf,
+    A700 : #ffd8a6,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
+@include mat-core();
+$app-color-primary: mat-palette($mat-light-blue);
+$app-color-accent: mat-palette($mat-amber);
+$color-app-warn:    mat-palette($mat-red);
+$app-theme: mat-light-theme($app-color-primary, $app-color-accent, $color-app-warn);
+
+@include angular-material-theme($app-theme);
+
+//To add another secondary theme: https://github.com/angular/material2/blob/master/guides/theming.md
+
+.dark-theme {
+  $dark-primary: mat-palette($mat-indigo);
+  $dark-accent: mat-palette($mat-tawn);//#ffc000;
+
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent);
+
+  @include angular-material-theme($dark-theme);
+}
+
+.btn_side{
+  background-color: #3f51b5;
+}

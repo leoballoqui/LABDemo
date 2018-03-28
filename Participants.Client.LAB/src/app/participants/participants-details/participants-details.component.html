@@ -1,0 +1,44 @@
+<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+    <mat-card fxFlex="80">
+     <form class="example-form" >
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="30">
+          <span>First Name: </span><span class="spn_detailField">{{participant.FirstName}}</span>
+        </div>
+      
+        <div class="example-full-width" fxFlex="30">
+          <span>Last Name: </span><span class="spn_detailField">{{participant.LastName}}</span>
+        </div>
+
+        <div class="example-full-width" fxFlex="30">
+          <span>Date of Birth: </span><span class="spn_detailField">{{participant.DOB | date}}</span>
+        </div>
+      </div>
+        
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="30">
+          <span>Phone Number: </span><span class="spn_detailField">{{participant.PhoneNumber | slice:0:3}}-{{participant.PhoneNumber | slice:3:6}}-{{participant.PhoneNumber| slice:6:10}}</span>
+        </div>
+      
+        <div class="example-full-width" fxFlex="30">
+          <span>Sec. Phone Number: </span><span class="spn_detailField">{{participant.SecPhoneNumber | slice:0:3}}-{{participant.SecPhoneNumber | slice:3:6}}-{{participant.SecPhoneNumber| slice:6:10}}</span>
+        </div>
+
+        <div class="example-full-width" fxFlex="30">
+          <span>EMail: </span><span class="spn_detailField">{{participant.EmailAddress}}</span>
+        </div>
+      </div>
+
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="90">
+          <span>Address: </span><span class="spn_detailField">{{participant.Address}}</span>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+
+  <mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
+    <button mat-raised-button class="btn_side" (click)="Save()">Save</button>
+    <button mat-raised-button class="btn_side" (click)="goTo('participants')">Back</button>
+  </mat-card>
+</div>

@@ -1,0 +1,76 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatIconModule,
+  MatMenuModule,
+  MatRippleModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatListModule,
+  MatInputModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatTableModule,
+  MatDialogModule,
+  MatSnackBarModule,
+  MatTooltipModule,
+  MatProgressBarModule,
+  MatChipsModule,
+  MatDividerModule,
+  MatSelectModule,
+} from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatMenuModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    FlexLayoutModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTableModule,
+    MatDialogModule, 
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatProgressBarModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatSelectModule,
+  ],
+  declarations: [],
+  exports: [
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatMenuModule,
+    MatRippleModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    FlexLayoutModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTableModule,
+    MatDialogModule, 
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatProgressBarModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatSelectModule,
+    //... add others you need
+]
+})
+export class AppCommonModule { }

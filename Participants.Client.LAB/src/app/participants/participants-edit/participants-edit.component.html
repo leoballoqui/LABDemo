@@ -1,0 +1,54 @@
+<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+  <mat-card fxFlex="80">
+   <form class="form_EditParticipant">
+    <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+      <mat-form-field class="example-full-width" >
+        <input matInput name="txt_FirstName" placeholder="First Name" [(ngModel)]="participant.FirstName" required>
+      </mat-form-field>
+    
+      <mat-form-field class="example-full-width">
+        <input matInput name="txt_LastName" placeholder="Last Name" [(ngModel)]="participant.LastName" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="DOB" name="dp_DOB" [(ngModel)]="participant.DOB" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+      
+    <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+      <mat-form-field class="example-full-width" >
+        <input matInput name="txt_Phone" placeholder="Phone Number" [(ngModel)]="participant.PhoneNumber" type="tel" required>
+      </mat-form-field>
+    
+      <mat-form-field class="example-full-width" >
+          <input matInput name="txt_SecondPhone" placeholder="Secondary Phone Number" [(ngModel)]="participant.SecPhoneNumber" type="tel">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <input matInput name="emailFormControl" placeholder="Email" [(ngModel)]="participant.EmailAddress" [formControl]="emailFormControl"
+               [errorStateMatcher]="matcher" required>
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div> 
+
+    <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <mat-form-field class="example-full-width" style="width:100%" >
+          <input matInput placeholder="Address" name="txt_address" [(ngModel)]="participant.Address">
+        </mat-form-field>
+    </div>
+  </form>
+</mat-card>
+
+<mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
+  <button mat-raised-button class="btn_side" (click)="save()">Save</button>
+  <button mat-raised-button class="btn_side" (click)="goTo('participants')">Back</button>
+</mat-card>
+
+</div>
