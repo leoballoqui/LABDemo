@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Participants.API.LAB.ViewModels
 {
-    public class AppointmentVM
+    public class AppointmentsVM
     {
         public string Period { get; set; }
         public int TotalCapacity { get; set; }
@@ -18,7 +18,7 @@ namespace Participants.API.LAB.ViewModels
         }
 
 
-        public AppointmentVM()
+        public AppointmentsVM()
         {
         }
 

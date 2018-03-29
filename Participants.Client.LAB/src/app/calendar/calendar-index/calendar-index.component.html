@@ -2,124 +2,117 @@
   <mat-card fxFlex="80" style="padding:0">
     <div class="content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px" style="padding:0; background-color: #303030">
       <mat-card>
-        <form class="form_EditParticipant">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
-            <div fxFlex="55" style="text-align: left">
-              <button mat-raised-button class="btn_side btn_date" (click)="goToDay(1)">Last Week</button>
-              <mat-form-field class="date_calendar">
-                  <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="changeDates()">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-              <button mat-raised-button class="btn_side btn_date" (click)="goToDay(2)">Next Week</button>
-            </div>
-            <div fxFlex="45">
-              <mat-chip-list style="display:block; margin-top: 13px;">
-                  <mat-chip color="accent" [selectable]="false" selected="false">From: </mat-chip>
-                  <mat-chip color="accent" [selectable]="false" selected="true">{{fromDate | date}}</mat-chip>
-                  <mat-chip color="accent" [selectable]="false" selected="false" style="margin-left: 30px">To: </mat-chip>
-                  <mat-chip color="accent" [selectable]="false" selected="true">{{toDate | date}}</mat-chip>
-                </mat-chip-list>
-            </div>
-          </div>
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
-            <mat-form-field fxFlex="30" color="accent">
-              <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor">
-                  <mat-option [value]="0" selected>All</mat-option>
-                  <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
-                      {{ doctor.FullName }}
-                  </mat-option>
-              </mat-select>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
+          <div fxFlex="55" style="text-align: left">
+            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(1)">Last Week</button>
+            <mat-form-field class="date_calendar" color="accent">
+                <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="changeDates()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(2)">Next Week</button>
           </div>
-        </form>
+          <div fxFlex="45">
+            <mat-chip-list style="display:block; margin-top: 13px;">
+                <mat-chip [selectable]="false" selected="false">From: </mat-chip>
+                <mat-chip [selectable]="false" selected="true" color="accent">{{fromDate | date}}</mat-chip>
+                <mat-chip [selectable]="false" selected="false" style="margin-left: 30px">To: </mat-chip>
+                <mat-chip [selectable]="false" selected="true" color="accent">{{toDate | date}}</mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
+          <mat-form-field fxFlex="30" color="accent">
+            <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="doctorSelected()">
+                <mat-option [value]="0" selected>All</mat-option>
+                <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                    {{ doctor.FullName }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-card>
       <mat-card class="div-week-calendar-container" *ngIf="state=='week'" >
-          
-          <div class="div-TimeSeparator" style="vertical-align: middle" *ngFor="let items of weekData">
+        <div *ngFor="let item of weekData; let i = index">
+          <div class="div-TimeSeparator" style="vertical-align: middle" >
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-              <label fxFlex="25">{{items.Period + items.Percentage}}</label>
-              <mat-progress-bar mode="determinate" [value]="items.Percentage"></mat-progress-bar>
-              <mat-icon (click)="state = 'day'" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
+              <label fxFlex="25">{{item.Period}}</label>
+              <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
+              <mat-icon (click)="selectDay(i)" matTooltip="See Appointments" style="font-size: 2em">date_range</mat-icon>
             </div>
-          </div>
-
-        <!-- <div class="div-TimeSeparator" style="vertical-align: middle">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-            <label fxFlex="25">{{weekData[0].Period}}</label>
-            <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
-            <mat-icon (click)="state = 'day'" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-          </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="div-TimeSeparator" style="vertical-align: middle">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-            <label fxFlex="25">Tuesday. {{days[1] | date}}</label>
-            <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
-            <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-          </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="div-TimeSeparator">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-              <label fxFlex="25">Wednesday. {{days[2] | date}}</label>
-              <mat-progress-bar mode="determinate" value="60"></mat-progress-bar>
-              <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="div-TimeSeparator">
-            <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-                <label fxFlex="25">Thursday. {{days[3] | date}}</label>
-                <mat-progress-bar mode="determinate" value="60"></mat-progress-bar>
-                <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-              </div>
           </div>
           <mat-divider></mat-divider>
-        <div class="div-TimeSeparator">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-              <label fxFlex="25">Friday. {{days[4] | date}}</label>
-              <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
-              <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-            </div>
         </div>
-        <mat-divider></mat-divider>
-        <div class="div-TimeSeparator">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-              <label fxFlex="25">Saturday. {{days[5] | date}}</label>
-              <mat-progress-bar mode="determinate" value="80"></mat-progress-bar>
-              <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-            </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="div-TimeSeparator">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-              <label fxFlex="25">Sunday. {{days[6] | date}}</label>
-              <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
-              <mat-icon (click)="deleteEntry(element.ID)" matTooltip="See Appointments Details" style="font-size: 2em">date_range</mat-icon>
-            </div>
-        </div> -->
-      
-      
-      
       </mat-card>
       <mat-card class="div-week-calendar-container" *ngIf="state=='day'" >
-        <div class="div-TimeSeparator" style="vertical-align: middle">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-            <label fxFlex="20">6:00 am - 7:00 am</label>
-            <mat-progress-bar mode="determinate" value="20"></mat-progress-bar>
-            <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Add Appointment" style="font-size: 2em">event</mat-icon>
+        <div>
+            <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
+              <div fxFlex="45">
+                <mat-icon (click)="changeDates()" matTooltip="Back to week view" style="font-size: 2em">reply</mat-icon>
+              </div>
+              <div fxFlex="55">
+                <mat-chip-list style="display:block;">
+                    <mat-chip [selectable]="true" [selected]="dayTime == 'AM'" color="accent" (click)="dayTime = 'AM'">AM</mat-chip>
+                    <mat-chip [selectable]="true" [selected]="dayTime == 'Noon'" color="accent" (click)="dayTime = 'Noon'">Noon</mat-chip>
+                    <mat-chip [selectable]="true" [selected]="dayTime == 'PM'" color="accent" (click)="dayTime = 'PM'">PM</mat-chip>
+                </mat-chip-list>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+        <div *ngFor="let item of dayData; let i = index" [hidden]="(dayTime == 'AM' && i > 3) || (dayTime == 'Noon' && (i < 4 || i > 7)) || (dayTime == 'PM' && i < 8)">
+          <div class="div-TimeSeparator" style="vertical-align: middle" ng-show="">
+            <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
+              <label fxFlex="20">{{item.Period}}</label>
+              <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
+              <mat-icon (click)="goToAppointment(i)" matTooltip="Add Appointment" style="font-size: 2em">event</mat-icon>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </mat-card>
+      <mat-card class="div-week-calendar-container" *ngIf="state=='newAppointment'" >
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
+          <div fxFlex="20">
+            <mat-icon (click)="goBackToDay()" matTooltip="Back to day view" style="font-size: 2em">reply</mat-icon>
+          </div>
+          <div fxFlex="60" style="text-align: center">
+              <mat-chip [selectable]="true" [selected]="true" style="margin: 0 auto; font-size: 1.05em">{{selectedDate | date:'EEEE, MM/dd/yyyy'}} </mat-chip>
+          </div>
+          <div fxFlex="20">
           </div>
         </div>
         <mat-divider></mat-divider>
-        <div class="div-TimeSeparator" style="vertical-align: middle">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
-            <label fxFlex="20">7:00 am - 8:00 am</label>
-            <mat-progress-bar mode="determinate" value="80"></mat-progress-bar>
-            <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Add Appointment" style="font-size: 2em">event</mat-icon>
-          </div>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
+          <mat-form-field fxFlex="30" color="accent">
+            <mat-select name="ddl_AppDoctor" placeholder="Doctor" [(ngModel)]="selectedAppDoctor">
+                <mat-option [value]="0" selected>Please Select</mat-option>
+                <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                    {{ doctor.FullName }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="30" color="accent">
+            <mat-select name="ddl_AppParticipant" placeholder="Participant" [(ngModel)]="selectedAppParticipant">
+                <mat-option [value]="0" selected>Please Select</mat-option>
+                <mat-option *ngFor="let participant of participants" [value]="participant.ID">
+                    {{ participant.FullName }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="30" color="accent">
+            <mat-select name="ddl_AppTime" placeholder="TimeSlot" [(ngModel)]="selectedSlot">
+                <mat-option [value]="-1" selected>Please Select</mat-option>
+                <mat-option *ngFor="let item of dayData, let i = index" [value]="i">
+                    {{ item.Period }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <mat-divider></mat-divider>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
+          <button mat-raised-button class="btn_side" (click)="addAppointment()">Save</button>
+          <button mat-raised-button class="btn_side" (click)="goTo('participants')">Back</button>
+        </div>
       </mat-card>
     </div>
   </mat-card>

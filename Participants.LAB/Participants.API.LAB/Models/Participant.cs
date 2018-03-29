@@ -17,6 +17,13 @@ namespace Participants.API.LAB.Models
         public string SecPhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public string Address { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
         public List<Appointment> Appointments { get; set; }
     }
 }
