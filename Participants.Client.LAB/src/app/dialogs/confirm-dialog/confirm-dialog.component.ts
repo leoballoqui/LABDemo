@@ -8,7 +8,6 @@ import { MatDialogRef } from '@angular/material';
 })
 export class ConfirmDialogComponent {
 
-
     public title: string;
     public message: string;
 

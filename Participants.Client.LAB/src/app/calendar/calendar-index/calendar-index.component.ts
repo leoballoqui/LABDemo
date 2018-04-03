@@ -17,7 +17,7 @@ export class CalendarIndexComponent implements OnInit {
   private toDate: Date;
   private selectedDoctor: number = 0;
   private doctors : any;
-  private  participants : any;
+  private participants : any;
   private days : Array<Date>;
   private state : string ='week';
   private dayTime : string ='AM';
@@ -193,6 +193,12 @@ export class CalendarIndexComponent implements OnInit {
             duration: 7000,});
         }
     ); 
+  }
+
+  seeAppointments(day: number, slot:number){
+    if(day != -1)
+      this.selectedDate = new Date(this.selectedDate.setDate(this.fromDate.getDate() + day));
+    this.dialogsService.appointments(this.selectedDate, this.doctors, this.participants, slot);
   }
 
   goTo(destination: string){

@@ -71,6 +71,34 @@ namespace Participants.API.LAB.Controllers
             return result;
         }
 
+        [HttpPost]
+        public Object GetAppointmentsDetailsByDay([FromBody]DateTime date)
+        {
+            List<AppointmentDetailsVM> details = new List<AppointmentDetailsVM>();
+            List<string> periods = new List<string>();
+            List<Appointment> apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == date.Date).Include("Doctor").Include("Participant").ToList();
+
+            AppointmentDetailsVM appDetails;
+            foreach (Appointment appointment in apps)
+            {
+                appDetails = new AppointmentDetailsVM();
+                appDetails.AppointmentID = appointment.ID.Value;
+                appDetails.Date = date.Date;
+                appDetails.DoctorID = appointment.DoctorID;
+                appDetails.DoctorName = appointment.Doctor.FullName;
+                appDetails.ParticipantID = appointment.ParticipantID;
+                appDetails.ParticipantName = appointment.Participant.FullName;
+                appDetails.Slot = int.Parse(appointment.Time);
+                appDetails.Period = GetAppointmentSlotByClinic(1, int.Parse(appointment.Time));
+                details.Add(appDetails);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                periods.Add(GetAppointmentSlotByClinic(1, i));
+            }
+            return new {appointments = details, slots = periods};
+        }
+
         // GET: api/Appointments/5
         public string Get(int id)
         {

@@ -1,0 +1,79 @@
+<div id="appointmentsDialog" class="dialog">
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
+        <mat-form-field fxFlex="30">
+          <mat-select name="ddl_DialogAppDoctor" placeholder="Doctor" >
+              <mat-option [value]="0" selected>Please Select</mat-option>
+              <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                  {{ doctor.FullName }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <mat-select name="ddl_DialogAppParticipant" placeholder="Participant" >
+              <mat-option [value]="0" selected>Please Select</mat-option>
+              <mat-option *ngFor="let participant of participants" [value]="participant.ID">
+                  {{ participant.FullName }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <mat-select name="ddl_DialogAppTime" placeholder="Time Slot" >
+              <mat-option [value]="-1" selected>Please Select</mat-option>
+              <mat-option *ngFor="let slot of slots, let i = index" [value]="i">
+                  {{ slot }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-divider></mat-divider>
+
+      <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="allAppointments">
+          
+              <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+          
+             <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.ID}} </mat-cell>
+              </ng-container>
+      
+              <!-- Position Column -->
+              <ng-container matColumnDef="doctor">
+                <mat-header-cell *matHeaderCellDef fxFlex="35"> Doctor </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="35"> {{element.DoctorName}} </mat-cell>
+              </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="participant">
+                <mat-header-cell *matHeaderCellDef fxFlex="35"> Participant </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="35"> {{element.ParticipantName}} </mat-cell>
+              </ng-container>
+          
+              <!-- Weight Column -->
+              <ng-container matColumnDef="time">
+                <mat-header-cell *matHeaderCellDef fxFlex="20"> Time </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Period}} </mat-cell>
+              </ng-container>
+
+      
+             <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef fxFlex="10" style="text-align: center"> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="10" style="text-align: center"> 
+                    <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Delete">delete</mat-icon>
+                </mat-cell>
+              </ng-container>
+          
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+
+    <div style="margin-top: 15px">
+        <button type="button" mat-raised-button  class="dialog_button"
+            (click)="dialogRef.close(true)">OK</button>
+        <button type="button" mat-raised-button class="dialog_button"
+            (click)="dialogRef.close()">Cancel</button>
+    </div>
+
+</div>

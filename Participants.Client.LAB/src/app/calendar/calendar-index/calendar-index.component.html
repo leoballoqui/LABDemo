@@ -38,7 +38,8 @@
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
               <label fxFlex="25">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
-              <mat-icon (click)="selectDay(i)" matTooltip="See Appointments" style="font-size: 2em">date_range</mat-icon>
+              <mat-icon (click)="selectDay(i)" matTooltip="See Day Details" style="font-size: 2em">date_range</mat-icon>
+              <mat-icon (click)="seeAppointments(i, -1)" matTooltip="See Appointments" style="font-size: 2em">assignment_ind</mat-icon>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -47,14 +48,15 @@
       <mat-card class="div-week-calendar-container" *ngIf="state=='day'" >
         <div>
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
-              <div fxFlex="45">
+              <div fxFlex="20">
                 <mat-icon (click)="changeDates()" matTooltip="Back to week view" style="font-size: 2em">reply</mat-icon>
               </div>
-              <div fxFlex="55">
-                <mat-chip-list style="display:block;">
-                    <mat-chip [selectable]="true" [selected]="dayTime == 'AM'" color="accent" (click)="dayTime = 'AM'">AM</mat-chip>
-                    <mat-chip [selectable]="true" [selected]="dayTime == 'Noon'" color="accent" (click)="dayTime = 'Noon'">Noon</mat-chip>
-                    <mat-chip [selectable]="true" [selected]="dayTime == 'PM'" color="accent" (click)="dayTime = 'PM'">PM</mat-chip>
+              <div fxFlex="80">
+                <mat-chip [selectable]="true" selected="true" style="margin-right:70px;  font-size: 1.05em">{{selectedDate | date:'EEEE, MM/dd/yyyy'}} </mat-chip>
+                <mat-chip-list style="display:inline-block;">
+                  <mat-chip [selectable]="true" [selected]="dayTime == 'AM'" color="accent" (click)="dayTime = 'AM'">AM</mat-chip>
+                  <mat-chip [selectable]="true" [selected]="dayTime == 'Noon'" color="accent" (click)="dayTime = 'Noon'">Noon</mat-chip>
+                  <mat-chip [selectable]="true" [selected]="dayTime == 'PM'" color="accent" (click)="dayTime = 'PM'">PM</mat-chip>
                 </mat-chip-list>
               </div>
             </div>
@@ -66,6 +68,7 @@
               <label fxFlex="20">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
               <mat-icon (click)="goToAppointment(i)" matTooltip="Add Appointment" style="font-size: 2em">event</mat-icon>
+              <mat-icon (click)="seeAppointments(-1, i)" matTooltip="See Appointments" style="font-size: 2em">assignment_ind</mat-icon>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -101,7 +104,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="30" color="accent">
-            <mat-select name="ddl_AppTime" placeholder="TimeSlot" [(ngModel)]="selectedSlot">
+            <mat-select name="ddl_AppTime" placeholder="Time Slot" [(ngModel)]="selectedSlot">
                 <mat-option [value]="-1" selected>Please Select</mat-option>
                 <mat-option *ngFor="let item of dayData, let i = index" [value]="i">
                     {{ item.Period }}
@@ -111,13 +114,13 @@
         </div>
         <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
           <button mat-raised-button class="btn_side" (click)="addAppointment()">Save</button>
-          <button mat-raised-button class="btn_side" (click)="goTo('participants')">Back</button>
+          <button mat-raised-button class="btn_side" (click)="goBackToDay()">Cancel</button>
         </div>
       </mat-card>
     </div>
   </mat-card>
   
   <mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
-    <button mat-raised-button class="btn_side" (click)="goTo('newparticipant')">Add New Appointment</button>
+    <button mat-raised-button class="btn_side" (click)="goToAppointment(0)">Add New Appointment</button>
   </mat-card>
 </div>

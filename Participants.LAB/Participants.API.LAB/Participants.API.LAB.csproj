@@ -254,6 +254,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AppointmentDetailsVM.cs" />
     <Compile Include="ViewModels\AppointmentsVM.cs" />
     <Compile Include="ViewModels\CalendarVM.cs" />
   </ItemGroup>
