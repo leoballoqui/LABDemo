@@ -1,6 +1,6 @@
 <div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
   <mat-card fxFlex="80">
-    <div class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z8" *ngIf="!loading">
       <mat-table #table [dataSource]="dataSource">
     
         <!--- Note that these columns can be defined in any order.

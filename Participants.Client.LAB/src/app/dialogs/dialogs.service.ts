@@ -10,23 +10,22 @@ export class DialogsService {
     constructor(private dialog: MatDialog) { }
 
     public confirm(title: string, message: string): Observable<boolean> {
-
         let dialogRef: MatDialogRef<ConfirmDialogComponent>;
         dialogRef = this.dialog.open(ConfirmDialogComponent);
-
         dialogRef.componentInstance.title = title;
         dialogRef.componentInstance.message = message;
 
         return dialogRef.afterClosed();
     }
 
-    public appointments(selectedDate:Date, doctors: any, participants: any, slot: any): Observable<boolean> {
+    public appointments(selectedDate:Date, doctors: any, participants: any, slot: any, selectedDoctor: any): Observable<boolean> {
         let dialogRef: MatDialogRef<AppointmentsDialogComponent>;
         dialogRef = this.dialog.open(AppointmentsDialogComponent);
         dialogRef.componentInstance.selectedDate = selectedDate;
         dialogRef.componentInstance.doctors = doctors;
         dialogRef.componentInstance.participants = participants;
-        dialogRef.componentInstance.slot = slot;
+        dialogRef.componentInstance.selectedSlot = slot;
+        dialogRef.componentInstance.selectedDoctor = selectedDoctor;
 
         return dialogRef.afterClosed();
     }

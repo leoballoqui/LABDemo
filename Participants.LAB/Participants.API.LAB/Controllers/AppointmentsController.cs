@@ -55,9 +55,9 @@ namespace Participants.API.LAB.Controllers
 
             List<Appointment> apps = null;
             if (selection.DoctorID == 0)
-                apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == selection.Date.Date).ToList();
+                apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == selection.Date.Date && a.Status != (int)AppointmentStatus.Canceled).ToList();
             else
-                apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == selection.Date.Date && a.DoctorID == selection.DoctorID).ToList();
+                apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == selection.Date.Date && a.DoctorID == selection.DoctorID && a.Status != (int)AppointmentStatus.Canceled).ToList();
 
             AppointmentsVM app;
             for (int i = 0; i < 12; i++)
@@ -65,7 +65,7 @@ namespace Participants.API.LAB.Controllers
                 app = new AppointmentsVM();
                 app.Period = GetAppointmentSlotByClinic(1, i);
                 app.TotalCapacity = slotTotalCapacity;
-                app.Appointments = apps.Where(a => a.Time == i.ToString()).Count();
+                app.Appointments = apps.Where(a => a.TimeSlot == i).Count();
                 result.Add(app);
             }
             return result;
@@ -88,15 +88,17 @@ namespace Participants.API.LAB.Controllers
                 appDetails.DoctorName = appointment.Doctor.FullName;
                 appDetails.ParticipantID = appointment.ParticipantID;
                 appDetails.ParticipantName = appointment.Participant.FullName;
-                appDetails.Slot = int.Parse(appointment.Time);
-                appDetails.Period = GetAppointmentSlotByClinic(1, int.Parse(appointment.Time));
+                appDetails.Slot = appointment.TimeSlot;
+                appDetails.Period = GetAppointmentSlotByClinic(1, appointment.TimeSlot);
+                appDetails.Status = appointment.Status;
+                appDetails.StatusName = GetAppointmentStatusName(appointment.Status);
                 details.Add(appDetails);
             }
             for (int i = 0; i < 12; i++)
             {
                 periods.Add(GetAppointmentSlotByClinic(1, i));
             }
-            return new {appointments = details, slots = periods};
+            return new {appointments = details.OrderBy(d => d.Slot), slots = periods};
         }
 
         // GET: api/Appointments/5
@@ -112,7 +114,8 @@ namespace Participants.API.LAB.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            appointment.Status = (int)AppointmentStatus.Created;
+            appointment.Date = appointment.Date.Date;
             db.Appointments.Add(appointment);
             db.SaveChanges();
 
@@ -137,22 +140,49 @@ namespace Participants.API.LAB.Controllers
             Appointment a = new Appointment();
             a.ParticipantID = 1;
             a.DoctorID = 1;
-            a.Date = DateTime.Today;
-            a.Time = "1";
+            a.Date = DateTime.Today.Date;
+            a.TimeSlot = 1;
+            a.Status = (int)AppointmentStatus.Created;
             db.Appointments.Add(a);
 
             a = new Appointment();
             a.ParticipantID = 2;
             a.DoctorID = 1;
-            a.Date = DateTime.Today;
-            a.Time = "1";
+            a.Date = DateTime.Today.Date;
+            a.TimeSlot = 1;
+            a.Status = (int)AppointmentStatus.Created;
             db.Appointments.Add(a);
 
             a = new Appointment();
             a.ParticipantID = 3;
             a.DoctorID = 2;
-            a.Date = DateTime.Today.AddDays(1);
-            a.Time = "2";
+            a.Date = DateTime.Today.AddDays(1).Date;
+            a.TimeSlot = 2;
+            a.Status = (int)AppointmentStatus.Created;
+            db.Appointments.Add(a);
+
+            a = new Appointment();
+            a.ParticipantID = 3;
+            a.DoctorID = 1;
+            a.Date = DateTime.Today.Date;
+            a.TimeSlot = 3;
+            a.Status = (int)AppointmentStatus.Created;
+            db.Appointments.Add(a);
+
+            a = new Appointment();
+            a.ParticipantID = 2;
+            a.DoctorID = 1;
+            a.Date = DateTime.Today.Date;
+            a.TimeSlot = 4;
+            a.Status = (int)AppointmentStatus.Created;
+            db.Appointments.Add(a);
+
+            a = new Appointment();
+            a.ParticipantID = 1;
+            a.DoctorID = 2;
+            a.Date = DateTime.Today.AddDays(1).Date;
+            a.TimeSlot = 5;
+            a.Status = (int)AppointmentStatus.Created;
             db.Appointments.Add(a);
 
             db.SaveChanges();
@@ -160,7 +190,7 @@ namespace Participants.API.LAB.Controllers
 
         private string GetAppointmentSlotByClinic(int clinicID, int slot)
         {
-            //Leo - 03/28/2108: At some point we will need to implement something to make this dynamic
+            //Leo - 03/28/2018: At some point we will need to implement something to make this dynamic
             switch (slot)
             {
                 case 0:
@@ -187,6 +217,28 @@ namespace Participants.API.LAB.Controllers
                     return "4:00 pm - 5:00 pm";
                 case 11:
                     return "5:00 pm - 6:00 pm";
+                default:
+                    return "";
+            }
+        }
+
+        private string GetAppointmentStatusName(int status)
+        {
+            //Leo - 04/04/2018: At some point we will need to implement something to make this dynamic
+            switch (status)
+            {
+                case 1:
+                    return "Created";
+                case 2:
+                    return "Notified";
+                case 3:
+                    return "Confirmed";
+                case 4:
+                    return "Completed";
+                case 5:
+                    return "Missed";
+                case 6:
+                    return "Canceled";
                 default:
                     return "";
             }

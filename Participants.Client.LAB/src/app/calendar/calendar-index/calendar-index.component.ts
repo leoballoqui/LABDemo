@@ -198,7 +198,7 @@ export class CalendarIndexComponent implements OnInit {
   seeAppointments(day: number, slot:number){
     if(day != -1)
       this.selectedDate = new Date(this.selectedDate.setDate(this.fromDate.getDate() + day));
-    this.dialogsService.appointments(this.selectedDate, this.doctors, this.participants, slot);
+    this.dialogsService.appointments(this.selectedDate, this.doctors, this.participants, slot, this.selectedDoctor);
   }
 
   goTo(destination: string){

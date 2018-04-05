@@ -14,8 +14,18 @@ namespace Participants.API.LAB.Models
         public int ParticipantID { get; set; }
         public int DoctorID { get; set; }
         public DateTime Date { get; set; }
-        public string Time { get; set; }
+        public int TimeSlot { get; set; }
+        public int Status { get; set; }
         public virtual Participant Participant { get; set; }
         public virtual Doctor Doctor { get; set; }
     }
+
+    enum AppointmentStatus {
+        Created = 1,
+        Notified = 2,
+        Confirmed = 3,
+        Completed = 4,
+        Missed = 5,
+        Canceled = 6
+    };
 }

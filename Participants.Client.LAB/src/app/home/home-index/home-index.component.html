@@ -1,5 +1,92 @@
-<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
-  <div class="div_logoContainer"> 
-    <img src="../../../assets/logo.png" >
-  </div>
+<div class="content div_content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+  <mat-card>
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
+      <div fxFlex="50" style="text-align: left">
+        <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 20px">Last Day</button>
+        <mat-form-field class="date_calendar" color="accent">
+            <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getAppointments()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-raised-button class="btn_side btn_date" (click)="goToNextDay()" style="margin-left: 20px">Next Day</button>
+      </div>
+      <div fxFlex="25">
+        <mat-form-field color="accent">
+          <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filertAppointments()">
+              <mat-option [value]="0" selected>All</mat-option>
+              <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                  {{ doctor.FullName }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+          <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filertAppointments()">
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+  <mat-card class="div-week-calendar-container">
+      <div class="example-container mat-elevation-z8" *ngIf="!loading">
+          <mat-table #table [dataSource]="appointments">
+          
+              <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.ID}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="doctor">
+              <mat-header-cell *matHeaderCellDef fxFlex="19"> Doctor </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="19"> {{element.DoctorName}} </mat-cell>
+              </ng-container>
+          
+              <ng-container matColumnDef="participant">
+              <mat-header-cell *matHeaderCellDef fxFlex="23"> Participant </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="23"> {{element.ParticipantName}} </mat-cell>
+              </ng-container>
+          
+              <ng-container matColumnDef="time">
+              <mat-header-cell *matHeaderCellDef fxFlex="18"> Time </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="18"> {{element.Period}} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef fxFlex="10"> Status </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="10" class="status_{{element.StatusName}}"> {{element.StatusName}} </mat-cell>
+              </ng-container>
+      
+              <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef style="text-align: center"> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let element" class="div_actionsContainer" style="text-align: center">
+                  <button (click)="notify(element, 'sms')" matTooltip="Notify participant via sms" mat-icon-button>
+                      <mat-icon>chat</mat-icon>
+                  </button>
+                  <button (click)="notify(element, 'EMail')" matTooltip="Notify participant via EMail" mat-icon-button>
+                      <mat-icon>mail</mat-icon>
+                  </button>
+                  <button (click)="confirm(element)" matTooltip="Appointment confirmed" mat-icon-button [disabled]="element.Status >= 3" >
+                      <mat-icon>done</mat-icon>
+                  </button>
+                  <button (click)="complete(element)" matTooltip="Appointment completed" mat-icon-button [disabled]="element.Status >= 4" >
+                      <mat-icon>done_all</mat-icon>
+                  </button>
+                  <button (click)="miss(element)" matTooltip="Appointment missed" mat-icon-button [disabled]="element.Status >= 5" >
+                      <mat-icon>report_problem</mat-icon>
+                  </button>
+                  <button (click)="cancel(element)" matTooltip="Appointment missed" mat-icon-button [disabled]="element.Status >= 6" >
+                      <mat-icon>delete</mat-icon>
+                  </button>
+                  <button (click)="reset(element)" matTooltip="Reset status" mat-icon-button [disabled]="element.Status <= 2" >
+                      <mat-icon>replay</mat-icon>
+                  </button>
+              </mat-cell>
+              </ng-container>
+          
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+      </div>
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  </mat-card>
 </div>

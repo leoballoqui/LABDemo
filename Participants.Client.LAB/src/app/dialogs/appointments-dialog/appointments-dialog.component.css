@@ -1,1 +1,26 @@
 
+.div_actionsContainer button{
+    width: 30px;
+    height: 30px;
+}
+
+.div_actionsContainer button mat-icon{
+    vertical-align: text-bottom;
+    margin:0;
+}
+
+.status_Canceled{
+    color: brown;
+}
+
+.status_Missed{
+    color: #FFC000;
+}
+
+.status_Completed{
+    color:#03a9f4;
+}
+
+.status_Confirmed{
+    color:#3F51B5;
+}

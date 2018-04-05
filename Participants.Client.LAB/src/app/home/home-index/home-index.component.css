@@ -1,6 +1,22 @@
-.div_logoContainer{
-    width: 100%; 
-    height: 100%; 
-    text-align: center; 
-    padding: 100px;
+.div_content{
+    padding:0; 
+    background-color: #303030; 
+    margin: 12px;
+}
+
+.status_Canceled{
+    color: #ff8800;
+    font-size: 1.05em;
+}
+
+.status_Missed{
+    color: #FFC000;
+}
+
+.status_Completed{
+    color:#03a9f4;
+}
+
+.status_Confirmed{
+    color:#23C35D;
 }
