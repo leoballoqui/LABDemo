@@ -20,3 +20,11 @@
 .status_Confirmed{
     color:#23C35D;
 }
+
+.mat-table .mat-column-participant{
+    cursor: pointer;
+}
+
+.mat-tooltip{
+    font-size: 18px !important;
+}

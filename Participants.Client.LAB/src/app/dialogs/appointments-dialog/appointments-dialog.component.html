@@ -46,7 +46,7 @@
         
             <ng-container matColumnDef="participant">
             <mat-header-cell *matHeaderCellDef fxFlex="23"> Participant </mat-header-cell>
-            <mat-cell *matCellDef="let element" fxFlex="23"> {{element.ParticipantName}} </mat-cell>
+            <mat-cell *matCellDef="let element" fxFlex="23" [matTooltip]="element.ParticipantContactInfo" style="cursor: pointer"> {{element.ParticipantName}} </mat-cell>
             </ng-container>
         
             <ng-container matColumnDef="time">

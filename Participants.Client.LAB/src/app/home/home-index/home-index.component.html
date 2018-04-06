@@ -29,7 +29,7 @@
   </mat-card>
   <mat-card class="div-week-calendar-container">
       <div class="example-container mat-elevation-z8" *ngIf="!loading">
-          <mat-table #table [dataSource]="appointments">
+          <mat-table #table [dataSource]="appointments" *ngIf="appointments.length > 0">
           
               <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -42,18 +42,22 @@
               </ng-container>
           
               <ng-container matColumnDef="participant">
-              <mat-header-cell *matHeaderCellDef fxFlex="23"> Participant </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="23"> {{element.ParticipantName}} </mat-cell>
+                <mat-header-cell *matHeaderCellDef fxFlex="28"> Participant </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="28"  [matTooltip]="element.ParticipantContactInfo"> 
+                  <span *ngIf="!element.info">{{element.ParticipantName}}</span>
+                  <span *ngIf="element.info">{{element.ParticipantContactInfo}}</span>
+                  <mat-icon (click)="element.info = !element.info" style="vertical-align: middle">contact_phone</mat-icon>
+                </mat-cell>
               </ng-container>
           
               <ng-container matColumnDef="time">
-              <mat-header-cell *matHeaderCellDef fxFlex="18"> Time </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="18"> {{element.Period}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="15"> Time </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.Period}} </mat-cell>
               </ng-container>
   
               <ng-container matColumnDef="status">
-              <mat-header-cell *matHeaderCellDef fxFlex="10"> Status </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="10" class="status_{{element.StatusName}}"> {{element.StatusName}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="7"> Status </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="7" class="status_{{element.StatusName}}"> {{element.StatusName}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="actions">
@@ -86,6 +90,7 @@
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
+          <div class="alert alert-info" role="alert" *ngIf="appointments.length == 0"><b>Sorry!</b> No contributions were processed for that plan/plans during the selected period.</div>
       </div>
       <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </mat-card>

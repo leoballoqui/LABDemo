@@ -8,6 +8,7 @@ using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -88,6 +89,7 @@ namespace Participants.API.LAB.Controllers
                 appDetails.DoctorName = appointment.Doctor.FullName;
                 appDetails.ParticipantID = appointment.ParticipantID;
                 appDetails.ParticipantName = appointment.Participant.FullName;
+                appDetails.ParticipantContactInfo = GetContactInfo(appointment.Participant);
                 appDetails.Slot = appointment.TimeSlot;
                 appDetails.Period = GetAppointmentSlotByClinic(1, appointment.TimeSlot);
                 appDetails.Status = appointment.Status;
@@ -242,6 +244,28 @@ namespace Participants.API.LAB.Controllers
                 default:
                     return "";
             }
+        }
+
+        private string GetContactInfo(Participant participant)
+        {
+            string contactInfo = "";
+            string phone = participant.PhoneNumber.Trim();
+            if(String.IsNullOrEmpty(phone))
+                phone = participant.SecPhoneNumber.Trim();
+
+            if (!String.IsNullOrEmpty(phone))
+                phone = Regex.Replace(phone, @"(\d{3})(\d{3})(\d{4})", "$1-$2-$3");
+            else
+                phone = "No Phone Number";
+
+            contactInfo = phone;
+            string email = participant.EmailAddress.Trim();
+            if (!String.IsNullOrEmpty(email))
+                contactInfo += ", " + email;
+            else
+                contactInfo += ", " + "No Email address";
+
+            return contactInfo;
         }
     }
 }

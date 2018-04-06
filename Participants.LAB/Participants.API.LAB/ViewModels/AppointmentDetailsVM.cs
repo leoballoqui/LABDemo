@@ -18,6 +18,7 @@ namespace Participants.API.LAB.ViewModels
         public int ParticipantID { get; set; }
         public string DoctorName { get; set; }
         public string ParticipantName { get; set; }
+        public string ParticipantContactInfo { get; set; }
 
         public AppointmentDetailsVM()
         {
