@@ -55,7 +55,9 @@ export class ParticipantsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    this.http.get('http://localhost:23049/api/Participants/GetParticipants')
+    //this.http.get('http://localhost:23049/api/Participants/GetParticipants')
+    this.http.get('/LABDemoAPI/api/Participants/GetParticipants')
+    
     .subscribe(
         data => {
           this.dataSource = data.json();

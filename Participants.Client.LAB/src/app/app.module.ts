@@ -15,6 +15,8 @@ import { DoctorsModule } from './doctors/doctors.module';
 import { DoctorsRoutingModule } from './doctors/doctors-routing.module';
 import { CalendarModule } from './calendar/calendar.module';
 import { CalendarRoutingModule } from './calendar/calendar-routing.module';
+import { LoginModule } from './login/login.module';
+import { LoginRoutingModule } from './login/login-routing.module';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ParticipantsService } from './participants/participants.service';
@@ -38,11 +40,13 @@ import { DoctorsService  } from './doctors/doctors.service';
     DoctorsRoutingModule,
     CalendarModule,
     CalendarRoutingModule,
+    LoginModule,
+    LoginRoutingModule,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([{
-      path: '', redirectTo: '/home', pathMatch: 'full'
+      path: '', redirectTo: '/login', pathMatch: 'full'
     }])
   ],
   providers: [AppToolbarService, ParticipantsService, CalendarService, DoctorsService],

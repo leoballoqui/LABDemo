@@ -1,0 +1,43 @@
+<div class="content div_content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+  <mat-card *ngIf="isLogging">
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+            <input matInput name="txt_participant" placeholder="Email" [(ngModel)]="userID">
+          </mat-form-field>
+      </div>
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+          <input matInput name="txt_participant" placeholder="Password" [(ngModel)]="password" type="password">
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" style="text-align: left">
+        <button mat-raised-button class="btn_side btn_date" (click)="login()" style="margin-right: 20px">Login</button>
+        <button mat-raised-button class="btn_side btn_date" (click)="isLogging = false" style="margin-left: 20px">Register</button>
+      </div>
+    </div>
+  </mat-card>
+  <mat-card *ngIf="!isLogging">
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+            <input matInput name="txt_participant" placeholder="Email" [(ngModel)]="userID">
+          </mat-form-field>
+      </div>
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+          <input matInput name="txt_participant" placeholder="Password" [(ngModel)]="password" type="password">
+        </mat-form-field>
+      </div>
+      <div fxFlex="25">
+        <mat-form-field class="example-full-width" color="accent">
+          <input matInput name="txt_participant" placeholder="Confirm Password" [(ngModel)]="confirmPassword" type="password">
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" style="text-align: left">
+        <button mat-raised-button class="btn_side btn_date" (click)="register()" style="margin-right: 20px">Register</button>
+        <button mat-raised-button class="btn_side btn_date" (click)="isLogging = true" style="margin-left: 20px">Login</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
