@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ParticipantsService } from './participants/participants.service';
 import { CalendarService } from './calendar/calendar.service';
 import { DoctorsService  } from './doctors/doctors.service';
+import { LoginService  } from './login/login.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,7 @@ import { DoctorsService  } from './doctors/doctors.service';
       path: '', redirectTo: '/login', pathMatch: 'full'
     }])
   ],
-  providers: [AppToolbarService, ParticipantsService, CalendarService, DoctorsService],
+  providers: [AppToolbarService, ParticipantsService, CalendarService, DoctorsService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

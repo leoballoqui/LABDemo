@@ -36,7 +36,9 @@ export class ParticipantsIndexComponent implements OnInit {
       {
         if(res == true)
         {
+          //let link = '/LABDemoAPI/api/Participants/DeleteParticipant';
           let link = 'http://localhost:23049/api/Participants/DeleteParticipant';
+          
           let headers = new Headers({ 'Content-Type': 'application/json' });
           let options = new RequestOptions({ headers: headers });
 
@@ -55,8 +57,8 @@ export class ParticipantsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    //this.http.get('http://localhost:23049/api/Participants/GetParticipants')
-    this.http.get('/LABDemoAPI/api/Participants/GetParticipants')
+    this.http.get('http://localhost:23049/api/Participants/GetParticipants')
+    //this.http.get('/LABDemoAPI/api/Participants/GetParticipants')
     
     .subscribe(
         data => {
@@ -74,11 +76,7 @@ export class ParticipantsIndexComponent implements OnInit {
     this.router.navigate(['/' + destination]);
   }
 
-  goToAction(destination: string, /*id: string = ''*/iteme:any){
-    /*this.dataSource.forEach(m => {
-      if(m.ID == id)
-        item = m;
-    });*/
+  goToAction(destination: string, iteme:any){
     this.participantsService.setSelected(iteme);
     this.goTo(destination);
   }

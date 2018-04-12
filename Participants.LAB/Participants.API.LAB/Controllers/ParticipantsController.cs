@@ -20,8 +20,17 @@ namespace Participants.API.LAB.Controllers
         // GET: api/Participants
         public IQueryable<Participant> GetParticipants()
         {
-            FillDB();
-            return db.Participants;
+            try
+            {
+                FillDB();
+                return db.Participants;
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
         }
 
         // GET: api/Participants/5

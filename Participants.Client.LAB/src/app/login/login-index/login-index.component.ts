@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import {LoginService} from '../login.service';
 
 @Component({
   selector: 'app-login-index',
@@ -11,13 +12,16 @@ import {MatSnackBar} from '@angular/material';
 export class LoginIndexComponent implements OnInit {
 
   private isLogging:boolean = true;
-  private userID:string = 'leoballoqui@leo.com';
-  private password:string = 'Sponsor123!';
-  private confirmPassword:string;
+  private userID:string = 'leo@leo.com';
+  private password:string = 'Password1!';
+  private confirmPassword:string = 'Password1!';
+  private loginService:LoginService;
 
   constructor(    
     private http: Http,
-    public snackBar: MatSnackBar,) { 
+    public snackBar: MatSnackBar,
+    @Inject(LoginService)pService:LoginService) { 
+      this.loginService = pService;
   }
 
   ngOnInit() {
@@ -26,17 +30,7 @@ export class LoginIndexComponent implements OnInit {
   }
 
   register(){
-    let link = 'http://localhost:23049/api/Account/Register';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-    let data = JSON.stringify(
-    {
-      Email: this.userID,
-      Password: this.password,
-      ConfirmPassword: this.confirmPassword,
-    });
-
-    this.http.post(link, data, options)
+    /*this.loginService.register(this.userID, this.password, this.confirmPassword)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The user was successfully created.", {
@@ -46,20 +40,19 @@ export class LoginIndexComponent implements OnInit {
           this.snackBar.open("Error!", "Sorry, an error ocurred while creating the user.", {
             duration: 7000,});
         }
-    ); 
+    ); */
+    this.loginService.register2(this.userID, this.password, this.confirmPassword);
   }
 
   login(){
-    let link = 'http://localhost:23049/Token';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    //let link = '/LABDemoAPI/Token';
+    let link =  'http://localhost:23049/Token'
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     let options = new RequestOptions({ headers: headers });
-    let data = JSON.stringify(
-    {
-      grant_type: 'password',
-      client_id: 'web',
-      username: this.userID,
-      password: this.password
-    });
+    let data = "userName=" + encodeURIComponent(this.userID) +
+               "&password=" + encodeURIComponent(this.password) +
+               "&grant_type=password"
+               "&client_id=web";
 
     this.http.post(link, data, options)
     .subscribe(
@@ -68,7 +61,7 @@ export class LoginIndexComponent implements OnInit {
             duration: 7000,});
         },
         err => {
-          alert(err.json())
+          alert(err.access_token)
           this.snackBar.open("Error!", "Sorry, an error ocurred while creating the user.", {
             duration: 7000,});
         }
