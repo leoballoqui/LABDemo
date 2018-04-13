@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
+import {CommonService} from '../../common/common.service';
 import {DoctorsService} from '../doctors.service';
 
 @Component({
@@ -13,7 +14,7 @@ import {DoctorsService} from '../doctors.service';
 export class DoctorsIndexComponent implements OnInit {
   private displayedColumns = ['fullName', 'phone', 'secphone', 'email', 'actions'];
   private dataSource = null;
-  private doctorsService:DoctorsService;
+  private commonrService:CommonService;
   private loading = false;
 
   constructor(
@@ -21,8 +22,8 @@ export class DoctorsIndexComponent implements OnInit {
     private http: Http,
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(DoctorsService)doctorService:DoctorsService) { 
-      this.doctorsService = doctorService;
+    @Inject(CommonService)commonService:CommonService) { 
+      this.commonrService = commonService;
   }
 
   ngOnInit() {
@@ -72,8 +73,8 @@ export class DoctorsIndexComponent implements OnInit {
     this.router.navigate(['/' + destination]);
   }
 
-  goToAction(destination: string, iteme:any){
-    this.doctorsService.setSelected(iteme);
+  goToAction(destination: string, doctor:any){
+    this.commonrService.setSelectedDoctor(doctor);
     this.goTo(destination);
   }
 }

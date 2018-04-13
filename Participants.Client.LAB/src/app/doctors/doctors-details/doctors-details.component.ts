@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
+import {CommonService} from '../../common/common.service';
 import {DoctorsService} from '../doctors.service';
 
 @Component({
@@ -11,17 +12,17 @@ import {DoctorsService} from '../doctors.service';
 export class DoctorsDetailsComponent implements OnInit {
 
   private doctor : any;
-  private doctorsService:DoctorsService;
+  private commonService:CommonService;
 
   constructor(
     private router: Router,
     private http: Http,
-    @Inject(DoctorsService)pService:DoctorsService) { 
-      this.doctorsService = pService;
+    @Inject(CommonService)commonService:CommonService) { 
+      this.commonService = commonService;
   }
 
   ngOnInit() {
-    this.doctor = this.doctorsService.getSelected();
+    this.doctor = this.commonService.getSelectedDoctor();
     if(this.doctor === null || this.doctor === undefined)
       this.goTo('doctors');
   }

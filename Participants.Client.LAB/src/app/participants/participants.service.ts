@@ -1,13 +1,38 @@
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class ParticipantsService {
+
+    constructor(private http: Http) { 
   
- private selectedparticipant: object;
+    }
+  
+    getAllParticipants(){
+        return this.http.get('/api/Participants/GetParticipants')
+    }
 
-  getSelected() {
-    return this.selectedparticipant;
-  }
+    addParticipant(participant: string){
+        let link = '/api/Participants/AddParticipant';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+    
+        return this.http.post(link, participant, options)
+    }
 
-  setSelected(participant:object) {
-    this.selectedparticipant = participant;
-  }
+    updateParticipant(participant: string){
+        let link = '/api/Participants/UpdateParticipant';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
 
+        return this.http.post(link, participant, options)
+    }
+
+    deleteParticipant(participantID : number){
+        let link = '/api/Participants/DeleteParticipant';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.post(link, participantID, options)
+    }
 }

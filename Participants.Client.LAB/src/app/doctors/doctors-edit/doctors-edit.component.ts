@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
+import {CommonService} from '../../common/common.service';
 import {DoctorsService} from '../doctors.service';
 import { FormsModule, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -21,14 +22,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class DoctorsEditComponent implements OnInit {
 
   private doctor : any;
-  private doctorsService:DoctorsService;
+  private commonService:CommonService;
 
   constructor(
     private router: Router,
     private http: Http,
     private snackBar: MatSnackBar,
-    @Inject(DoctorsService)pService:DoctorsService) { 
-      this.doctorsService = pService;
+    @Inject(CommonService)commonService:CommonService) { 
+      this.commonService = commonService;
   }
 
   emailFormControl = new FormControl('', [
@@ -39,7 +40,7 @@ export class DoctorsEditComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   ngOnInit() {
-    this.doctor = this.doctorsService.getSelected();
+    this.doctor = this.commonService.getSelectedDoctor();
     if(this.doctor === null || this.doctor === undefined)
       this.goTo('doctors');
   }

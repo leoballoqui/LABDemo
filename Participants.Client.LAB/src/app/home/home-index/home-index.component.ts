@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import {CommonService} from '../../common/common.service';
+import {HomeService} from '../home.service';
 
 @Component({
   selector: 'app-home-index',
@@ -18,13 +20,25 @@ export class HomeIndexComponent implements OnInit {
   private appointments : Array<any>;
   private loading : boolean;
   private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
+  private commonService:CommonService;
+  private homeService:HomeService;
 
   constructor(    
     private http: Http,
-    public snackBar: MatSnackBar,) { 
+    private router: Router,
+    private snackBar: MatSnackBar,
+    @Inject(CommonService)commonService:CommonService,
+    @Inject(HomeService)homeService:HomeService) { 
+      this.homeService = homeService;
   }
 
   ngOnInit() {
+    if (!this.commonService.isAuthorized())
+    {
+      this.commonService.logOut();
+      this.router.navigate(['/login']);
+    }
+
     this.selectedDate = new Date();
     this.getDoctors();
     this.getAppointments();

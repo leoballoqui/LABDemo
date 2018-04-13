@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppCommonModule } from '../app-common/app-common.module';
+import { AppCommonModule } from '../common/common.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginIndexComponent} from './login-index/login-index.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

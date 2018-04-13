@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppCommonModule } from './app-common/app-common.module';
+import { AppCommonModule } from './common/common.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import {Request, XHRBackend, XHRConnection} from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { AppToolbarService } from './app-toolbar/app-toolbar.service';
@@ -19,10 +20,13 @@ import { LoginModule } from './login/login.module';
 import { LoginRoutingModule } from './login/login-routing.module';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ParticipantsService } from './participants/participants.service';
-import { CalendarService } from './calendar/calendar.service';
-import { DoctorsService  } from './doctors/doctors.service';
+import { CommonService } from './common/common.service';
 import { LoginService  } from './login/login.service';
+import { ParticipantsService  } from './participants/participants.service';
+import { DoctorsService  } from './doctors/doctors.service';
+import { CalendarService  } from './calendar/calendar.service';
+import { ApiXHRBackend } from './common/prefix-api.util';
+
 
 @NgModule({
   declarations: [
@@ -50,7 +54,7 @@ import { LoginService  } from './login/login.service';
       path: '', redirectTo: '/login', pathMatch: 'full'
     }])
   ],
-  providers: [AppToolbarService, ParticipantsService, CalendarService, DoctorsService, LoginService],
+  providers: [AppToolbarService, CommonService, CalendarService, ParticipantsService, DoctorsService, LoginService, { provide: XHRBackend, useClass: ApiXHRBackend }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

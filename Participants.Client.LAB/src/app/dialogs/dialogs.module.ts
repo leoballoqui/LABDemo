@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppCommonModule } from '../app-common/app-common.module';
+import { AppCommonModule } from '../common/common.module';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { AppointmentsDialogComponent } from './appointments-dialog/appointments-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

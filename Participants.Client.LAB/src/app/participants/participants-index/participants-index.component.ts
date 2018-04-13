@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
+import {CommonService} from '../../common/common.service';
 import {ParticipantsService} from '../participants.service';
 
 @Component({
@@ -13,41 +14,43 @@ import {ParticipantsService} from '../participants.service';
 export class ParticipantsIndexComponent implements OnInit {
   private displayedColumns = ['firstName', 'lastName', 'dob', 'email', 'phone', 'actions'];
   private dataSource = null;
-  private participantsService:ParticipantsService;
   private loading = false;
+  private commonService:CommonService;
+  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
     private http: Http,
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(ParticipantsService)pService:ParticipantsService) { 
-      this.participantsService = pService;
+    @Inject(CommonService)commonService:CommonService,
+    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
+      this.commonService = commonService;
+      this.participantsService = participantsService;
   }
 
   ngOnInit() {
+    if (!this.commonService.isAuthorized())
+    {
+      this.commonService.logOut();
+      this.router.navigate(['/login']);
+    }
+
     this.refreshData();
   }
 
-  deleteEntry(id: string){
+  deleteEntry(id: number){
     this.dialogsService
     .confirm('Please Confirm', 'Are you sure you want to delete this participant?')
     .subscribe(res => 
       {
         if(res == true)
         {
-          //let link = '/LABDemoAPI/api/Participants/DeleteParticipant';
-          let link = 'http://localhost:23049/api/Participants/DeleteParticipant';
-          
-          let headers = new Headers({ 'Content-Type': 'application/json' });
-          let options = new RequestOptions({ headers: headers });
-
-          this.http.post(link, id, options)
+          this.participantsService.deleteParticipant(id)
           .subscribe(data => {
-            console.log("All Ok!");
             this.refreshData();
             this.snackBar.open("Success!", "The participant was successfully deleted.", {
-              duration: 100000,});
+              duration: 7000,});
           }, error => {
               console.log("Oooops!");
           });
@@ -57,18 +60,17 @@ export class ParticipantsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    this.http.get('http://localhost:23049/api/Participants/GetParticipants')
-    //this.http.get('/LABDemoAPI/api/Participants/GetParticipants')
-    
+    this.participantsService.getAllParticipants()
     .subscribe(
         data => {
           this.dataSource = data.json();
           this.loading = false;
-        }, //For Success Response
+        },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+            duration: 7000,});
           this.loading = false;
-        } //For Error Response
+        }
     ); 
   }
 
@@ -76,8 +78,8 @@ export class ParticipantsIndexComponent implements OnInit {
     this.router.navigate(['/' + destination]);
   }
 
-  goToAction(destination: string, iteme:any){
-    this.participantsService.setSelected(iteme);
+  goToAction(destination: string, participant:any){
+    this.commonService.setSelectedParticipant(participant);
     this.goTo(destination);
   }
 }
