@@ -24,7 +24,7 @@ export class ParticipantsIndexComponent implements OnInit {
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
     @Inject(CommonService)commonService:CommonService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
+    @Inject(ParticipantsService)participantsService:ParticipantsService,) { 
       this.commonService = commonService;
       this.participantsService = participantsService;
   }
@@ -52,7 +52,8 @@ export class ParticipantsIndexComponent implements OnInit {
             this.snackBar.open("Success!", "The participant was successfully deleted.", {
               duration: 7000,});
           }, error => {
-              console.log("Oooops!");
+            this.snackBar.open("Error!", "Sorry, an error ocurred while deleting the participant.", {
+              duration: 7000,});
           });
         }
       });
@@ -69,6 +70,7 @@ export class ParticipantsIndexComponent implements OnInit {
         err => {
           this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
             duration: 7000,});
+          console.error(err)
           this.loading = false;
         }
     ); 

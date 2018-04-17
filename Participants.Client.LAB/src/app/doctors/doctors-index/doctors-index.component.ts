@@ -14,7 +14,8 @@ import {DoctorsService} from '../doctors.service';
 export class DoctorsIndexComponent implements OnInit {
   private displayedColumns = ['fullName', 'phone', 'secphone', 'email', 'actions'];
   private dataSource = null;
-  private commonrService:CommonService;
+  private commonService:CommonService;
+  private doctorsService: DoctorsService;
   private loading = false;
 
   constructor(
@@ -22,33 +23,31 @@ export class DoctorsIndexComponent implements OnInit {
     private http: Http,
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService) { 
-      this.commonrService = commonService;
+    @Inject(CommonService)commonService:CommonService,
+    @Inject(DoctorsService)doctorService:DoctorsService) { 
+      this.commonService = commonService;
+      this.doctorsService = doctorService;
   }
 
   ngOnInit() {
     this.refreshData();
   }
 
-  deleteEntry(id: string){
+  deleteEntry(id: number){
     this.dialogsService
     .confirm('Please Confirm', 'Are you sure you want to delete this doctor?')
     .subscribe(res => 
       {
         if(res == true)
         {
-          let link = 'http://localhost:23049/api/Doctors/DeleteDoctor';
-          let headers = new Headers({ 'Content-Type': 'application/json' });
-          let options = new RequestOptions({ headers: headers });
-
-          this.http.post(link, id, options)
+          this.doctorsService.deleteDoctor(id)
           .subscribe(data => {
-            console.log("All Ok!");
             this.refreshData();
             this.snackBar.open("Success!", "The doctor was successfully deleted.", {
-              duration: 100000,});
+              duration: 7000,});
           }, error => {
-              console.log("Oooops!");
+            this.snackBar.open("Error!", "Sorry, an error ocurred while deleting the doctor.", {
+              duration: 7000,});
           });
         }
       });
@@ -56,16 +55,17 @@ export class DoctorsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    this.http.get('http://localhost:23049/api/Doctors/GetDoctors')
+    this.doctorsService.getAllDoctors()
     .subscribe(
         data => {
           this.dataSource = data.json();
           this.loading = false;
-        }, //For Success Response
+        },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+            duration: 7000,});
           this.loading = false;
-        } //For Error Response
+        } 
     ); 
   }
 
@@ -74,7 +74,7 @@ export class DoctorsIndexComponent implements OnInit {
   }
 
   goToAction(destination: string, doctor:any){
-    this.commonrService.setSelectedDoctor(doctor);
+    this.commonService.setSelectedDoctor(doctor);
     this.goTo(destination);
   }
 }

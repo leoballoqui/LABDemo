@@ -12,7 +12,7 @@
       </div>
       <div fxFlex="25">
         <mat-form-field color="accent">
-          <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filertAppointments()">
+          <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filterAppointments()">
               <mat-option [value]="0" selected>All</mat-option>
               <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
                   {{ doctor.FullName }}
@@ -22,7 +22,7 @@
       </div>
       <div fxFlex="25">
         <mat-form-field class="example-full-width" color="accent">
-          <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filertAppointments()">
+          <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filterAppointments()">
         </mat-form-field>
       </div>
     </div>

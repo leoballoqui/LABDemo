@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { FormsModule, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
+import { DoctorsService } from '../doctors.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,12 +30,16 @@ export class DoctorsNewComponent implements OnInit {
   private email: string;
   private address: string;
   private graduatedFrom: string;
+  private doctorsService: DoctorsService;
  
   constructor(
     private router: Router,
     private http: Http,
-    private snackBar: MatSnackBar) 
-    { }
+    private snackBar: MatSnackBar,
+    @Inject(DoctorsService)doctorService:DoctorsService) { 
+      this.doctorsService = doctorService;
+    }
+
 
   emailFormControl = new FormControl('', [
     Validators.required,
@@ -51,7 +56,6 @@ export class DoctorsNewComponent implements OnInit {
   }
 
   save() {
-    let link = 'http://localhost:23049/api/Doctors/AddDoctor';
     let data = JSON.stringify(
       {
         FirstName: this.firstName,
@@ -64,17 +68,14 @@ export class DoctorsNewComponent implements OnInit {
         GraduatedFrom: this.graduatedFrom,
       });
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    this.http.post(link, data, options)
+    this.doctorsService.addDoctor(data)
     .subscribe(data => {
         this.snackBar.open("Success!", "The doctor was successfully inserted.", {
-          duration: 10000,});
+          duration: 7000,});
           this.clearComponents();
     }, error => {
       this.snackBar.open("Error!", "Sorry, an error ocurred while trying to add the doctor.", {
-        duration: 10000,});
+        duration: 7000,});
     });
   }
 

@@ -25,6 +25,7 @@ export class AppToolbarService {
                 return active;
             });
     }
+    
     getMenuItems(): MenuItem[] {
         return this.router.config
             .filter(route => route.data && route.data.nav) //only add a menu item for routes with a "nav" property set.

@@ -5,7 +5,7 @@
             <mat-chip [selectable]="true" [selected]="true" style="margin-top: 15px; font-size: 1.05em; background-color: #3f51b5">{{selectedDate | date:'EE, MM/dd/yyyy'}} </mat-chip>
         </div>
         <mat-form-field fxFlex="30">
-          <mat-select name="ddl_DialogAppDoctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filertAppointments()">
+          <mat-select name="ddl_DialogAppDoctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filterAppointments()">
               <mat-option [value]="0" selected>See All</mat-option>
               <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
                   {{ doctor.FullName }}
@@ -13,7 +13,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex="30">
-          <mat-select name="ddl_DialogAppParticipant" placeholder="Participant" [(ngModel)]="selectedParticipant" (change)="filertAppointments()">
+          <mat-select name="ddl_DialogAppParticipant" placeholder="Participant" [(ngModel)]="selectedParticipant" (change)="filterAppointments()">
               <mat-option [value]="0" selected>See All</mat-option>
               <mat-option *ngFor="let participant of participants" [value]="participant.ID">
                   {{ participant.FullName }}
@@ -21,7 +21,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex="20">
-          <mat-select name="ddl_DialogAppTime" placeholder="Time Slot" [(ngModel)]="selectedSlot" (change)="filertAppointments()">
+          <mat-select name="ddl_DialogAppTime" placeholder="Time Slot" [(ngModel)]="selectedSlot" (change)="filterAppointments()">
               <mat-option [value]="-1" selected>See All</mat-option>
               <mat-option *ngFor="let slot of slots, let i = index" [value]="i">
                   {{ slot }}

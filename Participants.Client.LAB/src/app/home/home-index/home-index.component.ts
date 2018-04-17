@@ -3,7 +3,8 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../common/common.service';
-import {HomeService} from '../home.service';
+import {CalendarService} from '../../calendar/calendar.service';
+import {DoctorsService} from '../../doctors/doctors.service';
 
 @Component({
   selector: 'app-home-index',
@@ -21,15 +22,19 @@ export class HomeIndexComponent implements OnInit {
   private loading : boolean;
   private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
   private commonService:CommonService;
-  private homeService:HomeService;
+  private calendarService:CalendarService;
+  private doctorsService: DoctorsService;
 
   constructor(    
     private http: Http,
     private router: Router,
     private snackBar: MatSnackBar,
     @Inject(CommonService)commonService:CommonService,
-    @Inject(HomeService)homeService:HomeService) { 
-      this.homeService = homeService;
+    @Inject(CalendarService)calendarService:CalendarService,
+    @Inject(DoctorsService)doctorService:DoctorsService) { 
+      this.commonService = commonService;
+      this.calendarService = calendarService;
+      this.doctorsService = doctorService;
   }
 
   ngOnInit() {
@@ -45,7 +50,7 @@ export class HomeIndexComponent implements OnInit {
   }
 
   getDoctors(){
-    this.http.get('http://localhost:23049/api/Doctors/GetDoctors')
+    this.doctorsService.getAllDoctors()
     .subscribe(
         data => {
           this.doctors = data.json();
@@ -57,19 +62,16 @@ export class HomeIndexComponent implements OnInit {
   }
 
   getAppointments(){
-    let link = 'http://localhost:23049/api/Appointments/GetAppointmentsDetailsByDay';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-    this.loading = true;
-    this.http.post(link, this.selectedDate, options)
+    this.calendarService.getAppointmentsDetails(this.selectedDate)
     .subscribe(
         data => {
           this.allAppointments = data.json().appointments;
-          this.filertAppointments();
+          this.filterAppointments();
           this.loading = false;
         },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+            duration: 7000,});
           this.loading = false;
         }
     ); 
@@ -120,7 +122,7 @@ export class HomeIndexComponent implements OnInit {
       duration: 5000,});
   }
 
-  filertAppointments(){
+  filterAppointments(){
     this.appointments = this.allAppointments;
     let participantText = this.participant.trim().toLowerCase();
     if(this.selectedDoctor > 0)

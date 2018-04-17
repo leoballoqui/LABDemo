@@ -23,13 +23,16 @@ export class DoctorsEditComponent implements OnInit {
 
   private doctor : any;
   private commonService:CommonService;
+  private doctorsService: DoctorsService;
 
   constructor(
     private router: Router,
     private http: Http,
     private snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService) { 
+    @Inject(CommonService)commonService:CommonService,
+    @Inject(DoctorsService)doctorService:DoctorsService) { 
       this.commonService = commonService;
+      this.doctorsService = doctorService;
   }
 
   emailFormControl = new FormControl('', [
@@ -46,19 +49,15 @@ export class DoctorsEditComponent implements OnInit {
   }
 
   save() {
-    let link = 'http://localhost:23049/api/Doctors/UpdateDoctor';
     let data = JSON.stringify(this.doctor);
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    this.http.post(link, data, options)
+    this.doctorsService.updateDoctor(data)
     .subscribe(data => {
         this.snackBar.open("Success!", "The doctor was successfully inserted.", {
-          duration: 10000,});
+          duration: 7000,});
     }, error => {
       this.snackBar.open("Error!", "Sorry, an error ocurred while trying to update the doctor.", {
-        duration: 10000,});
+        duration: 7000,});
     });
   }
 

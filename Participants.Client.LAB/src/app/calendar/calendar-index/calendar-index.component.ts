@@ -4,6 +4,8 @@ import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
 import {CalendarService} from '../calendar.service';
+import {ParticipantsService} from '../../participants/participants.service';
+import {DoctorsService} from '../../doctors/doctors.service';
 
 @Component({
   selector: 'app-calendar-index',
@@ -11,7 +13,6 @@ import {CalendarService} from '../calendar.service';
   styleUrls: ['./calendar-index.component.css']
 })
 export class CalendarIndexComponent implements OnInit {
-  private calendarService:CalendarService;
   private selectedDate: Date;
   private fromDate: Date;
   private toDate: Date;
@@ -26,15 +27,21 @@ export class CalendarIndexComponent implements OnInit {
   private selectedSlot: number = 0;
   private selectedAppDoctor: number = 0;
   private selectedAppParticipant: number = 0;
-
+  private calendarService:CalendarService;
+  private doctorsService: DoctorsService;
+  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
     private http: Http,
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(CalendarService)calendarService:CalendarService) { 
+    @Inject(CalendarService)calendarService:CalendarService,
+    @Inject(DoctorsService)doctorService:DoctorsService,
+    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
       this.calendarService = calendarService;
+      this.participantsService = participantsService;
+      this.doctorsService = doctorService;
   }
 
   ngOnInit() {
@@ -45,7 +52,6 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   goToDay(value: number ){
-    //this.selectedDate = new Date(this.selectedDate);
     if(value == 1)
     {
       this.selectedDate = new Date(this.selectedDate.setDate(this.selectedDate.getDate() - 7));
@@ -58,25 +64,27 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   getDoctors(){
-    this.http.get('http://localhost:23049/api/Doctors/GetDoctors')
+    this.doctorsService.getAllDoctors()
     .subscribe(
         data => {
           this.doctors = data.json();
         },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the doctors data.", {
+            duration: 7000,});
         } 
     ); 
   }
 
   getParticipants(){
-    this.http.get('http://localhost:23049/api/Participants/GetParticipants')
+    this.participantsService.getAllParticipants()
     .subscribe(
         data => {
           this.participants = data.json();
         },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the participants data.", {
+            duration: 7000,});
         } 
     ); 
   }
@@ -94,43 +102,39 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   getWeekData(){
-    let link = 'http://localhost:23049/api/Appointments/GetAppointmentsByWeek';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
     let data = JSON.stringify(
-      {
-        DoctorID: this.selectedDoctor,
-        Date: this.selectedDate,
-      });
+    {
+      DoctorID: this.selectedDoctor,
+      Date: this.selectedDate,
+    });
 
-    this.http.post(link, data, options)
+    this.calendarService.getWeekData(data)
     .subscribe(
         data => {
           this.weekData  = data.json();
         },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the appointments data.", {
+            duration: 7000,});
         }
     ); 
   }
 
   getDayData(){
-    let link = 'http://localhost:23049/api/Appointments/GetAppointmentsByDay';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
     let data = JSON.stringify(
       {
         DoctorID: this.selectedDoctor,
         Date: this.selectedDate,
       });
 
-    this.http.post(link, data, options)
+    this.calendarService.getDayData(data)
     .subscribe(
         data => {
           this.dayData = data.json();
         },
         err => {
-          console.error(err)
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the appointments data.", {
+            duration: 7000,});
         }
     ); 
   }
@@ -170,9 +174,6 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   addAppointment(){
-    let link = 'http://localhost:23049/api/Appointments/AddAppointment';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
     let data = JSON.stringify(
       {
         ParticipantID: this.selectedAppParticipant,
@@ -181,7 +182,7 @@ export class CalendarIndexComponent implements OnInit {
         Time: this.selectedSlot
       });
 
-    this.http.post(link, data, options)
+    this.calendarService.addAppointment(data)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The appointment was successfully created.", {

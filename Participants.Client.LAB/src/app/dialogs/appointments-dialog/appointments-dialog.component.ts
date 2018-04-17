@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
+import { CalendarService } from '../../calendar/calendar.service';
 import { MatSnackBar } from '@angular/material';
 
 
@@ -23,11 +24,14 @@ export class AppointmentsDialogComponent {
     public selectedDoctor : number = 0;
     public selectedParticipant : number = 0;
     private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
+    private calendarService:CalendarService;
 
     constructor(
       private http: Http,
       public snackBar: MatSnackBar,
-      public dialogRef: MatDialogRef<AppointmentsDialogComponent>,) {
+      public dialogRef: MatDialogRef<AppointmentsDialogComponent>,
+      @Inject(CalendarService)calendarService:CalendarService) {
+        this.calendarService = calendarService;
     }
 
     ngOnInit() {
@@ -35,19 +39,16 @@ export class AppointmentsDialogComponent {
     }
 
     getAppointments(){
-      let link = 'http://localhost:23049/api/Appointments/GetAppointmentsDetailsByDay';
-      let headers = new Headers({ 'Content-Type': 'application/json' });
-      let options = new RequestOptions({ headers: headers });
-  
-      this.http.post(link, this.selectedDate, options)
+      this.calendarService.getAppointmentsDetails(this.selectedDate)
       .subscribe(
           data => {
             this.allAppointments = data.json().appointments;
-            this.filertAppointments();
+            this.filterAppointments();
             this.slots = data.json().slots;
           },
           err => {
-            console.error(err)
+            this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+              duration: 7000,});
           }
       ); 
     }
@@ -97,7 +98,7 @@ export class AppointmentsDialogComponent {
         duration: 5000,});
     }
 
-    filertAppointments(){
+    filterAppointments(){
       this.appointments = this.allAppointments;
       if(this.selectedDoctor > 0)
         this.appointments = this.appointments.filter(app => app.DoctorID === this.selectedDoctor)
