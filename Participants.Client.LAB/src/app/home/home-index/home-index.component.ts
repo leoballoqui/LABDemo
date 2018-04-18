@@ -3,8 +3,7 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../common/common.service';
-import {CalendarService} from '../../calendar/calendar.service';
-import {DoctorsService} from '../../doctors/doctors.service';
+import {AjaxService} from '../../common/ajax.service';
 
 @Component({
   selector: 'app-home-index',
@@ -21,20 +20,14 @@ export class HomeIndexComponent implements OnInit {
   private appointments : Array<any>;
   private loading : boolean;
   private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
-  private commonService:CommonService;
-  private calendarService:CalendarService;
-  private doctorsService: DoctorsService;
 
   constructor(    
     private http: Http,
     private router: Router,
     private snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(CalendarService)calendarService:CalendarService,
-    @Inject(DoctorsService)doctorService:DoctorsService) { 
-      this.commonService = commonService;
-      this.calendarService = calendarService;
-      this.doctorsService = doctorService;
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   ngOnInit() {
@@ -44,13 +37,16 @@ export class HomeIndexComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
+    this.allAppointments = new Array<any>();
+    this.appointments = new Array<any>();
+
     this.selectedDate = new Date();
     this.getDoctors();
     this.getAppointments();
   }
 
   getDoctors(){
-    this.doctorsService.getAllDoctors()
+    this.ajaxService.getAllDoctors()
     .subscribe(
         data => {
           this.doctors = data.json();
@@ -62,7 +58,7 @@ export class HomeIndexComponent implements OnInit {
   }
 
   getAppointments(){
-    this.calendarService.getAppointmentsDetails(this.selectedDate)
+    this.ajaxService.getAppointmentsDetails(this.selectedDate)
     .subscribe(
         data => {
           this.allAppointments = data.json().appointments;

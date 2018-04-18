@@ -3,9 +3,9 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { FormsModule, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
-import { DoctorsService } from '../doctors.service';
+import {CommonService} from '../../common/common.service';
+import {AjaxService} from '../../common/ajax.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -30,14 +30,14 @@ export class DoctorsNewComponent implements OnInit {
   private email: string;
   private address: string;
   private graduatedFrom: string;
-  private doctorsService: DoctorsService;
  
   constructor(
     private router: Router,
     private http: Http,
-    private snackBar: MatSnackBar,
-    @Inject(DoctorsService)doctorService:DoctorsService) { 
-      this.doctorsService = doctorService;
+    private snackBar: MatSnackBar,    
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
     }
 
 
@@ -49,6 +49,12 @@ export class DoctorsNewComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   ngOnInit() {
+    if (!this.commonService.isAuthorized())
+    {
+      this.commonService.logOut();
+      this.router.navigate(['/login']);
+    }
+
     this.firstName = "Yo D";
     this.lastName = "Yo D";
     this.email = "yod@yo.yo";
@@ -68,7 +74,7 @@ export class DoctorsNewComponent implements OnInit {
         GraduatedFrom: this.graduatedFrom,
       });
 
-    this.doctorsService.addDoctor(data)
+    this.ajaxService.addDoctor(data)
     .subscribe(data => {
         this.snackBar.open("Success!", "The doctor was successfully inserted.", {
           duration: 7000,});

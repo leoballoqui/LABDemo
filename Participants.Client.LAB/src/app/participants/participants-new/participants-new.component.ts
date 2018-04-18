@@ -3,10 +3,9 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { FormsModule, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
-import {CommonService} from '../../common/common.service';
-import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
-import {ParticipantsService} from '../participants.service';
+import {CommonService} from '../../common/common.service';
+import {AjaxService} from '../../common/ajax.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -31,17 +30,14 @@ export class ParticipantsNewComponent implements OnInit {
   private secondaryPhone: string;
   private eMail: string;
   private address: string;
-  private commonService:CommonService;
-  private participantsService: ParticipantsService;
  
   constructor(
     private router: Router,
     private http: Http,
     private snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
-      this.commonService = commonService;
-      this.participantsService = participantsService;
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   emailFormControl = new FormControl('', [
@@ -76,7 +72,7 @@ export class ParticipantsNewComponent implements OnInit {
         Address: this.address,
       });
 
-    this.participantsService.addParticipant(data)
+    this.ajaxService.addParticipant(data)
     .subscribe(data => {
         this.snackBar.open("Success!", "The participant was successfully inserted.", {
           duration: 7000,});

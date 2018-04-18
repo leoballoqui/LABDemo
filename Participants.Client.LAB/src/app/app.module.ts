@@ -21,10 +21,7 @@ import { LoginRoutingModule } from './login/login-routing.module';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from './common/common.service';
-import { LoginService  } from './login/login.service';
-import { ParticipantsService  } from './participants/participants.service';
-import { DoctorsService  } from './doctors/doctors.service';
-import { CalendarService  } from './calendar/calendar.service';
+import { AjaxService  } from './common/ajax.service';
 import { ApiXHRBackend } from './common/prefix-api.util';
 
 
@@ -54,7 +51,7 @@ import { ApiXHRBackend } from './common/prefix-api.util';
       path: '', redirectTo: '/login', pathMatch: 'full'
     }])
   ],
-  providers: [AppToolbarService, CommonService, CalendarService, ParticipantsService, DoctorsService, LoginService, { provide: XHRBackend, useClass: ApiXHRBackend }],
+  providers: [AppToolbarService, CommonService, AjaxService, { provide: XHRBackend, useClass: ApiXHRBackend }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,15 +1,18 @@
+import { Subject } from 'rxjs/Subject'
+
 export class CommonService {
   
-    private userName: string;
-    private authorizationData: object;
+    public isAuth: boolean = false;
     private selectedParticipant: object;
     private selectedDoctor: object;
+    private subject = new Subject<any>();
    
     
     setAuthData(token:string, userName:string, expire:Date) {
       localStorage.setItem('id_token', token);
       localStorage.setItem('expiration', expire.toString());
-      this.userName = userName
+      this.isAuth = true;
+      this.subject.next(this.isAuth);
     }
 
     getSelectedParticipant() {
@@ -41,6 +44,12 @@ export class CommonService {
 
     logOut() {
       localStorage.clear();
+      this.isAuth = false;
+      this.subject.next(this.isAuth);
+    }
+
+    notifier() {
+      return this.subject.asObservable();
     }
 
   

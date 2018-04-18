@@ -5,7 +5,7 @@ import { FormsModule, FormControl, FormGroupDirective, NgForm, Validators } from
 import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../common/common.service';
-import {ParticipantsService} from '../participants.service';
+import {AjaxService} from '../../common/ajax.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -22,17 +22,13 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class ParticipantsEditComponent implements OnInit {
 
   private participant : any;
-  private commonService:CommonService;
-  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
     private http: Http,
     private snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
-      this.commonService = commonService;
-      this.participantsService = participantsService;
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
   }
 
   emailFormControl = new FormControl('', [
@@ -57,7 +53,7 @@ export class ParticipantsEditComponent implements OnInit {
   save() {
     let data = JSON.stringify(this.participant);
 
-    this.participantsService.updateParticipant(data)
+    this.ajaxService.updateParticipant(data)
     .subscribe(data => {
         this.snackBar.open("Success!", "The participant was successfully updated.", {
           duration: 7000,});

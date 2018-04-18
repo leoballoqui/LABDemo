@@ -2,9 +2,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
-import { DialogsService } from '../../dialogs/dialogs.service';
-import { CalendarService } from '../../calendar/calendar.service';
 import { MatSnackBar } from '@angular/material';
+import { DialogsService } from '../../dialogs/dialogs.service';
+import { AjaxService } from '../../common/ajax.service';
 
 
 @Component({
@@ -24,14 +24,13 @@ export class AppointmentsDialogComponent {
     public selectedDoctor : number = 0;
     public selectedParticipant : number = 0;
     private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
-    private calendarService:CalendarService;
 
     constructor(
       private http: Http,
       public snackBar: MatSnackBar,
       public dialogRef: MatDialogRef<AppointmentsDialogComponent>,
-      @Inject(CalendarService)calendarService:CalendarService) {
-        this.calendarService = calendarService;
+      private ajaxService:AjaxService) {
+
     }
 
     ngOnInit() {
@@ -39,7 +38,7 @@ export class AppointmentsDialogComponent {
     }
 
     getAppointments(){
-      this.calendarService.getAppointmentsDetails(this.selectedDate)
+      this.ajaxService.getAppointmentsDetails(this.selectedDate)
       .subscribe(
           data => {
             this.allAppointments = data.json().appointments;

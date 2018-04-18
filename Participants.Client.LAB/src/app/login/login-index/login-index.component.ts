@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { LoginService } from '../login.service';
 import {CommonService} from '../../common/common.service';
+import {AjaxService} from '../../common/ajax.service';
 
 @Component({
   selector: 'app-login-index',
@@ -16,24 +16,26 @@ export class LoginIndexComponent implements OnInit {
   private userID:string = 'leo@leo.com';
   private password:string = 'Password1!';
   private confirmPassword:string = 'Password1!';
-  private loginService:LoginService;
-  private commonService:CommonService;
 
   constructor(    
     private http: Http,
     private router: Router,
     private snackBar: MatSnackBar,
-    @Inject(LoginService)loginService:LoginService,
-    @Inject(CommonService)commonService:CommonService) { 
-      this.loginService = loginService;
-      this.commonService = commonService;
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   ngOnInit() {
+    if(this.router.url.includes("logout"))
+    {
+      this.logout();
+      this.router.navigate(['/login'])
+    }
   }
 
   register(){
-    this.loginService.register(this.userID, this.password, this.confirmPassword)
+    this.ajaxService.register(this.userID, this.password, this.confirmPassword)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The user was successfully created.", {
@@ -48,7 +50,7 @@ export class LoginIndexComponent implements OnInit {
   }
   
   login(){
-    this.loginService.login(this.userID, this.password)
+    this.ajaxService.login(this.userID, this.password)
     .subscribe(
         data => {
           this.commonService.setAuthData(data.json().access_token, this.userID, new Date(data.json()['.expires']));
@@ -61,4 +63,9 @@ export class LoginIndexComponent implements OnInit {
         }
     );
   }
+
+  logout(){
+    this.commonService.logOut();
+  }
+
 }

@@ -3,9 +3,8 @@ import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
-import {CalendarService} from '../calendar.service';
-import {ParticipantsService} from '../../participants/participants.service';
-import {DoctorsService} from '../../doctors/doctors.service';
+import {CommonService} from '../../common/common.service';
+import {AjaxService} from '../../common/ajax.service';
 
 @Component({
   selector: 'app-calendar-index',
@@ -27,24 +26,24 @@ export class CalendarIndexComponent implements OnInit {
   private selectedSlot: number = 0;
   private selectedAppDoctor: number = 0;
   private selectedAppParticipant: number = 0;
-  private calendarService:CalendarService;
-  private doctorsService: DoctorsService;
-  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
     private http: Http,
-    private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(CalendarService)calendarService:CalendarService,
-    @Inject(DoctorsService)doctorService:DoctorsService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
-      this.calendarService = calendarService;
-      this.participantsService = participantsService;
-      this.doctorsService = doctorService;
+    private dialogsService: DialogsService,
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   ngOnInit() {
+    if (!this.commonService.isAuthorized())
+    {
+      this.commonService.logOut();
+      this.router.navigate(['/login']);
+    }
+
     this.selectedDate = new Date();
     this.getDoctors();
     this.getParticipants();
@@ -64,7 +63,7 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   getDoctors(){
-    this.doctorsService.getAllDoctors()
+    this.ajaxService.getAllDoctors()
     .subscribe(
         data => {
           this.doctors = data.json();
@@ -77,7 +76,7 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   getParticipants(){
-    this.participantsService.getAllParticipants()
+    this.ajaxService.getAllParticipants()
     .subscribe(
         data => {
           this.participants = data.json();
@@ -108,7 +107,7 @@ export class CalendarIndexComponent implements OnInit {
       Date: this.selectedDate,
     });
 
-    this.calendarService.getWeekData(data)
+    this.ajaxService.getWeekData(data)
     .subscribe(
         data => {
           this.weekData  = data.json();
@@ -127,7 +126,7 @@ export class CalendarIndexComponent implements OnInit {
         Date: this.selectedDate,
       });
 
-    this.calendarService.getDayData(data)
+    this.ajaxService.getDayData(data)
     .subscribe(
         data => {
           this.dayData = data.json();
@@ -182,7 +181,7 @@ export class CalendarIndexComponent implements OnInit {
         Time: this.selectedSlot
       });
 
-    this.calendarService.addAppointment(data)
+    this.ajaxService.addAppointment(data)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The appointment was successfully created.", {

@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
-import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
+import { DialogsService } from '../../dialogs/dialogs.service';
 import {CommonService} from '../../common/common.service';
-import {ParticipantsService} from '../participants.service';
+import {AjaxService} from '../../common/ajax.service';
 
 @Component({
   selector: 'app-participants-index',
@@ -15,18 +15,15 @@ export class ParticipantsIndexComponent implements OnInit {
   private displayedColumns = ['firstName', 'lastName', 'dob', 'email', 'phone', 'actions'];
   private dataSource = null;
   private loading = false;
-  private commonService:CommonService;
-  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
     private http: Http,
     private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService,) { 
-      this.commonService = commonService;
-      this.participantsService = participantsService;
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   ngOnInit() {
@@ -46,7 +43,7 @@ export class ParticipantsIndexComponent implements OnInit {
       {
         if(res == true)
         {
-          this.participantsService.deleteParticipant(id)
+          this.ajaxService.deleteParticipant(id)
           .subscribe(data => {
             this.refreshData();
             this.snackBar.open("Success!", "The participant was successfully deleted.", {
@@ -61,7 +58,7 @@ export class ParticipantsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    this.participantsService.getAllParticipants()
+    this.ajaxService.getAllParticipants()
     .subscribe(
         data => {
           this.dataSource = data.json();

@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
+import {CommonService} from '../common/common.service';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
@@ -14,8 +15,13 @@ export class MenuItem {
 @Injectable()
 export class AppToolbarService {
   activeMenuItem$: Observable<MenuItem>;
+  private commonService:CommonService;
 
-  constructor(private router: Router, private titleService: Title) {
+  constructor(
+    private router: Router, 
+    private titleService: Title,
+    @Inject(CommonService)commonService:CommonService) {
+        this.commonService = commonService;
         this.activeMenuItem$ = this.router.events
             .filter(e => e instanceof NavigationEnd)
             .map(_ => this.router.routerState.root)
@@ -27,6 +33,14 @@ export class AppToolbarService {
     }
     
     getMenuItems(): MenuItem[] {
+
+        if (!this.commonService.isAuthorized())
+        {
+            let items: MenuItem[] = new Array<MenuItem>();
+            items.push({'path':"/login", 'title': 'Login', 'icon': '' });
+            return items;
+        }
+
         return this.router.config
             .filter(route => route.data && route.data.nav) //only add a menu item for routes with a "nav" property set.
             .map(route => {

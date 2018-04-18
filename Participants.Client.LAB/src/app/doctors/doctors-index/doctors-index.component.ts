@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
-import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
+import { DialogsService } from '../../dialogs/dialogs.service';
 import {CommonService} from '../../common/common.service';
-import {DoctorsService} from '../doctors.service';
+import {AjaxService} from '../../common/ajax.service';
 
 @Component({
   selector: 'app-doctors-index',
@@ -14,22 +14,25 @@ import {DoctorsService} from '../doctors.service';
 export class DoctorsIndexComponent implements OnInit {
   private displayedColumns = ['fullName', 'phone', 'secphone', 'email', 'actions'];
   private dataSource = null;
-  private commonService:CommonService;
-  private doctorsService: DoctorsService;
   private loading = false;
 
   constructor(
     private router: Router,
     private http: Http,
-    private dialogsService: DialogsService,
     public snackBar: MatSnackBar,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(DoctorsService)doctorService:DoctorsService) { 
-      this.commonService = commonService;
-      this.doctorsService = doctorService;
+    private dialogsService: DialogsService,
+    private commonService:CommonService,
+    private ajaxService:AjaxService) { 
+
   }
 
   ngOnInit() {
+    if (!this.commonService.isAuthorized())
+    {
+      this.commonService.logOut();
+      this.router.navigate(['/login']);
+    }
+    
     this.refreshData();
   }
 
@@ -40,7 +43,7 @@ export class DoctorsIndexComponent implements OnInit {
       {
         if(res == true)
         {
-          this.doctorsService.deleteDoctor(id)
+          this.ajaxService.deleteDoctor(id)
           .subscribe(data => {
             this.refreshData();
             this.snackBar.open("Success!", "The doctor was successfully deleted.", {
@@ -55,7 +58,7 @@ export class DoctorsIndexComponent implements OnInit {
 
   refreshData(){
     this.loading = true;
-    this.doctorsService.getAllDoctors()
+    this.ajaxService.getAllDoctors()
     .subscribe(
         data => {
           this.dataSource = data.json();

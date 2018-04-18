@@ -15,6 +15,14 @@
                   <!-- <mat-icon *ngIf="navItem.icon">{{navItem.icon}}</mat-icon> -->
                   <span>{{navItem.title}}</span>
               </a>
+              <a *ngIf="isAuth"
+                mat-list-item
+                mat-ripple
+                [style.position]="'relative'"
+                routerLinkActive="selected"
+                (click)="confirmLogout()">
+                <span>Logout</span>
+              </a>
           </mat-nav-list>
       </mat-sidenav>
       <mat-toolbar color="primary">

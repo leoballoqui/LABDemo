@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {CommonService} from '../../common/common.service';
-import {ParticipantsService} from '../participants.service';
 
 @Component({
   selector: 'app-participants-details',
@@ -12,16 +11,12 @@ import {ParticipantsService} from '../participants.service';
 export class ParticipantsDetailsComponent implements OnInit {
 
   private participant : any;
-  private commonService:CommonService;
-  private participantsService: ParticipantsService;
 
   constructor(
     private router: Router,
-    private http: Http,
-    @Inject(CommonService)commonService:CommonService,
-    @Inject(ParticipantsService)participantsService:ParticipantsService) { 
-      this.commonService = commonService;
-      this.participantsService = participantsService;
+    private http: Http,    
+    private commonService:CommonService) { 
+
   }
 
   ngOnInit() {
