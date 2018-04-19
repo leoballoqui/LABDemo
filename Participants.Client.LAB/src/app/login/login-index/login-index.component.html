@@ -16,6 +16,7 @@
         <button mat-raised-button class="btn_side btn_date" (click)="isLogging = false" style="margin-left: 20px">Register</button>
       </div>
     </div>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </mat-card>
   <mat-card *ngIf="!isLogging">
     <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
@@ -39,5 +40,6 @@
         <button mat-raised-button class="btn_side btn_date" (click)="isLogging = true" style="margin-left: 20px">Login</button>
       </div>
     </div>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </mat-card>
 </div>

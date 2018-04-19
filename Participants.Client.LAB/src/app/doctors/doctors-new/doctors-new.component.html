@@ -2,7 +2,7 @@
     <mat-card fxFlex="80">
      <form class="form_NewDoctor">
       <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-        <mat-form-field>
+        <mat-form-field color="accent">
           <mat-select name="ddl_Suffix" placeholder="Suffix" [(ngModel)]="suffix" required>
             <mat-option value="Dr." selected>Dr.</mat-option>
             <mat-option value="MD.">MD.</mat-option>
@@ -10,25 +10,25 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width" >
+        <mat-form-field class="example-full-width" color="accent">
           <input matInput name="txt_FirstName" placeholder="First Name" [(ngModel)]="firstName" required>
         </mat-form-field>
       
-        <mat-form-field class="example-full-width">
+        <mat-form-field class="example-full-width" color="accent">
           <input matInput name="txt_LastName" placeholder="Last Name" [(ngModel)]="lastName" required>
         </mat-form-field>
       </div>
         
       <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-        <mat-form-field class="example-full-width" >
+        <mat-form-field class="example-full-width" color="accent">
           <input matInput name="txt_Phone" placeholder="Phone Number" [(ngModel)]="phone" type="tel" required>
         </mat-form-field>
       
-        <mat-form-field class="example-full-width" >
+        <mat-form-field class="example-full-width" color="accent">
             <input matInput name="txt_SecondPhone" placeholder="Secondary Phone Number" [(ngModel)]="secondaryPhone" type="tel">
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field class="example-full-width" color="accent">
           <input matInput name="emailFormControl" placeholder="Email" [(ngModel)]="email" [formControl]="emailFormControl"
                  [errorStateMatcher]="matcher" required>
           <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -41,11 +41,11 @@
       </div> 
 
       <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-          <mat-form-field class="example-full-width" style="width:30%">
+          <mat-form-field class="example-full-width" style="width:30%" color="accent">
             <input matInput placeholder="Graduated From" name="txt_graduatedFrom" [(ngModel)]="graduatedFrom">
           </mat-form-field>
 
-          <mat-form-field class="example-full-width" style="width:60%">
+          <mat-form-field class="example-full-width" style="width:60%" color="accent">
             <input matInput placeholder="Address" name="txt_address" [(ngModel)]="address">
           </mat-form-field>
       </div>

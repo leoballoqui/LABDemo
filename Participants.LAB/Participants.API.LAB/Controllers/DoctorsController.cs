@@ -13,6 +13,7 @@ using Participants.API.LAB.Models;
 
 namespace Participants.API.LAB.Controllers
 {
+    [Authorize]
     public class DoctorsController : ApiController
     {
         private MainDbContext db = new MainDbContext();

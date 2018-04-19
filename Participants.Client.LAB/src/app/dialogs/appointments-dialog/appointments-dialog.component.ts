@@ -53,48 +53,27 @@ export class AppointmentsDialogComponent {
     }
 
     notify(app: any, via: string){
-      if(app.Status < 2)
-      {
-        app.Status = 2;
-        app.StatusName = "Notified";
-      }
-      this.snackBar.open("Success!", "The user was notified via " + via + ".", {
-        duration: 5000,});
+      this.setAppStatus(app, 2, "Notified", "The user was notified via " + via + ".");
     }
-
+  
     confirm(app: any){
-      app.Status = 3;
-      app.StatusName = "Confirmed";
-      this.snackBar.open("Success!", "The appointment is confirmed.", {
-        duration: 5000,});
+      this.setAppStatus(app, 3, "Confirmed", "The appointment is confirmed.");
     }
-
+  
     complete(app: any){
-      app.Status = 4;
-      app.StatusName = "Completed";
-      this.snackBar.open("Success!", "The appointment is completed.", {
-        duration: 5000,});
+      this.setAppStatus(app, 4, "Completed", "The appointment is completed.");
     }
-
+  
     miss(app: any){
-      app.Status = 5;
-      app.StatusName = "Missed";
-      this.snackBar.open("Success!", "The appointment was marked as 'missed'.", {
-        duration: 5000,});
+      this.setAppStatus(app, 5, "Missed", "The appointment was marked as 'Missed'.");
     }
-
+  
     cancel(app: any){
-      app.Status = 6;
-      app.StatusName = "Canceled";
-      this.snackBar.open("Success!", "The appointment was canceled.", {
-        duration: 5000,});
+      this.setAppStatus(app, 6, "Canceled", "The appointment was canceled.");
     }
-
+  
     reset(app: any){
-      app.Status = 1;
-      app.StatusName = "Created";
-      this.snackBar.open("Success!", "The appointment satus was reset.", {
-        duration: 5000,});
+      this.setAppStatus(app, 1, "Created", "The appointment satus was reset.");
     }
 
     filterAppointments(){
@@ -105,5 +84,29 @@ export class AppointmentsDialogComponent {
         this.appointments = this.appointments.filter(app => app.ParticipantID === this.selectedParticipant)
       if(this.selectedSlot > -1)
         this.appointments = this.appointments.filter(app => app.Slot === this.selectedSlot)
+    }
+
+    setAppStatus(app : any, status : number, statusName : string, successMessage: string){
+      let data = JSON.stringify(
+      {
+        ID: app.AppointmentID,
+        Status: status
+      });
+  
+      this.ajaxService.setAppStatus(data).subscribe(
+        data => {
+          if(status != 2 || app.Status < 2)
+          {
+            app.Status = status;
+            app.StatusName = statusName;
+          }
+          this.snackBar.open("Success!", successMessage, {
+            duration: 5000,});
+        },
+        err => {
+          this.snackBar.open("Error!", "Sorry, an error ocurred while processing the request.", {
+            duration: 7000,});
+        }
+      ); 
     }
 }

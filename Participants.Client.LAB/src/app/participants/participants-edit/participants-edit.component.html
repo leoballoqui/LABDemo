@@ -2,15 +2,15 @@
   <mat-card fxFlex="80">
    <form class="form_EditParticipant">
     <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-      <mat-form-field class="example-full-width" >
+      <mat-form-field class="example-full-width" color="accent">
         <input matInput name="txt_FirstName" placeholder="First Name" [(ngModel)]="participant.FirstName" required>
       </mat-form-field>
     
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="example-full-width" color="accent">
         <input matInput name="txt_LastName" placeholder="Last Name" [(ngModel)]="participant.LastName" required>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field color="accent">
         <input matInput [matDatepicker]="picker" placeholder="DOB" name="dp_DOB" [(ngModel)]="participant.DOB" required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -18,15 +18,15 @@
     </div>
       
     <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-      <mat-form-field class="example-full-width" >
+      <mat-form-field class="example-full-width" color="accent">
         <input matInput name="txt_Phone" placeholder="Phone Number" [(ngModel)]="participant.PhoneNumber" type="tel" required>
       </mat-form-field>
     
-      <mat-form-field class="example-full-width" >
+      <mat-form-field class="example-full-width" color="accent">
           <input matInput name="txt_SecondPhone" placeholder="Secondary Phone Number" [(ngModel)]="participant.SecPhoneNumber" type="tel">
       </mat-form-field>
 
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="example-full-width" color="accent">
         <input matInput name="emailFormControl" placeholder="Email" [(ngModel)]="participant.EmailAddress" [formControl]="emailFormControl"
                [errorStateMatcher]="matcher" required>
         <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -39,7 +39,7 @@
     </div> 
 
     <div layout-gt-sm="row" layout-padding fxLayoutGap="16px">
-        <mat-form-field class="example-full-width" style="width:100%" >
+        <mat-form-field class="example-full-width" style="width:100%" color="accent">
           <input matInput placeholder="Address" name="txt_address" [(ngModel)]="participant.Address">
         </mat-form-field>
     </div>

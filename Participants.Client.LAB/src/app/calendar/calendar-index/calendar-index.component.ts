@@ -26,6 +26,7 @@ export class CalendarIndexComponent implements OnInit {
   private selectedSlot: number = 0;
   private selectedAppDoctor: number = 0;
   private selectedAppParticipant: number = 0;
+  private loading = false;
 
   constructor(
     private router: Router,
@@ -107,14 +108,17 @@ export class CalendarIndexComponent implements OnInit {
       Date: this.selectedDate,
     });
 
+    this.loading = true;
     this.ajaxService.getWeekData(data)
     .subscribe(
         data => {
           this.weekData  = data.json();
+          this.loading = false;
         },
         err => {
           this.snackBar.open("Error!", "Sorry, an error ocurred accessing the appointments data.", {
             duration: 7000,});
+            this.loading = false;
         }
     ); 
   }
@@ -126,14 +130,17 @@ export class CalendarIndexComponent implements OnInit {
         Date: this.selectedDate,
       });
 
+    this.loading = true;
     this.ajaxService.getDayData(data)
     .subscribe(
         data => {
           this.dayData = data.json();
+          this.loading = false;
         },
         err => {
           this.snackBar.open("Error!", "Sorry, an error ocurred accessing the appointments data.", {
             duration: 7000,});
+            this.loading = false;
         }
     ); 
   }
@@ -181,16 +188,19 @@ export class CalendarIndexComponent implements OnInit {
         Time: this.selectedSlot
       });
 
+    this.loading = true;
     this.ajaxService.addAppointment(data)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The appointment was successfully created.", {
             duration: 7000,});
+          this.loading = false;
           this.goBackToDay();
         },
         err => {
           this.snackBar.open("Error!", "Sorry, an error ocurred while creating the appointment.", {
             duration: 7000,});
+          this.loading = false;
         }
     ); 
   }

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppToolbarService, MenuItem } from './app-toolbar/app-toolbar.service';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from './dialogs/dialogs.service';
-import {CommonService} from './common/common.service';
+import { CommonService } from './common/common.service';
 import { Subscription } from 'rxjs/Subscription'
 
 @Component({
@@ -25,9 +25,15 @@ export class AppComponent implements OnInit, OnDestroy  {
     private dialogsService: DialogsService,
     private commonService: CommonService) {
       this.resolveMenuItems();
+      window.addEventListener("beforeunload", function (e) {
+        //localStorage.clear();
+        //console.log("unloaded")
+        return null;
+      });
   }
 
   ngOnInit() {
+    this.isAuth = this.commonService.isAuthorized();
     this.subscription = this.commonService.notifier().subscribe(value => 
       {
         this.isAuth = value;
@@ -53,15 +59,5 @@ export class AppComponent implements OnInit, OnDestroy  {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-  // @HostListener("window:onbeforeunload",["$event"])
-  //   clearLocalStorage(event){
-  //     alert("Leo");
-  //       localStorage.clear();
-  //   }
-    @HostListener('window:beforeunload')
-    doSomething() {
-      alert("Leo");
-    }
 
 }

@@ -14,6 +14,7 @@ using System.Web.Http.Description;
 
 namespace Participants.API.LAB.Controllers
 {
+    [Authorize]
     public class AppointmentsController : ApiController
     {
         private MainDbContext db = new MainDbContext();
@@ -122,6 +123,25 @@ namespace Participants.API.LAB.Controllers
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = appointment.ID }, appointment);
+        }
+
+        [HttpPost]
+        public void SetAppointmentStatus(Appointment appointment)
+        {
+            Appointment app = db.Appointments.Where(a => a.ID == appointment.ID).FirstOrDefault();
+            if (app != null)
+            {
+                if (appointment.Status != 2 || app.Status < 2)
+                {
+                    app.Status = appointment.Status;
+                    db.SaveChanges();
+                }
+                if (appointment.Status == 2)
+                {
+                    // Notify via Email or add mechanism to notify via sms
+                }
+
+            }
         }
 
         // PUT: api/Appointments/5

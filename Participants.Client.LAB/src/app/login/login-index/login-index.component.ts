@@ -16,6 +16,7 @@ export class LoginIndexComponent implements OnInit {
   private userID:string = 'leo@leo.com';
   private password:string = 'Password1!';
   private confirmPassword:string = 'Password1!';
+  private loading = false;
 
   constructor(    
     private http: Http,
@@ -35,31 +36,36 @@ export class LoginIndexComponent implements OnInit {
   }
 
   register(){
+    this.loading = true;
     this.ajaxService.register(this.userID, this.password, this.confirmPassword)
     .subscribe(
         data => {
           this.snackBar.open("Success!", "The user was successfully created.", {
             duration: 7000,});
             this.isLogging = true;
+            this.loading = false;
         },
         err => {
           this.snackBar.open("Error!", "Sorry, an error ocurred while creating the user.", {
             duration: 7000,});
+            this.loading = false;
         }
     );
   }
   
   login(){
+    this.loading = true;
     this.ajaxService.login(this.userID, this.password)
     .subscribe(
         data => {
           this.commonService.setAuthData(data.json().access_token, this.userID, new Date(data.json()['.expires']));
+          this.loading = false;
           this.router.navigate(['/home']);
         },
         err => {
-          console.log(err);
           this.snackBar.open("Error!", JSON.parse(err.text()).error_description, {
             duration: 7000,});
+          this.loading = false;
         }
     );
   }
