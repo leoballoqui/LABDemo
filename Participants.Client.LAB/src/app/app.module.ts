@@ -18,6 +18,8 @@ import { CalendarModule } from './calendar/calendar.module';
 import { CalendarRoutingModule } from './calendar/calendar-routing.module';
 import { LoginModule } from './login/login.module';
 import { LoginRoutingModule } from './login/login-routing.module';
+import { ClinicalNotesModule } from './clinical-notes/clinical-notes.module';
+import { ClinicalNotesRoutingModule } from './clinical-notes/clinical-notes-routing.module';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from './common/common.service';
@@ -44,6 +46,8 @@ import { ApiXHRBackend } from './common/prefix-api.util';
     CalendarRoutingModule,
     LoginModule,
     LoginRoutingModule,
+    ClinicalNotesModule,
+    ClinicalNotesRoutingModule,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,

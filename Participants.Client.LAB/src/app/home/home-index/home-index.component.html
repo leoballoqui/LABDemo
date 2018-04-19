@@ -4,7 +4,7 @@
       <div fxFlex="50" style="text-align: left">
         <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 20px">Last Day</button>
         <mat-form-field class="date_calendar" color="accent">
-            <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getAppointments()">
+            <input matInput [matDatepicker]="picker" placeholder="Date Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getAppointments()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>

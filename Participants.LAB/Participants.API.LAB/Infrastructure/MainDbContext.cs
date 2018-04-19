@@ -25,5 +25,9 @@ namespace Participants.API.LAB.Infrastructure
         public virtual DbSet<Doctor> Doctors { get; set; }
 
         public virtual DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<ClinicalNoteCategory> ClinicalNoteCategories { get; set; }
+
+        public DbSet<ClinicalNote> ClinicalNotes { get; set; }
     }
 }
