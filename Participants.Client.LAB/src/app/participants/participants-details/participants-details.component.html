@@ -5,34 +5,41 @@
         <mat-chip-list style="display:none"></mat-chip-list>
         <div class="example-full-width" fxFlex="30">
           <span>First Name: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.FirstName}}</mat-chip>
+          <!-- <span>First Name: </span><b>{{participant.FirstName}}</b> -->
         </div>
       
         <div class="example-full-width" fxFlex="30">
           <span>Last Name: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.LastName}}</mat-chip>
+          <!-- <span>Last Name: </span><b>{{participant.LastName}}</b> -->
         </div>
 
         <div class="example-full-width" fxFlex="30">
           <span>Date of Birth: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.DOB | date}}</mat-chip>
+          <!-- <span>Date of Birth: </span><b>{{participant.DOB | date}}</b> -->
         </div>
       </div>
         
       <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
         <div class="example-full-width" fxFlex="30">
-          <span>Phone #: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.PhoneNumber | slice:0:3}}-{{participant.PhoneNumber | slice:3:6}}-{{participant.PhoneNumber| slice:6:10}}</mat-chip>  
+          <span>Phone #: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.PhoneNumber | slice:0:3}}-{{participant.PhoneNumber | slice:3:6}}-{{participant.PhoneNumber| slice:6:10}}</mat-chip> 
+          <!-- <span>Phone #: </span><b>{{participant.PhoneNumber | slice:0:3}}-{{participant.PhoneNumber | slice:3:6}}-{{participant.PhoneNumber| slice:6:10}}</b>  -->
         </div>
       
         <div class="example-full-width" fxFlex="30">
-          <span>Sec. Phone #: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.SecPhoneNumber | slice:0:3}}-{{participant.SecPhoneNumber | slice:3:6}}-{{participant.SecPhoneNumber| slice:6:10}}</mat-chip>  
+          <span>Sec. Phone #: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.SecPhoneNumber | slice:0:3}}-{{participant.SecPhoneNumber | slice:3:6}}-{{participant.SecPhoneNumber| slice:6:10}}</mat-chip>
+           <!--<span>Sec. Phone #: </span><b>{{participant.SecPhoneNumber | slice:0:3}}-{{participant.SecPhoneNumber | slice:3:6}}-{{participant.SecPhoneNumber| slice:6:10}}</b>   -->
         </div>
 
         <div class="example-full-width" fxFlex="30">
           <span>EMail: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.EmailAddress}}</mat-chip>
+           <!--<span>EMail: </span><b>{{participant.EmailAddress}}</b> -->
         </div>
       </div>
 
       <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
         <div class="example-full-width" fxFlex="90">
           <span>Address: </span><mat-chip [selectable]="false" selected="false" class="spn_detailField">{{participant.Address}}</mat-chip>
+          <!-- <span>Address: </span><b>{{participant.Address}}</b> -->
         </div>
       </div>
     </form>

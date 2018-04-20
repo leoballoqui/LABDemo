@@ -20,6 +20,7 @@ namespace Participants.API.LAB.Controllers
         // GET: api/ClinicalNoteCategories
         public IQueryable<ClinicalNoteCategory> GetClinicalNoteCategories()
         {
+            FillDB();
             return db.ClinicalNoteCategories;
         }
 
@@ -115,5 +116,22 @@ namespace Participants.API.LAB.Controllers
         {
             return db.ClinicalNoteCategories.Count(e => e.ID == id) > 0;
         }
+
+        private void FillDB()
+        {
+
+            if (db.ClinicalNoteCategories.Count(e => e.Name == "Cat1") > 0)
+                return;
+
+            ClinicalNoteCategory cnc = new ClinicalNoteCategory();
+            cnc.Name = "Cat1";
+            cnc.ComponentName = "ClinicalNoteTest";
+            cnc.FriendlyName = "First Clinical Note";
+
+            db.ClinicalNoteCategories.Add(cnc);
+            db.SaveChanges();
+        }
+
+
     }
 }

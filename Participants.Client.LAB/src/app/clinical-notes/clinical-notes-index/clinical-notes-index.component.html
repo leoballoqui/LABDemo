@@ -41,12 +41,12 @@
     
             <ng-container matColumnDef="doctor">
               <mat-header-cell *matHeaderCellDef fxFlex="20"> Doctor </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.DoctorName}} </mat-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Doctor.FullName}} </mat-cell>
             </ng-container>
     
             <ng-container matColumnDef="participant">
               <mat-header-cell *matHeaderCellDef fxFlex="19"> Participant </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="19"> {{element.ParticipantName}} </mat-cell>
+              <mat-cell *matCellDef="let element" fxFlex="19"> {{element.Participant.FullName}} </mat-cell>
             </ng-container>
     
             <ng-container matColumnDef="created">
@@ -56,7 +56,7 @@
         
             <ng-container matColumnDef="category">
               <mat-header-cell *matHeaderCellDef fxFlex="20"> Category </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.CategoryFriendlyName}} </mat-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Category.FriendlyName}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef fxFlex="13" style="text-align: center"> Actions </mat-header-cell>
@@ -72,7 +72,6 @@
           </mat-table>
         </div>
         <!-- <div class="alert alert-info" role="alert"><b>Sorry!</b> No contributions were processed for that plan/plans during the selected period.</div> -->
-        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
     </div>
   </mat-card>

@@ -15,7 +15,10 @@ export class ClinicalNotesComponent implements OnInit {
   private doctors : any;
   private participants : any;
   private notes : Array<any>;
+  private allNotes : Array<any>;
   private selectedDate: Date; 
+  private selectedDoctor : number = 0;
+  private participant: string = "";
   private displayedColumns = ['doctor', 'participant', 'created', 'category', 'actions'];
   private loading = false;
 
@@ -40,6 +43,7 @@ export class ClinicalNotesComponent implements OnInit {
     this.selectedDate = new Date();
     this.getDoctors();
     this.getParticipants();
+    this.getClinicalNotes();
   }
 
   getDoctors(){
@@ -68,7 +72,41 @@ export class ClinicalNotesComponent implements OnInit {
     ); 
   }
 
+  getClinicalNotes(){
+    this.loading = true;
+    this.ajaxService.getClinicalNotesByDay(this.selectedDate)
+    .subscribe(
+        data => {
+          this.allNotes = data.json();
+          this.filterNotes();
+          this.loading = false;
+        },
+        err => {
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+            duration: 7000,});
+          this.loading = false;
+        }
+    ); 
+  }
 
+  filterNotes(){
+    this.notes = this.allNotes;
+    let participantText = this.participant.trim().toLowerCase();
+    if(this.selectedDoctor > 0)
+      this.notes = this.notes.filter(app => app.DoctorID === this.selectedDoctor)
+    if(participantText != "")
+      this.notes = this.notes.filter(app => app.ParticipantName.toLowerCase().includes(participantText))
+  }
+
+  goToPreviousDay(){
+    this.selectedDate = new Date(this.selectedDate.setDate(this.selectedDate.getDate() - 1))
+    this.getClinicalNotes();
+  }
+
+  goToNextDay(){
+    this.selectedDate = new Date(this.selectedDate.setDate(this.selectedDate.getDate() + 1))
+    this.getClinicalNotes();
+  }
 
   goTo(destination: string){
     this.router.navigate(['/' + destination]);

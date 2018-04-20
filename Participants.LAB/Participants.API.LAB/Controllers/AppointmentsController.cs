@@ -169,7 +169,7 @@ namespace Participants.API.LAB.Controllers
 
             a = new Appointment();
             a.ParticipantID = 2;
-            a.DoctorID = 1;
+            a.DoctorID = 3;
             a.Date = DateTime.Today.Date;
             a.TimeSlot = 1;
             a.Status = (int)AppointmentStatus.Created;

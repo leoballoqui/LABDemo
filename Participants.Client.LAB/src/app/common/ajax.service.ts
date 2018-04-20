@@ -2,6 +2,8 @@ import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { ObservableMedia } from '@angular/flex-layout';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share'
 
 @Injectable()
 
@@ -18,7 +20,7 @@ export class AjaxService {
         let link = '/api/Participants/GetParticipants';
         let options = this.addAuthHeader();
 
-        let call = this.http.get(link, options)
+        let call = this.http.get(link, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -28,7 +30,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, participant, options);
+        let call = this.http.post(link, participant, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -38,7 +40,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, participant, options)
+        let call = this.http.post(link, participant, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -48,7 +50,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, participantID, options)
+        let call = this.http.post(link, participantID, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -59,7 +61,7 @@ export class AjaxService {
         let link = '/api/Doctors/GetDoctors';
         let options = this.addAuthHeader();
 
-        let call = this.http.get(link, options)
+        let call = this.http.get(link, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -69,7 +71,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, doctor, options)
+        let call = this.http.post(link, doctor, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -79,7 +81,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, doctor, options)
+        let call = this.http.post(link, doctor, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -89,7 +91,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, doctorID, options)
+        let call = this.http.post(link, doctorID, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -101,7 +103,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, data, options)
+        let call = this.http.post(link, data, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -111,7 +113,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, data, options)
+        let call = this.http.post(link, data, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -122,7 +124,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, date, options)
+        let call = this.http.post(link, date, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -132,7 +134,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, data, options)
+        let call = this.http.post(link, data, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }
@@ -142,7 +144,7 @@ export class AjaxService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = this.addAuthHeader(headers);
 
-        let call = this.http.post(link, data, options)
+        let call = this.http.post(link, data, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
       }
@@ -176,6 +178,19 @@ export class AjaxService {
 
         return this.http.post(link, data, options)
     }
+
+    /* Clinical Notes */
+
+    getClinicalNotesByDay(date: Date){
+        let link = '/api/ClinicalNotes/GetClinicalNotesByDay';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, date, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
 
     /* Private Functions */
 

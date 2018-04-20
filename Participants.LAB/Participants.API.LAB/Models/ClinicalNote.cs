@@ -9,7 +9,7 @@ namespace Participants.API.LAB.Models
     {
         public int ID { get; set; }
         public int DoctorID { get; set; }
-        public int PatientID { get; set; }
+        public int ParticipantID { get; set; }
         //public int GroupID { get; set; }
         public int CategoryID { get; set; }
         public DateTime Created { get; set; }
