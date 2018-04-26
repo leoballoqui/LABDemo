@@ -5,7 +5,10 @@ export class CommonService {
     public isAuth: boolean = false;
     private selectedParticipant: object;
     private selectedDoctor: object;
+    private selectedNote: object;
     private subject = new Subject<any>();
+    private doctorList : Array<any>;
+    private participantsList : Array<any>;
    
     
     setAuthData(token:string, userName:string, expire:Date) {
@@ -29,6 +32,30 @@ export class CommonService {
    
      setSelectedDoctor(doctor:object) {
        this.selectedDoctor = doctor;
+     }
+
+     getParticipants() {
+      return this.participantsList;
+    }
+  
+    setParticipants(participants: Array<any>) {
+      this.participantsList = participants;
+    }
+
+    getDoctors() {
+      return this.doctorList;
+    }
+  
+    setDoctors(doctors:Array<any>) {
+      this.doctorList = doctors;
+    }
+
+     getSelectedNote() {
+       return this.selectedNote;
+     }
+
+     setSelectedNote(note: any): any {
+       this.selectedNote = note;
      }
 
      isAuthorized() {

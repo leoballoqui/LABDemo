@@ -13,6 +13,7 @@ namespace Participants.API.LAB.Models
         //public int GroupID { get; set; }
         public int CategoryID { get; set; }
         public DateTime Created { get; set; }
+        public DateTime VisitDate { get; set; }
         public string Data { get; set; }
         public virtual Participant Participant { get; set; }
         public virtual Doctor Doctor { get; set; }

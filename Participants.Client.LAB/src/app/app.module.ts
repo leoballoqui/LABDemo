@@ -52,7 +52,7 @@ import { ApiXHRBackend } from './common/prefix-api.util';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([{
-      path: '', redirectTo: '/login', pathMatch: 'full'
+      path: '', redirectTo: '/home', pathMatch: 'full'
     }])
   ],
   providers: [AppToolbarService, CommonService, AjaxService, { provide: XHRBackend, useClass: ApiXHRBackend }],

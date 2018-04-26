@@ -23,7 +23,7 @@ namespace Participants.API.LAB.Controllers
         public IEnumerable<ClinicalNote> GetClinicalNotesByDay([FromBody]DateTime date)
         {
             FillDB();
-            return db.ClinicalNotes.Where(cn => cn.Created == date.Date)
+            return db.ClinicalNotes.Where(cn => cn.VisitDate == date.Date)
                 .Include("Category").Include("Doctor").Include("Participant").ToList();
         }
 
@@ -139,7 +139,7 @@ namespace Participants.API.LAB.Controllers
 
                     ClinicalNoteCategory cnc = new ClinicalNoteCategory();
                     cnc.Name = "Cat1";
-                    cnc.ComponentName = "ClinicalNoteTest";
+                    cnc.ComponentName = "Test";
                     cnc.FriendlyName = "First Clinical Note";
                     db.ClinicalNoteCategories.Add(cnc);
                     db.SaveChanges();
@@ -150,9 +150,21 @@ namespace Participants.API.LAB.Controllers
                 cn.ParticipantID = 1;
                 cn.DoctorID = 1;
                 cn.Created = DateTime.Now.Date;
-                cn.Data = "{}";
+                cn.VisitDate = DateTime.Now.Date;
+                cn.Data = "{\"Brief\":\"This is a brief of the first note.\", \"Comments\":\"This is suppused to be a longer text, only used as a place-holder for the first test note.\"}";
 
                 db.ClinicalNotes.Add(cn);
+
+                cn = new ClinicalNote();
+                cn.CategoryID = 1;
+                cn.ParticipantID = 2;
+                cn.DoctorID = 2;
+                cn.Created = DateTime.Now.Date;
+                cn.VisitDate = DateTime.Now.Date;
+                cn.Data = "{\"Brief\":\"This is a brief of the second note.\", \"Comments\":\"This is suppused to be a longer text, only used as a place-holder for the second test note.\"}";
+
+                db.ClinicalNotes.Add(cn);
+
                 db.SaveChanges();
             }
             catch (Exception e)

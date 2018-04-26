@@ -6,7 +6,7 @@
           <div fxFlex="50" style="text-align: left">
             <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 20px">Last Day</button>
             <mat-form-field class="date_calendar" color="accent">
-                <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getAppointments()">
+                <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getClinicalNotes()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -14,7 +14,7 @@
           </div>
           <div fxFlex="25">
             <mat-form-field color="accent">
-              <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filterAppointments()">
+              <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filterNotes()">
                   <mat-option [value]="0" selected>All</mat-option>
                   <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
                       {{ doctor.FullName }}
@@ -24,14 +24,14 @@
           </div>
           <div fxFlex="25">
             <mat-form-field class="example-full-width" color="accent">
-              <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filterAppointments()">
+              <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filterNotes()">
             </mat-form-field>
           </div>
         </div>
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
       <mat-card>
-        <div class="example-container mat-elevation-z8">
+        <div class="example-container mat-elevation-z8" *ngIf="!showNote">
           <mat-table #table [dataSource]="notes">
         
             <ng-container matColumnDef="id">
@@ -45,24 +45,29 @@
             </ng-container>
     
             <ng-container matColumnDef="participant">
-              <mat-header-cell *matHeaderCellDef fxFlex="19"> Participant </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="19"> {{element.Participant.FullName}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="20"> Participant </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Participant.FullName}} </mat-cell>
             </ng-container>
     
+            <ng-container matColumnDef="visit">
+              <mat-header-cell *matHeaderCellDef fxFlex="15"> Visit date </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.VisitDate | date}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="created">
-              <mat-header-cell *matHeaderCellDef fxFlex="13"> Created </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="13"> {{element.Created | date}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="15"> Created </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.Created | date}} </mat-cell>
             </ng-container>
         
             <ng-container matColumnDef="category">
-              <mat-header-cell *matHeaderCellDef fxFlex="20"> Category </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Category.FriendlyName}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="17"> Category </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="17"> {{element.Category.FriendlyName}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef fxFlex="13" style="text-align: center"> Actions </mat-header-cell>
               <mat-cell *matCellDef="let element" fxFlex="13" style="text-align: center"> 
-                  <mat-icon (click)="goToAction('participantdetails', element)" matTooltip="Details">description</mat-icon>
-                  <mat-icon (click)="goToAction('editparticipant', element)" matTooltip="Edit">edit</mat-icon>
+                  <mat-icon (click)="noteDetails(element)" matTooltip="Details">description</mat-icon>
+                  <mat-icon (click)="noteEdit(element)" matTooltip="Edit">edit</mat-icon>
                   <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Delete">delete</mat-icon>
               </mat-cell>
             </ng-container>
@@ -71,7 +76,15 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
         </div>
-        <!-- <div class="alert alert-info" role="alert"><b>Sorry!</b> No contributions were processed for that plan/plans during the selected period.</div> -->
+        <div class="example-container mat-elevation-z8" *ngIf="showNote">
+          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
+            <div fxFlex="20">
+              <mat-icon (click)="goBackToIndex()" matTooltip="Back" style="font-size: 2em">reply</mat-icon>
+            </div>
+          </div>
+          <template #dynamic></template>
+
+        </div>
       </mat-card>
     </div>
   </mat-card>
