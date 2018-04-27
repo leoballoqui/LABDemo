@@ -6,7 +6,8 @@ export class CommonService {
     private selectedParticipant: object;
     private selectedDoctor: object;
     private selectedNote: object;
-    private subject = new Subject<any>();
+    private authSubject = new Subject<any>();
+    private childComponentSubject = new Subject<any>();
     private doctorList : Array<any>;
     private participantsList : Array<any>;
    
@@ -15,7 +16,7 @@ export class CommonService {
       localStorage.setItem('id_token', token);
       localStorage.setItem('expiration', expire.toString());
       this.isAuth = true;
-      this.subject.next(this.isAuth);
+      this.authSubject.next(this.isAuth);
     }
 
     getSelectedParticipant() {
@@ -72,11 +73,19 @@ export class CommonService {
     logOut() {
       localStorage.clear();
       this.isAuth = false;
-      this.subject.next(this.isAuth);
+      this.authSubject.next(this.isAuth);
     }
 
-    notifier() {
-      return this.subject.asObservable();
+    childComponentDone(message: string) {
+      this.childComponentSubject.next(message);
+    }
+
+    authNotifier() {
+      return this.authSubject.asObservable();
+    }
+
+    childComponentNotifier() {
+      return this.childComponentSubject.asObservable();
     }
 
   

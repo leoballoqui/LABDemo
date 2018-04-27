@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
     this.isAuth = this.commonService.isAuthorized();
-    this.subscription = this.commonService.notifier().subscribe(value => 
+    this.subscription = this.commonService.authNotifier().subscribe(value => 
       {
         this.isAuth = value;
         this.resolveMenuItems();

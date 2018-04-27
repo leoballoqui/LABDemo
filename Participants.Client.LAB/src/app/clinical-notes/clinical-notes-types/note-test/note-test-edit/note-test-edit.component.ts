@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../../../common/common.service';
+import {AjaxService} from '../../../../common/ajax.service';
 
 @Component({
   selector: 'app-note-test-edit',
@@ -21,7 +23,9 @@ export class NoteTestEditComponent implements OnInit {
   constructor(
     private router: Router,
     private http: Http,
-    private commonService:CommonService) { 
+    private snackBar: MatSnackBar,
+    private commonService:CommonService,
+    private ajaxService:AjaxService,) { 
 
   }
 
@@ -41,6 +45,51 @@ export class NoteTestEditComponent implements OnInit {
     this.data = JSON.parse(this.note.Data);
     this.selectedNoteDoctor = this.note.Doctor.ID;
     this.selectedNoteParticipant = this.note.Participant.ID;
+    this.selectedDate = this.note.VisitDate;
+  }
+
+  complete() {
+    this.note.DoctorID = this.selectedNoteDoctor;
+    this.note.ParticipantID = this.selectedNoteParticipant;
+    this.note.VisitDate = this.selectedDate;
+    this.note.data = JSON.stringify(this.data);
+
+    let data = JSON.stringify(this.note);
+    if(this.note.ID == null || this.note.ID == 0)
+      this.save(data);
+    else
+      this.update(data);
+    
+  }
+
+  save(data : string) {
+    this.ajaxService.addClinicalNote(data)
+    .subscribe(data => {
+        this.snackBar.open("Success!", "The note was successfully created.", {
+          duration: 7000,});
+          this.commonService.childComponentDone("complete");
+    }, error => {
+      this.snackBar.open("Error!", "Sorry, an error ocurred while trying to create the note.", {
+        duration: 7000,});
+        this.commonService.childComponentDone("complete");
+    });
+  }
+
+  update(data : string) {
+    this.ajaxService.updateClinicalNote(data)
+    .subscribe(data => {
+        this.snackBar.open("Success!", "The note was successfully updated.", {
+          duration: 7000,});
+          this.commonService.childComponentDone("complete");
+    }, error => {
+      this.snackBar.open("Error!", "Sorry, an error ocurred while trying to update the note.", {
+        duration: 7000,});
+        this.commonService.childComponentDone("complete");
+    });
+  }
+
+  cancel() {
+    this.commonService.childComponentDone("back");
   }
 
   goTo(destination: string){

@@ -2,17 +2,17 @@
   <mat-card fxFlex="100" style="padding:0">
     <div class="content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px" style="padding:0; background-color: #303030">
       <mat-card>
-        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
-          <div fxFlex="50" style="text-align: left">
-            <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 20px">Last Day</button>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
+          <div fxFlex="47" style="text-align: left">
+            <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 5px">Last Day</button>
             <mat-form-field class="date_calendar" color="accent">
                 <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="getClinicalNotes()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-            <button mat-raised-button class="btn_side btn_date" (click)="goToNextDay()" style="margin-left: 20px">Next Day</button>
+            <button mat-raised-button class="btn_side btn_date" (click)="goToNextDay()" style="margin-left: 5px">Next Day</button>
           </div>
-          <div fxFlex="25">
+          <div fxFlex="18">
             <mat-form-field color="accent">
               <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="filterNotes()">
                   <mat-option [value]="0" selected>All</mat-option>
@@ -22,15 +22,40 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div fxFlex="25">
+          <div fxFlex="17">
             <mat-form-field class="example-full-width" color="accent">
               <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filterNotes()">
+            </mat-form-field>
+          </div>
+          <div fxFlex="18">
+            <mat-form-field color="accent">
+              <mat-select name="ddl_Category" placeholder="Note Category" [(ngModel)]="selectedCategory" (change)="filterNotes()">
+                  <mat-option [value]="0" selected>All</mat-option>
+                  <mat-option *ngFor="let cat of categories" [value]="cat.ID">
+                      {{ cat.FriendlyName }}
+                  </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
       <mat-card>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px" style="padding-top: 0; padding-bottom: 0;">
+            <div fxFlex="18">
+                <mat-form-field color="accent" style="border-top:0">
+                  <mat-select name="ddl_CategoryNew" placeholder="Note Category" [(ngModel)]="selectedNewCategory" >
+                      <mat-option [value]="0" selected>All</mat-option>
+                      <mat-option *ngFor="let cat of categories; let i = index" [value]="index">
+                          {{ cat.FriendlyName }}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div fxFlex="10" style="margin-left: 15px">
+                    <mat-icon (click)="addNote()" matTooltip="New Clinical Note" style="margin-top: 22px;">add</mat-icon>
+                </div>
+            </div>
+        </div>
         <div class="example-container mat-elevation-z8" *ngIf="!showNote">
           <mat-table #table [dataSource]="notes">
         
@@ -50,25 +75,27 @@
             </ng-container>
     
             <ng-container matColumnDef="visit">
-              <mat-header-cell *matHeaderCellDef fxFlex="15"> Visit date </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.VisitDate | date}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="10"> Visit date </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="10"> {{element.VisitDate | date}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="created">
-              <mat-header-cell *matHeaderCellDef fxFlex="15"> Created </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.Created | date}} </mat-cell>
+            <ng-container matColumnDef="summary">
+              <mat-header-cell *matHeaderCellDef fxFlex="20"> Summary </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Summary}} </mat-cell>
             </ng-container>
         
             <ng-container matColumnDef="category">
-              <mat-header-cell *matHeaderCellDef fxFlex="17"> Category </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="17"> {{element.Category.FriendlyName}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="15"> Category </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.Category.FriendlyName}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
-              <mat-header-cell *matHeaderCellDef fxFlex="13" style="text-align: center"> Actions </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="13" style="text-align: center"> 
-                  <mat-icon (click)="noteDetails(element)" matTooltip="Details">description</mat-icon>
-                  <mat-icon (click)="noteEdit(element)" matTooltip="Edit">edit</mat-icon>
-                  <mat-icon (click)="deleteEntry(element.ID)" matTooltip="Delete">delete</mat-icon>
+              <mat-header-cell *matHeaderCellDef fxFlex="15" style="text-align: center"> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15" style="text-align: center"> 
+                  <mat-icon (click)="detailsNote(element)" matTooltip="Details">description</mat-icon>
+                  <mat-icon (click)="editNote(element)" matTooltip="Edit">edit</mat-icon>
+                  <mat-icon (click)="cloneNote(element)" matTooltip="Clone">content_copy</mat-icon>
+                  <mat-icon (click)="deleteNote(element.ID)" matTooltip="Delete">delete</mat-icon>
+                  
               </mat-cell>
             </ng-container>
         
@@ -81,9 +108,13 @@
             <div fxFlex="20">
               <mat-icon (click)="goBackToIndex()" matTooltip="Back" style="font-size: 2em">reply</mat-icon>
             </div>
+            <div fxFlex="60" style="text-align: center">
+              <span style="color:rgb(201, 194, 194)">Category: </span><span style="font-size: 1.08em">{{commonService.getSelectedNote().Category.FriendlyName}}</span>
+            </div>
           </div>
-          <template #dynamic></template>
-
+          <div class="div_childComponentContainer">
+            <template #dynamic></template>
+          </div>
         </div>
       </mat-card>
     </div>

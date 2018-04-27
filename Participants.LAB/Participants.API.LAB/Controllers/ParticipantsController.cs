@@ -186,7 +186,7 @@ namespace Participants.API.LAB.Controllers
             d.PhoneNumber = "3059999999";
             d.SecPhoneNumber = "3059999998";
             d.Address = "Boca Raton";
-            d.EmailAddress = "chicho@cojo.com";
+            d.EmailAddress = "juana@loca.com";
             d.Suffix = "Dr.";
             d.GraduatedFrom = "FIU";
             d.ClinicID = 1;

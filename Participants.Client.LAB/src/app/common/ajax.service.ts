@@ -191,6 +191,46 @@ export class AjaxService {
         return call;
     }
 
+    addClinicalNote(note: string){
+        let link = '/api/ClinicalNotes/AddClinicalNote';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, note, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    updateClinicalNote(note: string){
+        let link = '/api/ClinicalNotes/UpdateClinicalNote';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, note, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    deleteClinicalNote(noteID : number){
+        let link = '/api/ClinicalNotes/DeleteClinicalNote';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, noteID, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    /* Clinical Notes Categories */
+
+    getAllCategories(){
+        let link = '/api/ClinicalNoteCategories/GetClinicalNoteCategories';
+        let options = this.addAuthHeader();
+
+        let call = this.http.get(link, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
 
     /* Private Functions */
 

@@ -47,29 +47,29 @@ namespace Participants.API.LAB.Controllers
             return Ok(clinicalNote);
         }
 
-        // PUT: api/ClinicalNotes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutClinicalNote(int id, ClinicalNote clinicalNote)
+        [HttpPost]
+        public IHttpActionResult UpdateClinicalNote(ClinicalNote clinicalNote)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
-
-            if (id != clinicalNote.ID)
-            {
+            if (clinicalNote.ID == 0)
                 return BadRequest();
-            }
-
-            db.Entry(clinicalNote).State = EntityState.Modified;
 
             try
             {
+                clinicalNote.Participant = null;
+                clinicalNote.Doctor = null;
+                clinicalNote.Category = null;
+                clinicalNote.VisitDate = clinicalNote.VisitDate.Date;
+                clinicalNote.checkSummary();
+
+                db.Entry(clinicalNote).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!ClinicalNoteExists(id))
+                if (!ClinicalNoteExists(clinicalNote.ID))
                 {
                     return NotFound();
                 }
@@ -82,14 +82,20 @@ namespace Participants.API.LAB.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/ClinicalNotes
         [ResponseType(typeof(ClinicalNote))]
-        public IHttpActionResult PostClinicalNote(ClinicalNote clinicalNote)
+        [HttpPost]
+        public IHttpActionResult AddClinicalNote(ClinicalNote clinicalNote)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            clinicalNote.Participant = null;
+            clinicalNote.Doctor = null;
+            clinicalNote.Category = null;
+            clinicalNote.VisitDate = clinicalNote.VisitDate.Date;
+            clinicalNote.checkSummary();
 
             db.ClinicalNotes.Add(clinicalNote);
             db.SaveChanges();
@@ -97,9 +103,9 @@ namespace Participants.API.LAB.Controllers
             return CreatedAtRoute("DefaultApi", new { id = clinicalNote.ID }, clinicalNote);
         }
 
-        // DELETE: api/ClinicalNotes/5
         [ResponseType(typeof(ClinicalNote))]
-        public IHttpActionResult DeleteClinicalNote(int id)
+        [HttpPost]
+        public IHttpActionResult DeleteClinicalNote([FromBody] int id)
         {
             ClinicalNote clinicalNote = db.ClinicalNotes.Find(id);
             if (clinicalNote == null)
@@ -151,6 +157,7 @@ namespace Participants.API.LAB.Controllers
                 cn.DoctorID = 1;
                 cn.Created = DateTime.Now.Date;
                 cn.VisitDate = DateTime.Now.Date;
+                cn.Summary = "This is a brief of the first note";
                 cn.Data = "{\"Brief\":\"This is a brief of the first note.\", \"Comments\":\"This is suppused to be a longer text, only used as a place-holder for the first test note.\"}";
 
                 db.ClinicalNotes.Add(cn);
@@ -161,6 +168,7 @@ namespace Participants.API.LAB.Controllers
                 cn.DoctorID = 2;
                 cn.Created = DateTime.Now.Date;
                 cn.VisitDate = DateTime.Now.Date;
+                cn.Summary = "This is a brief of the second note";
                 cn.Data = "{\"Brief\":\"This is a brief of the second note.\", \"Comments\":\"This is suppused to be a longer text, only used as a place-holder for the second test note.\"}";
 
                 db.ClinicalNotes.Add(cn);
