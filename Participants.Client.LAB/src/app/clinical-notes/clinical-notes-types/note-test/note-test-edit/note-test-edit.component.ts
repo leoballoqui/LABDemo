@@ -42,19 +42,30 @@ export class NoteTestEditComponent implements OnInit {
     this.doctors = this.commonService.getDoctors();
     this.participants = this.commonService.getParticipants();
     this.note = this.commonService.getSelectedNote();
-    this.data = JSON.parse(this.note.Data);
-    this.selectedNoteDoctor = this.note.Doctor.ID;
-    this.selectedNoteParticipant = this.note.Participant.ID;
-    this.selectedDate = this.note.VisitDate;
+    if(this.note != null && this.note.IsNew != true)
+    {
+      this.data = JSON.parse(this.note.Data);
+      this.selectedNoteDoctor = this.note.Doctor.ID;
+      this.selectedNoteParticipant = this.note.Participant.ID;
+      this.selectedDate = this.note.VisitDate;
+    }
+    else
+    {
+      this.selectedNoteDoctor = 0;
+      this.selectedNoteParticipant = 0;
+      this.data = {};
+      this.selectedDate = new Date();
+    }
   }
 
   complete() {
     this.note.DoctorID = this.selectedNoteDoctor;
     this.note.ParticipantID = this.selectedNoteParticipant;
     this.note.VisitDate = this.selectedDate;
+    this.resolveSummary();
     this.note.data = JSON.stringify(this.data);
-
     let data = JSON.stringify(this.note);
+    
     if(this.note.ID == null || this.note.ID == 0)
       this.save(data);
     else
@@ -71,7 +82,7 @@ export class NoteTestEditComponent implements OnInit {
     }, error => {
       this.snackBar.open("Error!", "Sorry, an error ocurred while trying to create the note.", {
         duration: 7000,});
-        this.commonService.childComponentDone("complete");
+       // this.commonService.childComponentDone("complete");
     });
   }
 
@@ -84,8 +95,12 @@ export class NoteTestEditComponent implements OnInit {
     }, error => {
       this.snackBar.open("Error!", "Sorry, an error ocurred while trying to update the note.", {
         duration: 7000,});
-        this.commonService.childComponentDone("complete");
+        //this.commonService.childComponentDone("complete");
     });
+  }
+
+  resolveSummary() {
+    this.note.Summary = this.data.Brief;
   }
 
   cancel() {

@@ -91,10 +91,13 @@ namespace Participants.API.LAB.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (clinicalNote.CategoryID < 1)
+                clinicalNote.CategoryID = clinicalNote.Category.ID;
             clinicalNote.Participant = null;
             clinicalNote.Doctor = null;
             clinicalNote.Category = null;
             clinicalNote.VisitDate = clinicalNote.VisitDate.Date;
+            clinicalNote.Created = DateTime.Now.Date;
             clinicalNote.checkSummary();
 
             db.ClinicalNotes.Add(clinicalNote);

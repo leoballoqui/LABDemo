@@ -30,7 +30,9 @@ export class ClinicalNotesComponent implements OnInit {
   private displayedColumns = ['doctor', 'participant', 'visit', 'summary', 'category', 'actions'];
   private loading = false;
   private showNote = false;
+  private newNoteCategoryError = false;
 
+  
   @ViewChild('dynamic', { read: ViewContainerRef }) viewContainerRef: ViewContainerRef;
 
   constructor(
@@ -59,6 +61,7 @@ export class ClinicalNotesComponent implements OnInit {
 
     this.notes = new Array<any>();
     this.selectedDate = new Date();
+    this.selectedNewCategory = -1;
     this.getDoctors();
     this.getParticipants();
     this.getCategories();
@@ -192,12 +195,31 @@ export class ClinicalNotesComponent implements OnInit {
   }
 
   addNote(){
-    this.commonService.setSelectedNote(null);
-    let component = this;
-    this.showNote = true;
-    setTimeout(function() {
-      component.loadComponent(component.categories[component.selectedNewCategory].ComponentName, false)
-    }, 50);
+    if(this.selectedNewCategory < 0)
+    {
+      this.newNoteCategoryError = true;
+      this.snackBar.open("Error!", "Please select a note category.", {
+        duration: 3500,});
+    }
+    else
+    {
+      let newNote : any = {};
+      newNote.Category = this.categories[this.selectedNewCategory];
+      newNote.IsNew = true;
+      this.commonService.setSelectedNote(newNote);
+      this.commonService.setDoctors(this.doctors);
+      this.commonService.setParticipants(this.participants);
+      let component = this;
+      this.showNote = true;
+      setTimeout(function() {
+        component.loadComponent(newNote.Category.ComponentName, false)
+      }, 50);
+    }
+  }
+
+  categorySelected(){
+    if(this.selectedNewCategory >= 0)
+      this.newNoteCategoryError = false;
   }
 
   loadComponent(componentName: string, isDetails: boolean){

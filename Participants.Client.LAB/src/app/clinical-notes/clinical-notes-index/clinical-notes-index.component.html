@@ -41,16 +41,19 @@
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
       <mat-card>
-        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px" style="padding-top: 0; padding-bottom: 0;">
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px" *ngIf="!showNote" style="padding-top: 0; padding-bottom: 0;">
             <div fxFlex="18">
                 <mat-form-field color="accent" style="border-top:0">
-                  <mat-select name="ddl_CategoryNew" placeholder="Note Category" [(ngModel)]="selectedNewCategory" >
-                      <mat-option [value]="0" selected>All</mat-option>
-                      <mat-option *ngFor="let cat of categories; let i = index" [value]="index">
+                  <mat-select name="ddl_CategoryNew" placeholder="Note Category" [(ngModel)]="selectedNewCategory" (change)="categorySelected()">
+                      <mat-option [value]="-1" selected>All</mat-option>
+                      <mat-option *ngFor="let cat of categories; let i = index" [value]="i">
                           {{ cat.FriendlyName }}
                       </mat-option>
                   </mat-select>
                 </mat-form-field>
+                <div fxFlex="10" style="margin-left: 15px; color: darkorange" *ngIf="newNoteCategoryError">
+                    <mat-icon (click)="addNote()" matTooltip="Please select a category" style="margin-top: 22px;">warning</mat-icon>
+                </div>
                 <div fxFlex="10" style="margin-left: 15px">
                     <mat-icon (click)="addNote()" matTooltip="New Clinical Note" style="margin-top: 22px;">add</mat-icon>
                 </div>
@@ -95,7 +98,6 @@
                   <mat-icon (click)="editNote(element)" matTooltip="Edit">edit</mat-icon>
                   <mat-icon (click)="cloneNote(element)" matTooltip="Clone">content_copy</mat-icon>
                   <mat-icon (click)="deleteNote(element.ID)" matTooltip="Delete">delete</mat-icon>
-                  
               </mat-cell>
             </ng-container>
         
