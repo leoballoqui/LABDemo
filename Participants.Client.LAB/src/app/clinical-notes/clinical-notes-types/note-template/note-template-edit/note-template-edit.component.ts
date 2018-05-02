@@ -6,11 +6,11 @@ import {CommonService} from '../../../../common/common.service';
 import {AjaxService} from '../../../../common/ajax.service';
 
 @Component({
-  selector: 'app-note-test-edit',
-  templateUrl: './note-test-edit.component.html',
-  styleUrls: ['./note-test-edit.component.css']
+  selector: 'app-note-template-edit',
+  templateUrl: './note-template-edit.component.html',
+  styleUrls: ['./note-template-edit.component.css']
 })
-export class NoteTestEditComponent implements OnInit {
+export class NoteTemplateEditComponent implements OnInit {
 
   private doctors : Array<any>;
   private participants : Array<any>;

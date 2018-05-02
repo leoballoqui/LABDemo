@@ -35,6 +35,7 @@ export class HomeIndexComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
 
     this.allAppointments = new Array<any>();

@@ -24,6 +24,7 @@ export class NoteTestDetailsComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
     this.resolveData();
   }

@@ -109,6 +109,10 @@
           <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
             <div fxFlex="20">
               <mat-icon (click)="goBackToIndex()" matTooltip="Back" style="font-size: 2em">reply</mat-icon>
+              <span *ngIf="detailsMode" style="margin-left: 40px">
+                <mat-icon (click)="shortcutToNote(false)" matTooltip="Edit" >edit</mat-icon>
+                <mat-icon (click)="shortcutToNote(true)" matTooltip="Clone">content_copy</mat-icon>
+              </span>
             </div>
             <div fxFlex="60" style="text-align: center">
               <span style="color:rgb(201, 194, 194)">Category: </span><span style="font-size: 1.08em">{{commonService.getSelectedNote().Category.FriendlyName}}</span>

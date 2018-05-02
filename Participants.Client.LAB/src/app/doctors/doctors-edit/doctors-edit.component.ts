@@ -44,6 +44,7 @@ export class DoctorsEditComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
     
     this.doctor = this.commonService.getSelectedDoctor();

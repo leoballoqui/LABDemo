@@ -1,0 +1,43 @@
+  <mat-card>
+    <form class="example-form" >
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Doctor: </span><span class="spn_detailField">{{note.Doctor.FullName}}</span>
+        </div>
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName" >Participant: </span><span class="spn_detailField">{{note.Participant.FullName}}</span>
+        </div>
+      </div>
+        
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Category: </span><span class="spn_detailField">{{note.Category.FriendlyName}}</span>
+        </div>
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Created: </span><span class="spn_detailField">{{note.Created | date}}</span>
+        </div>
+      </div>
+
+      <!-- This block below varies depending on the Note -->
+
+      <!-- Example, taken from the Test Note -->
+      <!-- <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="100">
+          <label class="spn_detailFieldName">Brief: </label>
+          <p class="spn_detailField">{{data.Brief}}</p>
+        </div>
+      </div>
+
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="100">
+          <label class="spn_detailFieldName">Comments: </label>
+          <p class="spn_detailField">{{data.Comments}}</p>
+        </div>
+      </div> -->
+
+      <!-- The block above varies depending on the Note -->
+
+    </form>
+  </mat-card>
+
+

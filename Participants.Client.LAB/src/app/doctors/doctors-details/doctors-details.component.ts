@@ -24,6 +24,7 @@ export class DoctorsDetailsComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
     
     this.doctor = this.commonService.getSelectedDoctor();

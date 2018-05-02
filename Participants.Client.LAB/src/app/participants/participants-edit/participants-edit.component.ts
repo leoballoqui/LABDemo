@@ -43,6 +43,7 @@ export class ParticipantsEditComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
     
     this.participant = this.commonService.getSelectedParticipant();

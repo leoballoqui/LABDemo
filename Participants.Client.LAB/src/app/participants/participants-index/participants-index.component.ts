@@ -31,6 +31,7 @@ export class ParticipantsIndexComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
 
     this.refreshData();

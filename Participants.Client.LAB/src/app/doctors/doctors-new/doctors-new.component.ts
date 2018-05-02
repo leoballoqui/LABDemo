@@ -53,6 +53,7 @@ export class DoctorsNewComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
 
     this.firstName = "Yo D";

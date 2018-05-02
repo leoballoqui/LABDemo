@@ -1,22 +1,22 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
-import {CommonService} from '../../common/common.service';
+import {CommonService} from '../../../../common/common.service';
 
 @Component({
-  selector: 'app-participants-details',
-  templateUrl: './participants-details.component.html',
-  styleUrls: ['./participants-details.component.css']
+  selector: 'app-note-template-details',
+  templateUrl: './note-template-details.component.html',
+  styleUrls: ['./note-template-details.component.css']
 })
-export class ParticipantsDetailsComponent implements OnInit {
+export class NoteTemplateDetailsComponent implements OnInit {
 
-  private participant : any;
+  private note : any;
+  private data : any;
 
   constructor(
     private router: Router,
-    private http: Http,    
+    private http: Http,
     private commonService:CommonService) { 
-
   }
 
   ngOnInit() {
@@ -26,10 +26,12 @@ export class ParticipantsDetailsComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    
-    this.participant = this.commonService.getSelectedParticipant();
-    if(this.participant === null || this.participant === undefined)
-      this.goTo('participants');
+    this.resolveData();
+  }
+
+  resolveData(){
+    this.note = this.commonService.getSelectedNote();
+    this.data = JSON.parse(this.note.Data);
   }
 
   goTo(destination: string){

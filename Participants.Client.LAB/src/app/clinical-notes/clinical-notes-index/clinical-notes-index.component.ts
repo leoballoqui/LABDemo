@@ -7,8 +7,10 @@ import {CommonService} from '../../common/common.service';
 import {AjaxService} from '../../common/ajax.service';
 import { Subscription } from 'rxjs/Subscription'
 
+//Add references to al notes components here (both 'Details' and 'Edit')
 import { NoteTestEditComponent } from '../clinical-notes-types/note-test/note-test-edit/note-test-edit.component';
 import { NoteTestDetailsComponent } from '../clinical-notes-types/note-test/note-test-details/note-test-details.component';
+
 
 @Component({
   selector: 'app-clinical-notes-index',
@@ -31,7 +33,7 @@ export class ClinicalNotesComponent implements OnInit {
   private loading = false;
   private showNote = false;
   private newNoteCategoryError = false;
-
+  private detailsMode = false;
   
   @ViewChild('dynamic', { read: ViewContainerRef }) viewContainerRef: ViewContainerRef;
 
@@ -51,6 +53,7 @@ export class ClinicalNotesComponent implements OnInit {
     {
       this.commonService.logOut();
       this.router.navigate(['/login']);
+      return;
     }
 
     let component = this;
@@ -156,7 +159,10 @@ export class ClinicalNotesComponent implements OnInit {
   }
 
   editNote(note: any){
-    this.commonService.setSelectedNote(note);
+    if(note != null)
+      this.commonService.setSelectedNote(note);
+    else // Shortcut drom "Details"
+      note = this.commonService.getSelectedNote();
     this.commonService.setDoctors(this.doctors);
     this.commonService.setParticipants(this.participants);
     this.showNote = true;
@@ -167,7 +173,15 @@ export class ClinicalNotesComponent implements OnInit {
   }
 
   cloneNote(note: any){
-    let cloneNote = note;
+    let cloneNote : any = null;
+    if(note != null)
+      cloneNote = note;
+    else // Shortcut drom "Details"
+    {
+      this.showNote = false;
+      cloneNote = this.commonService.getSelectedNote();
+    }
+
     cloneNote.ID = 0;
     this.commonService.setSelectedNote(cloneNote);
     this.commonService.setDoctors(this.doctors);
@@ -175,7 +189,7 @@ export class ClinicalNotesComponent implements OnInit {
     this.showNote = true;
     let component = this;
     setTimeout(function() {
-      component.loadComponent(note.Category.ComponentName, false)
+      component.loadComponent(cloneNote.Category.ComponentName, false)
     }, 50);
   }
 
@@ -217,6 +231,16 @@ export class ClinicalNotesComponent implements OnInit {
     }
   }
 
+  shortcutToNote(clone: string){
+    let note : any = this.commonService.getSelectedNote();
+    this.showNote = false;
+    this.viewContainerRef.clear();
+    if(clone)
+      this.cloneNote(note);
+    else
+      this.editNote(note);
+  }
+
   categorySelected(){
     if(this.selectedNewCategory >= 0)
       this.newNoteCategoryError = false;
@@ -225,6 +249,7 @@ export class ClinicalNotesComponent implements OnInit {
   loadComponent(componentName: string, isDetails: boolean){
     let type = null;
     type = this.resolveComponentType(componentName, isDetails);
+    this.detailsMode = isDetails;
     if(type == null)
     {
       this.showNote = false;
