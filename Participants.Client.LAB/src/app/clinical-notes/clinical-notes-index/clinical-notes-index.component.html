@@ -1,6 +1,6 @@
 <div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
   <mat-card fxFlex="100" style="padding:0">
-    <div class="content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px" style="padding:0; background-color: #303030">
+    <div class="content div-ClinicNotes" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
       <mat-card>
         <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
           <div fxFlex="47" style="text-align: left">
@@ -41,7 +41,7 @@
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
       <mat-card>
-        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px" *ngIf="!showNote" style="padding-top: 0; padding-bottom: 0;">
+        <div class="content div-CategorySelector" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px" *ngIf="!showNote">
             <div fxFlex="18">
                 <mat-form-field color="accent" style="border-top:0">
                   <mat-select name="ddl_CategoryNew" placeholder="Note Category" [(ngModel)]="selectedNewCategory" (change)="categorySelected()">
@@ -51,12 +51,12 @@
                       </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <div fxFlex="10" style="margin-left: 15px; color: darkorange" *ngIf="newNoteCategoryError">
-                    <mat-icon (click)="addNote()" matTooltip="Please select a category" style="margin-top: 22px;">warning</mat-icon>
-                </div>
                 <div fxFlex="10" style="margin-left: 15px">
                     <mat-icon (click)="addNote()" matTooltip="New Clinical Note" style="margin-top: 22px;">add</mat-icon>
                 </div>
+                <div fxFlex="10" class="icon-CategoryError" *ngIf="newNoteCategoryError">
+                  <mat-icon (click)="addNote()" matTooltip="Please select a category" style="margin-top: 22px;">warning</mat-icon>
+              </div>
             </div>
         </div>
         <div class="example-container mat-elevation-z8" *ngIf="!showNote">
@@ -106,7 +106,7 @@
           </mat-table>
         </div>
         <div class="example-container mat-elevation-z8" *ngIf="showNote">
-          <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
+          <div class="content div-actionsRow" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="0">
             <div fxFlex="20">
               <mat-icon (click)="goBackToIndex()" matTooltip="Back" style="font-size: 2em">reply</mat-icon>
               <span *ngIf="detailsMode" style="margin-left: 40px">
@@ -115,10 +115,13 @@
               </span>
             </div>
             <div fxFlex="60" style="text-align: center">
-              <span style="color:rgb(201, 194, 194)">Category: </span><span style="font-size: 1.08em">{{commonService.getSelectedNote().Category.FriendlyName}}</span>
+              <span style="color:rgb(201, 194, 194)">Category: </span><span style="font-size: 1.12em">{{commonService.getSelectedNote().Category.FriendlyName}}</span>
+            </div>
+            <div fxFlex="20">
             </div>
           </div>
-          <div class="div_childComponentContainer">
+
+          <div class="div-childComponentContainer">
             <template #dynamic></template>
           </div>
         </div>

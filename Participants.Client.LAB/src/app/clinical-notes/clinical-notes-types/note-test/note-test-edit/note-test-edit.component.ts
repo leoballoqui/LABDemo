@@ -4,12 +4,14 @@ import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../../../common/common.service';
 import {AjaxService} from '../../../../common/ajax.service';
+import { registerDynamicClinicNoteType } from '../../dynamic-types-registrar';
 
 @Component({
   selector: 'app-note-test-edit',
   templateUrl: './note-test-edit.component.html',
   styleUrls: ['./note-test-edit.component.css']
 })
+
 export class NoteTestEditComponent implements OnInit {
 
   private doctors : Array<any>;
@@ -26,7 +28,6 @@ export class NoteTestEditComponent implements OnInit {
     private snackBar: MatSnackBar,
     private commonService:CommonService,
     private ajaxService:AjaxService,) { 
-
   }
 
   ngOnInit() {
@@ -113,3 +114,5 @@ export class NoteTestEditComponent implements OnInit {
   }
 
 }
+
+registerDynamicClinicNoteType(NoteTestEditComponent, "NoteTestEditComponent");

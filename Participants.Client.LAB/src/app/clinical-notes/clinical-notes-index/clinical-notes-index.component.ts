@@ -1,16 +1,12 @@
-import { Component, OnInit, AfterViewInit, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver  } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, ViewChild, ViewContainerRef, ComponentFactoryResolver, Type  } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { DialogsService } from '../../dialogs/dialogs.service';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../common/common.service';
 import {AjaxService} from '../../common/ajax.service';
-import { Subscription } from 'rxjs/Subscription'
-
-//Add references to al notes components here (both 'Details' and 'Edit')
-import { NoteTestEditComponent } from '../clinical-notes-types/note-test/note-test-edit/note-test-edit.component';
-import { NoteTestDetailsComponent } from '../clinical-notes-types/note-test/note-test-details/note-test-details.component';
-
+import { Subscription } from 'rxjs/Subscription';
+import { getTypeFor } from '../clinical-notes-types/dynamic-types-registrar';
 
 @Component({
   selector: 'app-clinical-notes-index',
@@ -69,7 +65,7 @@ export class ClinicalNotesComponent implements OnInit {
     this.getParticipants();
     this.getCategories();
     this.getClinicalNotes();
-  }
+    }
 
   getDoctors(){
     this.ajaxService.getAllDoctors()
@@ -248,7 +244,8 @@ export class ClinicalNotesComponent implements OnInit {
 
   loadComponent(componentName: string, isDetails: boolean){
     let type = null;
-    type = this.resolveComponentType(componentName, isDetails);
+    //type = this.resolveComponentType(componentName, isDetails);
+    type = getTypeFor(this.resolveComponentType(componentName, isDetails));
     this.detailsMode = isDetails;
     if(type == null)
     {
@@ -261,16 +258,25 @@ export class ClinicalNotesComponent implements OnInit {
   }
 
   resolveComponentType(componentName: string, isDetails: boolean) {
-    switch(componentName.toLowerCase()){
+    /*switch(componentName.toLowerCase()){
       case "test":
         return isDetails ? NoteTestDetailsComponent : NoteTestEditComponent;
       default:
         return null;
-    }
+    }*/
+    //This is Ok now because we are registering the cn compoennt types with a string like this "NoteTestEditComponent", 
+    //and no longer with the class name (would have failed after obfuscation).
+    let compName : string = "Note";
+    compName += componentName;
+    compName += isDetails ? "Details" : "Edit";
+    compName += "Component";
+    return compName;
   }
 
   goBackToIndex(){
     this.showNote = false;
+    this.detailsMode = false;
+    this.newNoteCategoryError = false;
   }
 
   goTo(destination: string){

@@ -16,9 +16,27 @@
     margin:auto;
 }
 
-.div_childComponentContainer{
+.div-childComponentContainer{
     max-height: 470px; 
     overflow-y: auto; 
-    overflow-x: hidden
+    overflow-x: hidden;
 }
 
+.div-actionsRow{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.icon-CategoryError{
+    margin-left: 15px; 
+    color: darkorange;
+}
+
+.div-CategorySelector{
+    padding-top: 0; 
+    padding-bottom: 0;
+}
+
+.div-ClinicNotes{
+    padding:0; 
+    background-color: #303030;
+}

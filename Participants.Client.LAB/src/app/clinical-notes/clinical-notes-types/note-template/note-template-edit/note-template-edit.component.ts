@@ -4,12 +4,14 @@ import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../../../common/common.service';
 import {AjaxService} from '../../../../common/ajax.service';
+import { registerDynamicClinicNoteType } from '../../dynamic-types-registrar';
 
 @Component({
   selector: 'app-note-template-edit',
   templateUrl: './note-template-edit.component.html',
   styleUrls: ['./note-template-edit.component.css']
 })
+
 export class NoteTemplateEditComponent implements OnInit {
 
   private doctors : Array<any>;
@@ -113,3 +115,5 @@ export class NoteTemplateEditComponent implements OnInit {
   }
 
 }
+
+registerDynamicClinicNoteType(NoteTemplateEditComponent, "NoteTemplateEditComponent");

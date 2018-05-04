@@ -2,12 +2,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {CommonService} from '../../../../common/common.service';
+import { registerDynamicClinicNoteType } from '../../dynamic-types-registrar';
 
 @Component({
   selector: 'app-note-template-details',
   templateUrl: './note-template-details.component.html',
   styleUrls: ['./note-template-details.component.css']
 })
+
 export class NoteTemplateDetailsComponent implements OnInit {
 
   private note : any;
@@ -39,3 +41,5 @@ export class NoteTemplateDetailsComponent implements OnInit {
   }
 
 }
+
+registerDynamicClinicNoteType(NoteTemplateDetailsComponent, "NoteTemplateDetailsComponent");
