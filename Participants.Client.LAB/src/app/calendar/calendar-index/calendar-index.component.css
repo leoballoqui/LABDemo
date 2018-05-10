@@ -16,4 +16,16 @@
     margin:auto;
 }
 
+.btn-iconContainer{
+    height: 24px;
+    width: 24px;
+}
 
+.btn-iconContainer mat-icon{
+    vertical-align: baseline;
+}
+
+.icon-noButton{
+    font-size: 24pt;
+    margin-top: -5px
+}

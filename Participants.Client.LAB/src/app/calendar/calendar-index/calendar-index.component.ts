@@ -23,6 +23,8 @@ export class CalendarIndexComponent implements OnInit {
   private dayTime : string ='AM';
   private weekData : Array<any>;
   private dayData : Array<any>;
+  private doctorsAvailability : Array<any>;
+  private doctorAvailability : Array<any>;
   private selectedSlot: number = 0;
   private selectedAppDoctor: number = 0;
   private selectedAppParticipant: number = 0;
@@ -93,6 +95,7 @@ export class CalendarIndexComponent implements OnInit {
   doctorSelected(){
     this.selectedAppDoctor = this.selectedDoctor;
     this.refreshData();
+    this.getDoctorsAvailability();
   }
 
   refreshData(){
@@ -146,6 +149,23 @@ export class CalendarIndexComponent implements OnInit {
     ); 
   }
 
+  getDoctorsAvailability(){
+    this.loading = true;
+    this.ajaxService.getDoctorsAvailability(this.selectedDate)
+    .subscribe(
+        data => {
+          this.doctorsAvailability = data.json();
+          this.resolveDoctorAvailability();
+          this.loading = false;
+        },
+        err => {
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the appointments data.", {
+            duration: 7000,});
+            this.loading = false;
+        }
+    ); 
+  }
+
   changeDates(){
     var temp = new Date(this.selectedDate);
     var day = temp.getDay();
@@ -172,7 +192,7 @@ export class CalendarIndexComponent implements OnInit {
     this.state ='newAppointment';
     this.selectedSlot = slot;
     this.selectedAppDoctor = this.selectedDoctor;
-    this.getDayData();
+    this.getDoctorsAvailability();
   }
 
   goBackToDay(){
@@ -186,7 +206,7 @@ export class CalendarIndexComponent implements OnInit {
         ParticipantID: this.selectedAppParticipant,
         DoctorID: this.selectedAppDoctor,
         Date: this.selectedDate,
-        Time: this.selectedSlot
+        TimeSlot: this.selectedSlot
       });
 
     this.loading = true;
@@ -210,6 +230,27 @@ export class CalendarIndexComponent implements OnInit {
     if(day != -1)
       this.selectedDate = new Date(this.selectedDate.setDate(this.fromDate.getDate() + day));
     this.dialogsService.appointments(this.selectedDate, this.doctors, this.participants, slot, this.selectedDoctor);
+  }
+
+  resolveDoctorAvailability(){
+    this.doctorAvailability = null;
+    if(this.doctorsAvailability != null && this.doctorsAvailability != undefined && this.selectedAppDoctor > 0)
+    {
+      let selected = this.doctorsAvailability.filter(avail => avail.DoctorID === this.selectedAppDoctor);
+      if(selected.length > 0)
+      {
+        this.doctorAvailability = selected[0].SlotsAvailability;
+        if(this.selectedSlot > -1)
+        {
+          let slot = this.doctorAvailability.filter(avail => avail.Index === this.selectedSlot);
+          if(slot.length > 0 && slot[0].isAvailable == false )
+            this.selectedSlot = -1;
+        }
+      }
+      else
+        this.snackBar.open("Error!", "Sorry, an error ocurred while resolving the selected doctor's availability.", {
+          duration: 7000,});
+    }
   }
 
   goTo(destination: string){

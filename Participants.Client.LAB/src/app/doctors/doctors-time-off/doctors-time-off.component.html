@@ -1,0 +1,75 @@
+<div class="content" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+  <mat-card fxFlex="100" style="padding:0">
+    <div class="content div-ClinicNotes" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
+      <mat-card>
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
+          <div fxFlex="29">
+            <!-- <span>Doctor:</span> <b>{{commonService.getSelectedDoctor().FullName}}</b> -->
+            <div style="margin-top: 20px">
+              <span style="color:rgb(201, 194, 194)">Doctor: </span><span style="font-size: 1.05em">{{commonService.getSelectedDoctor().FullName}}</span>
+            </div>
+          </div>
+          <div fxFlex="23" style="text-align: left">
+            <mat-form-field class="date_calendar" color="accent">
+                <input matInput [matDatepicker]="picker" placeholder="From" name="dp_FromDate" [(ngModel)]="fromDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="23">
+            <mat-form-field class="date_calendar" color="accent">
+              <input matInput [matDatepicker]="picker2" placeholder="To" name="dp_ToDate" [(ngModel)]="toDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          </div>
+          <div fxFlex="15">
+            <button mat-raised-button style="margin-right: 10px; margin-top: 15px" class="btn_side" (click)="goTo('newdoctor')">Add New Time Off</button>
+
+          </div>
+          <div fxFlex="10">
+            <button mat-raised-button style="margin-top: 15px" class="btn_side" (click)="goTo('doctors')">Cancel</button>
+          </div>
+        </div>
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      </mat-card>
+      <mat-card>
+        <div class="example-container mat-elevation-z8" *ngIf="!showNote">
+          <mat-table #table [dataSource]="timeOff">
+        
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.ID}} </mat-cell>
+            </ng-container>
+    
+            <ng-container matColumnDef="doctor">
+              <mat-header-cell *matHeaderCellDef fxFlex="20"> Doctor </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.Doctor.FullName}} </mat-cell>
+            </ng-container>
+    
+   
+            <ng-container matColumnDef="from">
+              <mat-header-cell *matHeaderCellDef fxFlex="10"> From </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="10"> {{element.From | date}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="to">
+              <mat-header-cell *matHeaderCellDef fxFlex="20"> To </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="20"> {{element.To}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef fxFlex="15" style="text-align: center"> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="15" style="text-align: center"> 
+                  <mat-icon  matTooltip="Delete">delete</mat-icon>
+              </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card>
+</div>

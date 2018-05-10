@@ -25,5 +25,6 @@ namespace Participants.API.LAB.Models
             }
         }
         public List<Appointment> Appointments { get; set; }
+        public List<TimeOff> TimeOffs { get; set; }
     }
 }

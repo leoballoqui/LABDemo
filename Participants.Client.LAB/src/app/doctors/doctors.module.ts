@@ -8,6 +8,7 @@ import { DoctorsIndexComponent} from './doctors-index/doctors-index.component';
 import { DoctorsNewComponent } from './doctors-new/doctors-new.component';
 import { DoctorsDetailsComponent } from './doctors-details/doctors-details.component';
 import { DoctorsEditComponent } from './doctors-edit/doctors-edit.component';
+import { DoctorsTimeOffComponent } from './doctors-time-off/doctors-time-off.component';
 import { DialogsModule } from '../dialogs/dialogs.module';
 
 @NgModule({
@@ -24,12 +25,14 @@ import { DialogsModule } from '../dialogs/dialogs.module';
     DoctorsNewComponent,
     DoctorsDetailsComponent,
     DoctorsEditComponent,
+    DoctorsTimeOffComponent,
   ],
   exports: [
     DoctorsIndexComponent,
     DoctorsNewComponent,
     DoctorsDetailsComponent,
     DoctorsEditComponent,
+    DoctorsTimeOffComponent,
 ]
 })
 export class DoctorsModule { }

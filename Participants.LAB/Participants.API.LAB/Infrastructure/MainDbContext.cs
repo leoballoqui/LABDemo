@@ -29,5 +29,7 @@ namespace Participants.API.LAB.Infrastructure
         public DbSet<ClinicalNoteCategory> ClinicalNoteCategories { get; set; }
 
         public DbSet<ClinicalNote> ClinicalNotes { get; set; }
+
+        public System.Data.Entity.DbSet<Participants.API.LAB.Models.TimeOff> TimeOffs { get; set; }
     }
 }

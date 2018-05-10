@@ -118,6 +118,15 @@ export class AjaxService {
         return call;
     }
 
+    getDoctorsAvailability(date: Date){
+        let link = '/api/Appointments/GetDoctorsAvailability';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, date, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
 
     getAppointmentsDetails(date: Date){
         let link = '/api/Appointments/GetAppointmentsDetailsByDay';
@@ -228,6 +237,24 @@ export class AjaxService {
         let options = this.addAuthHeader();
 
         let call = this.http.get(link, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    /* Doctor's Time Off */
+    
+    getDoctorTimeOff(doctorID: number){
+        let link = '/api/TimeOffs/GetTimeOffByDoctor';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+        let data = JSON.stringify(
+        {
+            DoctorID: doctorID,
+            From: null,
+            To: null,
+        });
+
+        let call = this.http.post(link, data, options).map(res => res).share();
         this.addAuthFailHandler(call);
         return call;
     }

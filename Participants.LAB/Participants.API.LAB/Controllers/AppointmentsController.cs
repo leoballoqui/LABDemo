@@ -74,6 +74,34 @@ namespace Participants.API.LAB.Controllers
         }
 
         [HttpPost]
+        public IEnumerable<AvailabilityVM> GetDoctorsAvailability([FromBody]DateTime date)
+        {
+            List<AvailabilityVM> result = new List<AvailabilityVM>();
+            List<Appointment> apps = db.Appointments.Where(a => DbFunctions.TruncateTime(a.Date) == date.Date && a.Status != (int)AppointmentStatus.Canceled).ToList();
+            List<Doctor> docs = db.Doctors.ToList();
+
+            AvailabilityVM availability = null;
+            SlotAvailabilityVM slotAvail = null;
+            foreach (Doctor doc in docs)
+            {
+                availability = new AvailabilityVM();
+                availability.DoctorID = doc.ID.Value;
+                availability.Date = date.Date;
+                for (int i = 0; i < 12; i++)
+                {
+                    slotAvail = new SlotAvailabilityVM();
+                    slotAvail.Index = i;
+                    slotAvail.Period = GetAppointmentSlotByClinic(1, i);
+                    slotAvail.isAvailable = apps.Where(app => app.DoctorID == doc.ID.Value && app.TimeSlot == i).FirstOrDefault() == null;
+                    availability.SlotsAvailability.Add(slotAvail);
+                }
+                result.Add(availability);
+            }
+
+            return result;
+        }
+
+        [HttpPost]
         public Object GetAppointmentsDetailsByDay([FromBody]DateTime date)
         {
             List<AppointmentDetailsVM> details = new List<AppointmentDetailsVM>();
@@ -117,6 +145,12 @@ namespace Participants.API.LAB.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if(db.Appointments.Where(app => app.DoctorID == appointment.DoctorID && 
+                                            app.TimeSlot == appointment.TimeSlot && 
+                                            app.Date == appointment.Date.Date &&
+                                            app.Status != (int)AppointmentStatus.Canceled).FirstOrDefault() != null)
+                return StatusCode(HttpStatusCode.Conflict);
+
             appointment.Status = (int)AppointmentStatus.Created;
             appointment.Date = appointment.Date.Date;
             db.Appointments.Add(appointment);

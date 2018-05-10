@@ -4,6 +4,8 @@ import { DoctorsIndexComponent } from './doctors-index/doctors-index.component';
 import { DoctorsNewComponent } from './doctors-new/doctors-new.component';
 import { DoctorsDetailsComponent } from './doctors-details/doctors-details.component';
 import { DoctorsEditComponent } from './doctors-edit/doctors-edit.component';
+import { DoctorsTimeOffComponent } from './doctors-time-off/doctors-time-off.component';
+
 
 const routes: Routes = [{
   path: 'doctors',
@@ -32,6 +34,13 @@ const routes: Routes = [{
   component: DoctorsEditComponent,
   data: {
     title: 'Edit Doctor'
+  }
+},
+{
+  path: 'doctortimeoff',
+  component: DoctorsTimeOffComponent,
+  data: {
+    title: 'Doctor\'s TIme Off'
   }
 }
 ];

@@ -39,8 +39,8 @@
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
               <label fxFlex="25">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
-              <mat-icon (click)="selectDay(i)" matTooltip="See Day Details" style="font-size: 2em">date_range</mat-icon>
-              <mat-icon (click)="seeAppointments(i, -1)" matTooltip="See Appointments" style="font-size: 2em">assignment_ind</mat-icon>
+              <mat-icon (click)="selectDay(i)" matTooltip="See Day Details" class="icon-noButton">date_range</mat-icon>
+              <mat-icon (click)="seeAppointments(i, -1)" matTooltip="See Appointments" class="icon-noButton">assignment_ind</mat-icon>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -68,8 +68,12 @@
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
               <label fxFlex="20">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
-              <mat-icon (click)="goToAppointment(i)" matTooltip="Add Appointment" style="font-size: 2em">event</mat-icon>
-              <mat-icon (click)="seeAppointments(-1, i)" matTooltip="See Appointments" style="font-size: 2em">assignment_ind</mat-icon>
+              <button class="btn-iconContainer" mat-icon-button (click)="goToAppointment(i)" [disabled]="item.Percentage >= 100">
+                <mat-icon  matTooltip="Add Appointment" style="font-size: 24pt">event</mat-icon>
+              </button>
+              <button class="btn-iconContainer" mat-icon-button (click)="seeAppointments(-1, i)" >
+                <mat-icon matTooltip="See Appointments" style="font-size: 24pt">assignment_ind</mat-icon>
+              </button>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -89,7 +93,7 @@
         <mat-divider></mat-divider>
         <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
           <mat-form-field fxFlex="30" color="accent">
-            <mat-select name="ddl_AppDoctor" placeholder="Doctor" [(ngModel)]="selectedAppDoctor">
+            <mat-select name="ddl_AppDoctor" placeholder="Doctor" [(ngModel)]="selectedAppDoctor" (change)="resolveDoctorAvailability()">
                 <mat-option [value]="0" selected>Please Select</mat-option>
                 <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
                     {{ doctor.FullName }}
@@ -105,10 +109,11 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="30" color="accent">
-            <mat-select name="ddl_AppTime" placeholder="Time Slot" [(ngModel)]="selectedSlot">
+            <mat-select name="ddl_AppTime" placeholder="Time Slot" [(ngModel)]="selectedSlot" [disabled]="this.doctorAvailability == null">
                 <mat-option [value]="-1" selected>Please Select</mat-option>
-                <mat-option *ngFor="let item of dayData, let i = index" [value]="i">
-                    {{ item.Period }}
+                <mat-option *ngFor="let item of doctorAvailability, let i = index" [value]="item.Index" [disabled]="!item.isAvailable">
+                   <!-- <div style="width: 5px; height: 2.3em; background-color: red; border: 1px solid black; float: left;"></div> -->
+                   {{ item.Period }}
                 </mat-option>
             </mat-select>
           </mat-form-field>
@@ -122,6 +127,6 @@
   </mat-card>
   
   <mat-card fxFlex fxLayout="column" fxLayoutGap="14px">
-    <button mat-raised-button class="btn_side" (click)="goToAppointment(0)">Add New Appointment</button>
+    <button mat-raised-button class="btn_side" (click)="goToAppointment(-1)">Add New Appointment</button>
   </mat-card>
 </div>
