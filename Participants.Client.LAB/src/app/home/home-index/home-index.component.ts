@@ -15,11 +15,16 @@ export class HomeIndexComponent implements OnInit {
   private selectedDate: Date; 
   private doctors : any;
   private selectedDoctor : number = 0;
-  private participant: string = ""
+  private participant: string = "";
+  private participantName: string = "";
+  private participantPhone: string = "";
   private allAppointments : Array<any>;
   private appointments : Array<any>;
   private loading : boolean = false;
-  private displayedColumns = ['doctor', 'participant', 'time', 'status', 'actions'];
+  private searchBy: string = "date";
+  private includePast : boolean = false;
+  private includeFuture : boolean = true;
+  private displayedColumns = ['doctor', 'participant', 'date', 'time', 'status', 'actions'];
 
   constructor(    
     private http: Http,
@@ -74,6 +79,31 @@ export class HomeIndexComponent implements OnInit {
         }
     ); 
   }
+
+  getAppointmentsByParticipant(){
+    if(this.participantName == "" && this.participantPhone == "")
+    {
+      this.snackBar.open("Error!", "Please provide either a participant's name or a phone number.", {
+        duration: 7000,});
+      return;
+    }
+
+    this.loading = true;
+    this.ajaxService.getAppointmentsDetailsByParticipant(this.participantName, this.participantPhone, this.includeFuture, this.includePast)
+    .subscribe(
+        data => {
+          this.allAppointments = data.json().appointments;
+          this.appointments = this.allAppointments;
+          this.loading = false;
+        },
+        err => {
+          this.snackBar.open("Error!", "Sorry, an error ocurred accessing the data.", {
+            duration: 7000,});
+          this.loading = false;
+        }
+    ); 
+  }
+
 
   notify(app: any, via: string){
     this.setAppStatus(app, 2, "Notified", "The user was notified via " + via + ".");

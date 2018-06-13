@@ -138,6 +138,23 @@ export class AjaxService {
         return call;
     }
 
+    getAppointmentsDetailsByParticipant(participantName: string, participantPhone: string, future:boolean, past:boolean){
+        let link = '/api/Appointments/GetAppointmentsDetailsByParticipant';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+        let data = JSON.stringify(
+        {
+            Name: participantName,
+            Phone: participantPhone,
+            Future: future,
+            Past: past,
+        });
+
+        let call = this.http.post(link, data, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
     addAppointment(data: string){
         let link = '/api/Appointments/AddAppointment';
         let headers = new Headers({ 'Content-Type': 'application/json' });

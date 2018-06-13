@@ -1,6 +1,12 @@
 <div class="content div_content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px">
   <mat-card>
-    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
+    <mat-chip-list style="display:none"></mat-chip-list>
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px" style="padding-top: 0; margin-bottom: 10px">
+        <mat-chip [selectable]="true" (click)="searchBy = 'date'" selected="{{searchBy == 'date'}}" class="spn_detailField"><mat-icon style="margin-right: 5px">calendar_today</mat-icon> Search by date</mat-chip>
+        <mat-chip [selectable]="true" (click)="searchBy = 'participant'" selected="{{searchBy == 'participant'}}" class="spn_detailField"><mat-icon style="margin-right: 5px">assignment_ind</mat-icon> Search by participant</mat-chip>
+    </div>
+
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px" *ngIf="searchBy == 'date'">
       <div fxFlex="50" style="text-align: left">
         <button mat-raised-button class="btn_side btn_date" (click)="goToPreviousDay()" style="margin-right: 20px">Last Day</button>
         <mat-form-field class="date_calendar" color="accent">
@@ -22,9 +28,28 @@
       </div>
       <div fxFlex="25">
         <mat-form-field class="example-full-width" color="accent">
-          <input matInput name="txt_participant" placeholder="Search by participant" [(ngModel)]="participant" (keyup)="filterAppointments()">
+          <input matInput name="txt_participant" placeholder="Participant" [(ngModel)]="participant" (keyup)="filterAppointments()">
         </mat-form-field>
       </div>
+    </div>
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px" *ngIf="searchBy == 'participant'">
+        <div fxFlex="25">
+            <mat-form-field class="example-full-width" color="accent">
+                <input matInput name="txt_participantName" placeholder="Participant" [(ngModel)]="participantName">
+            </mat-form-field>
+        </div>
+        <div fxFlex="25">
+            <mat-form-field class="example-full-width" color="accent">
+                <input matInput name="txt_phone" placeholder="Phone Number" [(ngModel)]="participantPhone">
+            </mat-form-field>
+        </div>
+        <div fxFlex="25" style="padding-top: 10px">
+            <mat-chip [selectable]="true" (click)="includePast = !includePast" selected="{{includePast}}" class="spn_detailField">Past</mat-chip>
+            <mat-chip [selectable]="true" (click)="includeFuture = !includeFuture" selected="{{includeFuture || !includePast}}" class="spn_detailField">Future</mat-chip>
+        </div>
+        <div fxFlex="25" style="padding-top: 10px">
+            <button mat-raised-button class="btn_side btn_date" (click)="getAppointmentsByParticipant()" style="margin-left: 20px">Search</button>
+        </div>
     </div>
   </mat-card>
   <mat-card class="div-week-calendar-container">
@@ -37,27 +62,32 @@
               </ng-container>
       
               <ng-container matColumnDef="doctor">
-              <mat-header-cell *matHeaderCellDef fxFlex="19"> Doctor </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="19"> {{element.DoctorName}}</mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="16"> Doctor </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="16"> {{element.DoctorName}}</mat-cell>
               </ng-container>
           
               <ng-container matColumnDef="participant">
-                <mat-header-cell *matHeaderCellDef fxFlex="28"> Participant </mat-header-cell>
-                <mat-cell *matCellDef="let element" fxFlex="28"  [matTooltip]="element.ParticipantContactInfo"> 
+                <mat-header-cell *matHeaderCellDef fxFlex="25"> Participant </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="25"  [matTooltip]="element.ParticipantContactInfo"> 
                   <span *ngIf="!element.info">{{element.ParticipantName}}</span>
                   <span *ngIf="element.info">{{element.ParticipantContactInfo}}</span>
                   <mat-icon (click)="element.info = !element.info" style="vertical-align: middle">contact_phone</mat-icon>
                 </mat-cell>
               </ng-container>
           
+              <ng-container matColumnDef="date">
+                <mat-header-cell *matHeaderCellDef fxFlex="8"> Date </mat-header-cell>
+                <mat-cell *matCellDef="let element" fxFlex="8"> {{element.Date| date:'MM/dd/yyyy'}}</mat-cell>
+              </ng-container>
+
               <ng-container matColumnDef="time">
-              <mat-header-cell *matHeaderCellDef fxFlex="15"> Time </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="15"> {{element.Period}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="14"> Time </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="14"> {{element.Period}} </mat-cell>
               </ng-container>
   
               <ng-container matColumnDef="status">
-              <mat-header-cell *matHeaderCellDef fxFlex="7"> Status </mat-header-cell>
-              <mat-cell *matCellDef="let element" fxFlex="7" class="status_{{element.StatusName}}"> {{element.StatusName}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef fxFlex="6"> Status </mat-header-cell>
+              <mat-cell *matCellDef="let element" fxFlex="6" class="status_{{element.StatusName}}"> {{element.StatusName}} </mat-cell>
               </ng-container>
       
               <ng-container matColumnDef="actions">
@@ -90,7 +120,7 @@
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
-          <div class="alert alert-info" role="alert" *ngIf="appointments.length == 0"><b>Sorry!</b> No contributions were processed for that plan/plans during the selected period.</div>
+          <div class="alert alert-info" role="alert" *ngIf="appointments.length == 0"><b>Sorry!</b> No appointments were found matching the selected criteria.</div>
       </div>
       <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </mat-card>

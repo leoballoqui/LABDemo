@@ -132,6 +132,50 @@ namespace Participants.API.LAB.Controllers
             return new {appointments = details.OrderBy(d => d.Slot), slots = periods};
         }
 
+        [HttpPost]
+        public Object GetAppointmentsDetailsByParticipant([FromBody]AppointmentsByPatient selection)
+        {
+            List<AppointmentDetailsVM> details = new List<AppointmentDetailsVM>();
+            List<string> periods = new List<string>();
+            List<Appointment> apps = new List<Appointment>();
+            if (!String.IsNullOrEmpty(selection.Name) || !String.IsNullOrEmpty(selection.Phone)) { 
+                DateTime past = selection.Past ? DateTime.MinValue.Date : DateTime.Now.Date;
+                DateTime future = (selection.Future || !selection.Past) ? DateTime.MaxValue.Date : DateTime.Now.Date;
+                IQueryable<Appointment> queryWhere = db.Appointments;
+
+                if (!String.IsNullOrEmpty(selection.Name))
+                    queryWhere = queryWhere.Where(a => a.Participant.FirstName.Contains(selection.Name) || a.Participant.LastName.Contains(selection.Name));
+                if (!String.IsNullOrEmpty(selection.Phone))
+                    queryWhere = queryWhere.Where(a => a.Participant.PhoneNumber.Contains(selection.Phone) || a.Participant.SecPhoneNumber.Contains(selection.Phone));
+
+                apps = queryWhere.Where(a => DbFunctions.TruncateTime(a.Date) >= past.Date &&
+                                             DbFunctions.TruncateTime(a.Date) <= future.Date).Take(100).Include("Doctor").Include("Participant").ToList();
+            }
+
+            AppointmentDetailsVM appDetails;
+            foreach (Appointment appointment in apps)
+            {
+                appDetails = new AppointmentDetailsVM();
+                appDetails.AppointmentID = appointment.ID.Value;
+                appDetails.Date = appointment.Date.Date;
+                appDetails.DoctorID = appointment.DoctorID;
+                appDetails.DoctorName = appointment.Doctor.FullName;
+                appDetails.ParticipantID = appointment.ParticipantID;
+                appDetails.ParticipantName = appointment.Participant.FullName;
+                appDetails.ParticipantContactInfo = GetContactInfo(appointment.Participant);
+                appDetails.Slot = appointment.TimeSlot;
+                appDetails.Period = GetAppointmentSlotByClinic(1, appointment.TimeSlot);
+                appDetails.Status = appointment.Status;
+                appDetails.StatusName = GetAppointmentStatusName(appointment.Status);
+                details.Add(appDetails);
+            }
+            for (int i = 0; i < 12; i++)
+            {
+                periods.Add(GetAppointmentSlotByClinic(1, i));
+            }
+            return new { appointments = details.OrderByDescending(d => d.Date).ThenBy(d => d.Slot), slots = periods };
+        }
+
         // GET: api/Appointments/5
         public string Get(int id)
         {
