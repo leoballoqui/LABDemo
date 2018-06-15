@@ -14,6 +14,7 @@ namespace Participants.API.LAB.Models
         public int DoctorID { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
+        public int Status { get; set; }
         public int NumberOfDays {
             get {
                 var dayDifference = (int)To.Subtract(From).TotalDays;
@@ -26,4 +27,11 @@ namespace Participants.API.LAB.Models
 
         public virtual Doctor Doctor { get; set; }
     }
+
+    enum TimeOffStatus
+    {
+        Created = 1,
+        Notified = 2,
+        Confirmed = 3
+    };
 }

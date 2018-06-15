@@ -3,7 +3,7 @@
     <div class="content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px" style="padding:0; background-color: #303030">
       <mat-card>
         <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
-          <div fxFlex="55" style="text-align: left">
+          <div fxFlex="58" style="text-align: left">
             <button mat-raised-button class="btn_side btn_date" (click)="goToDay(1)">Last Week</button>
             <mat-form-field class="date_calendar" color="accent">
                 <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="changeDates()">
@@ -12,7 +12,7 @@
             </mat-form-field>
             <button mat-raised-button class="btn_side btn_date" (click)="goToDay(2)">Next Week</button>
           </div>
-          <div fxFlex="45">
+          <div fxFlex="42">
             <mat-chip-list style="display:block; margin-top: 13px;">
                 <mat-chip [selectable]="false" selected="false">From: </mat-chip>
                 <mat-chip [selectable]="false" selected="true" color="accent">{{fromDate | date}}</mat-chip>

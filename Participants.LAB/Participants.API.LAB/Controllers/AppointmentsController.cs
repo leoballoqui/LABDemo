@@ -113,7 +113,7 @@ namespace Participants.API.LAB.Controllers
             {
                 appDetails = new AppointmentDetailsVM();
                 appDetails.AppointmentID = appointment.ID.Value;
-                appDetails.Date = date.Date;
+                appDetails.Date = date.Date.AddHours(10);
                 appDetails.DoctorID = appointment.DoctorID;
                 appDetails.DoctorName = appointment.Doctor.FullName;
                 appDetails.ParticipantID = appointment.ParticipantID;
@@ -197,6 +197,7 @@ namespace Participants.API.LAB.Controllers
 
             appointment.Status = (int)AppointmentStatus.Created;
             appointment.Date = appointment.Date.Date;
+            appointment.ClinicID = 1;
             db.Appointments.Add(appointment);
             db.SaveChanges();
 
@@ -243,6 +244,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.Date;
             a.TimeSlot = 1;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             a = new Appointment();
@@ -251,6 +253,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.Date;
             a.TimeSlot = 1;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             a = new Appointment();
@@ -259,6 +262,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.AddDays(1).Date;
             a.TimeSlot = 2;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             a = new Appointment();
@@ -267,6 +271,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.Date;
             a.TimeSlot = 3;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             a = new Appointment();
@@ -275,6 +280,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.Date;
             a.TimeSlot = 4;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             a = new Appointment();
@@ -283,6 +289,7 @@ namespace Participants.API.LAB.Controllers
             a.Date = DateTime.Today.AddDays(1).Date;
             a.TimeSlot = 5;
             a.Status = (int)AppointmentStatus.Created;
+            a.ClinicID = 1;
             db.Appointments.Add(a);
 
             db.SaveChanges();

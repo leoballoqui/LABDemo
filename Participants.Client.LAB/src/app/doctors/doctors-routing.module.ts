@@ -40,7 +40,7 @@ const routes: Routes = [{
   path: 'doctortimeoff',
   component: DoctorsTimeOffComponent,
   data: {
-    title: 'Doctor\'s TIme Off'
+    title: 'Doctors\' Time Off'
   }
 }
 ];

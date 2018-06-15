@@ -276,6 +276,36 @@ export class AjaxService {
         return call;
     }
 
+    addDoctorTimeOff(data: string){
+        let link = '/api/TimeOffs/AddTimeOff';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, data, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    notifyTimeOffParticipants(id: number){
+        let link = '/api/TimeOffs/NotifyParticipants';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, id, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
+    cancelAppointmentsTimeOff(id: number){
+        let link = '/api/TimeOffs/CancelAppointments';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, id, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
     /* Private Functions */
 
     private addAuthHeader(headers : Headers = null) : RequestOptions{

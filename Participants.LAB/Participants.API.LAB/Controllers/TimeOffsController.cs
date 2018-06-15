@@ -62,7 +62,7 @@ namespace Participants.API.LAB.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            timeOff.ClinicID = 1;
             db.TimeOffs.Add(timeOff);
             db.SaveChanges();
 
@@ -83,6 +83,49 @@ namespace Participants.API.LAB.Controllers
             db.SaveChanges();
 
             return Ok(timeOff);
+        }
+
+        [HttpPost]
+        [ResponseType(typeof(TimeOff))]
+        public IHttpActionResult CancelAppointments([FromBody]int id)
+        {
+            TimeOff timeOff = db.TimeOffs.Find(id);
+            if (timeOff == null)
+            {
+                return NotFound();
+            }
+            List<Appointment> appointments = db.Appointments.Where(a => a.DoctorID == timeOff.DoctorID &&
+                                                                        DbFunctions.TruncateTime(a.Date) >= timeOff.From.Date &&
+                                                                        DbFunctions.TruncateTime(a.Date) <= timeOff.To.Date).ToList();
+            foreach (var app in appointments)
+                app.Status = (int) AppointmentStatus.Canceled;
+
+            timeOff.Status = (int)TimeOffStatus.Confirmed;
+            db.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        [ResponseType(typeof(TimeOff))]
+        public IHttpActionResult NotifyParticipants([FromBody]int id)
+        {
+            TimeOff timeOff = db.TimeOffs.Find(id);
+            if (timeOff == null)
+            {
+                return NotFound();
+            }
+            List<Appointment> appointments = db.Appointments.Where(a => a.DoctorID == timeOff.DoctorID &&
+                                                                        DbFunctions.TruncateTime(a.Date) >= timeOff.From.Date &&
+                                                                        DbFunctions.TruncateTime(a.Date) <= timeOff.To.Date).Include("Participant").ToList();
+            foreach (var app in appointments)
+            {
+                string email = app.Participant.EmailAddress;
+                // Notify via Email or add mechanism to notify via sms
+            }
+            if(timeOff.Status < (int)TimeOffStatus.Notified)
+                timeOff.Status = (int)TimeOffStatus.Notified;
+            db.SaveChanges();
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)
@@ -109,12 +152,14 @@ namespace Participants.API.LAB.Controllers
             to.DoctorID = 1;
             to.From = DateTime.Today.AddDays(30).Date;
             to.To = DateTime.Today.AddDays(37).Date;
+            to.ClinicID = 1;
             db.TimeOffs.Add(to);
 
             to = new TimeOff();
             to.DoctorID = 2;
             to.From = DateTime.Today.AddDays(15).Date;
             to.To = DateTime.Today.AddDays(22).Date;
+            to.ClinicID = 1;
             db.TimeOffs.Add(to);
 
             db.SaveChanges();
