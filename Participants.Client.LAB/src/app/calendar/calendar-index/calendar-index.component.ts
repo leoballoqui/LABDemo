@@ -13,6 +13,7 @@ import {AjaxService} from '../../common/ajax.service';
 })
 export class CalendarIndexComponent implements OnInit {
   private selectedDate: Date;
+  private selectedDateDay: Date;
   private fromDate: Date;
   private toDate: Date;
   private selectedDoctor: number = 0;
@@ -49,6 +50,7 @@ export class CalendarIndexComponent implements OnInit {
     }
 
     this.selectedDate = new Date();
+    this.selectedDateDay = new Date(this.selectedDate);
     this.getDoctors();
     this.getParticipants();
     this.changeDates();
@@ -151,7 +153,7 @@ export class CalendarIndexComponent implements OnInit {
 
   getDoctorsAvailability(){
     this.loading = true;
-    this.ajaxService.getDoctorsAvailability(this.selectedDate)
+    this.ajaxService.getDoctorsAvailability(this.selectedDateDay)
     .subscribe(
         data => {
           this.doctorsAvailability = data.json();
@@ -167,6 +169,7 @@ export class CalendarIndexComponent implements OnInit {
   }
 
   changeDates(){
+    this.selectedDateDay = new Date(this.selectedDate);
     var temp = new Date(this.selectedDate);
     var day = temp.getDay();
     var diff = temp.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
@@ -185,6 +188,7 @@ export class CalendarIndexComponent implements OnInit {
     this.state ='day';
     this.dayTime ='AM';
     this.selectedDate = new Date(this.selectedDate.setDate(this.fromDate.getDate() + selecting));
+    this.selectedDateDay = new Date(this.selectedDate);
     this.getDayData();
 }
 
@@ -205,7 +209,7 @@ export class CalendarIndexComponent implements OnInit {
       {
         ParticipantID: this.selectedAppParticipant,
         DoctorID: this.selectedAppDoctor,
-        Date: this.selectedDate,
+        Date: this.selectedDateDay,
         TimeSlot: this.selectedSlot
       });
 

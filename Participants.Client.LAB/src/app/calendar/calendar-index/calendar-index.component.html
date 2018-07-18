@@ -2,34 +2,34 @@
   <mat-card fxFlex="80" style="padding:0">
     <div class="content" fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="16px" style="padding:0; background-color: #303030">
       <mat-card>
-        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="20px">
-          <div fxFlex="58" style="text-align: left">
-            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(1)">Last Week</button>
-            <mat-form-field class="date_calendar" color="accent">
+        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="10px">
+          <div fxFlex="36" style="text-align: left" id="div-week-calendar">
+            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(1)" style="min-width: 38px" matTooltip="Previous Week">-</button>
+            <mat-form-field class="date_calendar" color="accent" style="min-width: 38px" >
                 <input matInput [matDatepicker]="picker" placeholder="Week Selector" name="dp_Date" [(ngModel)]="selectedDate" (dateChange)="changeDates()">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(2)">Next Week</button>
+            <button mat-raised-button class="btn_side btn_date" (click)="goToDay(2)" style="min-width: 38px" matTooltip="Next Week" >+</button>
           </div>
-          <div fxFlex="42">
+          <div fxFlex="44">
             <mat-chip-list style="display:block; margin-top: 13px;">
                 <mat-chip [selectable]="false" selected="false">From: </mat-chip>
                 <mat-chip [selectable]="false" selected="true" color="accent">{{fromDate | date}}</mat-chip>
-                <mat-chip [selectable]="false" selected="false" style="margin-left: 30px">To: </mat-chip>
+                <mat-chip [selectable]="false" selected="false" style="margin-left: 20px">To: </mat-chip>
                 <mat-chip [selectable]="false" selected="true" color="accent">{{toDate | date}}</mat-chip>
             </mat-chip-list>
           </div>
-        </div>
-        <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
-          <mat-form-field fxFlex="30" color="accent">
-            <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="doctorSelected()">
+          <div fxFlex="20">
+            <mat-form-field color="accent">
+              <mat-select name="ddl_Doctor" placeholder="Doctor" [(ngModel)]="selectedDoctor" (change)="doctorSelected()">
                 <mat-option [value]="0" selected>All</mat-option>
                 <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
                     {{ doctor.FullName }}
                 </mat-option>
-            </mat-select>
-          </mat-form-field>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </mat-card>
@@ -39,8 +39,8 @@
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
               <label fxFlex="25">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
-              <mat-icon (click)="selectDay(i)" matTooltip="See Day Details" class="icon-noButton">date_range</mat-icon>
-              <mat-icon (click)="seeAppointments(i, -1)" matTooltip="See Appointments" class="icon-noButton">assignment_ind</mat-icon>
+              <mat-icon (click)="seeAppointments(i, -1)" matTooltip="See Appointments" class="icon-noButton">date_range</mat-icon>
+              <mat-icon (click)="selectDay(i)" matTooltip="See Day Details" class="icon-noButton">event</mat-icon>
             </div>
           </div>
           <mat-divider></mat-divider>
@@ -68,11 +68,11 @@
             <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="15px">
               <label fxFlex="20">{{item.Period}}</label>
               <mat-progress-bar mode="determinate" [value]="item.Percentage"></mat-progress-bar>
-              <button class="btn-iconContainer" mat-icon-button (click)="goToAppointment(i)" [disabled]="item.Percentage >= 100">
-                <mat-icon  matTooltip="Add Appointment" style="font-size: 24pt">event</mat-icon>
-              </button>
               <button class="btn-iconContainer" mat-icon-button (click)="seeAppointments(-1, i)" >
-                <mat-icon matTooltip="See Appointments" style="font-size: 24pt">assignment_ind</mat-icon>
+                <mat-icon matTooltip="See Appointments" style="font-size: 24pt">date_range</mat-icon>
+              </button>
+              <button class="btn-iconContainer" mat-icon-button (click)="goToAppointment(i)" [disabled]="item.Percentage >= 100">
+                <mat-icon  matTooltip="Add Appointment" style="font-size: 24pt">note_add</mat-icon>
               </button>
             </div>
           </div>
@@ -85,7 +85,12 @@
             <mat-icon (click)="goBackToDay()" matTooltip="Back to day view" style="font-size: 2em">reply</mat-icon>
           </div>
           <div fxFlex="60" style="text-align: center">
-              <mat-chip [selectable]="true" [selected]="true" style="margin: 0 auto; font-size: 1.05em">{{selectedDate | date:'EEEE, MM/dd/yyyy'}} </mat-chip>
+              <!-- <mat-chip [selectable]="true" [selected]="true" style="margin: 0 auto; font-size: 1.05em">{{selectedDate | date:'EEEE, MM/dd/yyyy'}} </mat-chip> -->
+              <mat-form-field class="date_calendar" color="accent">
+                <input matInput [matDatepicker]="picker" placeholder="Day" name="dp_DateDay" [(ngModel)]="selectedDateDay" (dateChange)="getDoctorsAvailability()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
           </div>
           <div fxFlex="20">
           </div>

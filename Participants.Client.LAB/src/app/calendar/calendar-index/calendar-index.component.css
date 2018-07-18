@@ -27,5 +27,9 @@
 
 .icon-noButton{
     font-size: 24pt;
-    margin-top: -5px
+    margin-top: -5px;
+}
+
+#weekcal .mat-form-field-infix{
+    width: 140px !important;
 }

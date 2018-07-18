@@ -53,3 +53,7 @@
       border-top-color: #e4b9b9; }
     .alert-danger .alert-link {
       color: #843534; }
+
+  #div-week-calendar .mat-form-field-infix{
+      width: 140px;
+  }
