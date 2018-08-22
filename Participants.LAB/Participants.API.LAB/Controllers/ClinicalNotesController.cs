@@ -127,7 +127,7 @@ namespace Participants.API.LAB.Controllers
         [ResponseType(typeof(void))]
         [HttpPost]
         [AllowAnonymous]
-        public IHttpActionResult StoreSignature()
+        public IHttpActionResult AddSignature()
         {
             var httpRequest = HttpContext.Current.Request;
             if (httpRequest.Files.Count < 1)
@@ -136,13 +136,36 @@ namespace Participants.API.LAB.Controllers
             }
 
             var postedFile = httpRequest.Files[0];
-            string name = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+            string name = DateTime.Now.ToString("yyyyMMddHHmmssfff") +  "_" + Guid.NewGuid();
             string ext = Path.GetExtension(postedFile.FileName);
-            var filePath = HttpContext.Current.Server.MapPath("~/TempUploads/" + name + ext);
+            string filePath = HttpContext.Current.Server.MapPath("~/TempUploads/" + name + ext);
             postedFile.SaveAs(filePath);
+            
             // NOTE: To store in memory use postedFile.InputStream
 
             return Ok(name + ext);
+        }
+
+        [ResponseType(typeof(ClinicalNote))]
+        [HttpPost]
+        public IHttpActionResult ApproveSignature(ImageUploadVM imageUpload)
+        {
+            var fullPath = HttpContext.Current.Server.MapPath("~/TempUploads/" + imageUpload.newImage);
+            if (File.Exists(fullPath))
+                File.Move(fullPath, HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.newImage));
+
+            fullPath = HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.oldImage);
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+
+            DirectoryInfo dirInfo = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/TempUploads/"));
+            DateTime now = DateTime.Now;
+            foreach (FileInfo fInfo in dirInfo.GetFiles())
+            {
+                if(fInfo.CreationTime.AddDays(1) < now)
+                    fInfo.Delete();
+            }
+            return Ok();
         }
 
         protected override void Dispose(bool disposing)

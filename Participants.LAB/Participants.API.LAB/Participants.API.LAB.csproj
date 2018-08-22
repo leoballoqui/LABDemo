@@ -262,6 +262,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AppointmentDetailsVM.cs" />
     <Compile Include="ViewModels\AppointmentsByPatient.cs" />
+    <Compile Include="ViewModels\SignaturesVM.cs" />
     <Compile Include="ViewModels\TimeOffVM.cs" />
     <Compile Include="ViewModels\SlotAvailability.cs" />
     <Compile Include="ViewModels\AvailabilityVM.cs" />

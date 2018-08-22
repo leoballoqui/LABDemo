@@ -247,6 +247,16 @@ export class AjaxService {
         return call;
     }
 
+    approveSignature(name : string){
+        let link = '/api/ClinicalNotes/ApproveSignature';
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = this.addAuthHeader(headers);
+
+        let call = this.http.post(link, name, options).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
     /* Clinical Notes Categories */
 
     getAllCategories(){

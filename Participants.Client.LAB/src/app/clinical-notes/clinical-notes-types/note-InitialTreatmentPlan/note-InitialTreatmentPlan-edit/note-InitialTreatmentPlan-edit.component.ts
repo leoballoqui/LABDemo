@@ -21,6 +21,7 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
   private selectedNoteParticipant : number;
   private note : any;
   private data : any;
+  private signature : string;
 
   constructor(
     private router: Router,
@@ -51,6 +52,7 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
       this.selectedNoteDoctor = this.note.Doctor.ID;
       this.selectedNoteParticipant = this.note.Participant.ID;
       this.selectedDate = this.note.VisitDate;
+      this.signature = this.data.Signature;
     }
     else
     {
@@ -69,11 +71,13 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
     this.note.data = JSON.stringify(this.data);
     let data = JSON.stringify(this.note);
     
+    if(this.data.Signature && this.data.Signature != this.signature)
+      this.saveSignature();
+
     if(this.note.ID == null || this.note.ID == 0)
       this.save(data);
     else
       this.update(data);
-    
   }
 
   save(data : string) {
@@ -85,8 +89,14 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
     }, error => {
       this.snackBar.open("Error!", "Sorry, an error ocurred while trying to create the note.", {
         duration: 7000,});
-       // this.commonService.childComponentDone("complete");
     });
+  }
+
+  saveSignature() {
+    let images : any = {};
+    images.newImage = this.data.Signature;
+    images.oldImage = this.signature;
+    this.ajaxService.approveSignature(JSON.stringify(images));
   }
 
   update(data : string) {
@@ -112,6 +122,16 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
 
   goTo(destination: string){
     this.router.navigate(['/' + destination]);
+  }
+
+  onUploadFinished(event){
+    if(event.serverResponse && event.serverResponse.status)
+      if(event.serverResponse.status == "200")
+        this.data.Signature = event.serverResponse.response._body.replace(/"/g,"");
+  }
+
+  onRemoved(event){
+    this.data.Signature = this.signature;
   }
 
 }

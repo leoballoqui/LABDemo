@@ -55,14 +55,23 @@
         </mat-form-field>
       </div>
       <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px" style="margin-top: 15px">
-        <label class="spn_detailFieldName">Client Signature {{data.Signature}}</label>
-        <image-upload name="fup_signature" class="fup_signature"
-          url="http://localhost:23049/api/ClinicalNotes/StoreSignature"
-          buttonCaption="Select"
-          dropBoxMessage="Drop Signature Here"
-          clearButtonCaption="Clear Signature"
-          [max]="1">
-        </image-upload>
+        <div fxFlex="47">
+          <label class="spn_detailFieldName">Client Signature</label>
+          <image-upload name="fup_signature" class="fup_signature"
+            url="http://localhost:23049/api/ClinicalNotes/AddSignature"
+            [extensions]="['jpeg','jpg','png']"
+            buttonCaption="Select"
+            dropBoxMessage="Drop Signature Here"
+            clearButtonCaption="Clear Signature"
+            [max]="1"
+            (uploadFinished)="onUploadFinished($event)"
+            (removed)="onRemoved($event)"
+            (uploadStateChanged)="onUploadStateChanged($event)">
+          </image-upload>
+        </div>
+        <div fxFlex="47">
+          <img src="http://localhost:23049/Uploads/{{signature}}" *ngIf="signature" style="max-width: 500px; max-height: 120px; margin-left: 20px"/>
+        </div>
       </div>
     </div>
 
