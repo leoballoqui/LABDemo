@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace Participants.API.LAB.Models
 {
@@ -20,7 +15,8 @@ namespace Participants.API.LAB.Models
         public virtual Doctor Doctor { get; set; }
     }
 
-    enum AppointmentStatus {
+    internal enum AppointmentStatus
+    {
         Created = 1,
         Notified = 2,
         Confirmed = 3,

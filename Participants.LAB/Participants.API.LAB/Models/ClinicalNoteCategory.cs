@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Participants.API.LAB.Models
+﻿namespace Participants.API.LAB.Models
 {
     public class ClinicalNoteCategory
     {

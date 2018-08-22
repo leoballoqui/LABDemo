@@ -1,24 +1,18 @@
-﻿using System;
+﻿using Participants.API.LAB.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
-using Participants.API.LAB.ViewModels;
 
 namespace Participants.API.LAB.Controllers
 {
     [Authorize]
-    public class ClinicalNotesController : ApiController
+    public class ClinicalNotesController : BaseController
     {
-        private MainDbContext db = new MainDbContext();
-
         [HttpPost]
         public IEnumerable<ClinicalNote> GetClinicalNotesByDay([FromBody]DateTime date)
         {
@@ -145,7 +139,6 @@ namespace Participants.API.LAB.Controllers
 
                 if (db.ClinicalNoteCategories.Count() <= 0)
                 {
-
                     ClinicalNoteCategory cnc = new ClinicalNoteCategory();
                     cnc.Name = "Cat1";
                     cnc.ComponentName = "Test";
@@ -182,9 +175,6 @@ namespace Participants.API.LAB.Controllers
             {
                 throw;
             }
-
-
-
         }
     }
 }
