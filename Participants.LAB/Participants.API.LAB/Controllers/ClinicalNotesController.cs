@@ -7,6 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
+<<<<<<< HEAD
+=======
+using Participants.API.LAB.Infrastructure;
+using Participants.API.LAB.Models;
+using Participants.API.LAB.ViewModels;
+using System.Web;
+using System.IO;
+>>>>>>> master
 
 namespace Participants.API.LAB.Controllers
 {
@@ -114,6 +122,27 @@ namespace Participants.API.LAB.Controllers
             db.SaveChanges();
 
             return Ok(clinicalNote);
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPost]
+        [AllowAnonymous]
+        public IHttpActionResult StoreSignature()
+        {
+            var httpRequest = HttpContext.Current.Request;
+            if (httpRequest.Files.Count < 1)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var postedFile = httpRequest.Files[0];
+            string name = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+            string ext = Path.GetExtension(postedFile.FileName);
+            var filePath = HttpContext.Current.Server.MapPath("~/TempUploads/" + name + ext);
+            postedFile.SaveAs(filePath);
+            // NOTE: To store in memory use postedFile.InputStream
+
+            return Ok(name + ext);
         }
 
         protected override void Dispose(bool disposing)

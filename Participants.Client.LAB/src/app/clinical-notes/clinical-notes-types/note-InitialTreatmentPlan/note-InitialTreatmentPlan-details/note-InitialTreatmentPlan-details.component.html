@@ -1,0 +1,54 @@
+  <mat-card>
+    <form class="example-form" >
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Doctor: </span><span class="spn_detailField">{{note.Doctor.FullName}}</span>
+        </div>
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName" >Participant: </span><span class="spn_detailField">{{note.Participant.FullName}}</span>
+        </div>
+      </div>
+        
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Category: </span><span class="spn_detailField">{{note.Category.FriendlyName}}</span>
+        </div>
+        <div class="example-full-width" fxFlex="50">
+          <span class="spn_detailFieldName">Created: </span><span class="spn_detailField">{{note.Created | date}}</span>
+        </div>
+      </div>
+
+      <!-- This block below varies depending on the Note -->
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="example-full-width" fxFlex="100">
+          <label class="spn_detailFieldName">General: </label>
+          <p class="spn_detailField">{{data.General}}</p>
+        </div>
+      </div>
+
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="div_detailHalfRow" fxFlex="50">
+          <label class="spn_detailFieldName">Problem #1</label>
+          <p class="spn_detailField" style="break-inside: auto">{{data.Problem1}}</p>
+        </div>
+        <div class="div_detailHalfRow" fxFlex="50">
+          <label class="spn_detailFieldName">Problem #2</label>
+          <p class="spn_detailField">{{data.Problem2}}</p>
+        </div>
+      </div>
+
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px">
+        <div class="div_detailHalfRow" fxFlex="50">
+          <label class="spn_detailFieldName">Problem #3</label>
+          <p class="spn_detailField">{{data.Problem3}}</p>
+        </div>
+        <div class="div_detailHalfRow" fxFlex="50">
+          <label class="spn_detailFieldName">Problem #4</label>
+          <p class="spn_detailField">{{data.Problem4}}</p>
+        </div>
+      </div>
+
+    </form>
+  </mat-card>
+
+

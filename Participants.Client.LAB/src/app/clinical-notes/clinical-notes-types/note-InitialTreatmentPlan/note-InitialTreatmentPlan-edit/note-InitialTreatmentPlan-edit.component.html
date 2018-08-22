@@ -1,0 +1,76 @@
+<mat-card>
+  <form class="example-form" >
+    <div class="content" fxLayout="row" fxLayout.sm="row" fxLayout.xs="row" fxLayoutGap="30px">
+      <mat-form-field fxFlex="30" color="accent">
+        <mat-select name="ddl_AppDoctor" placeholder="Doctor" [(ngModel)]="selectedNoteDoctor">
+            <mat-option [value]="0" selected>Please Select</mat-option>
+            <mat-option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                {{ doctor.FullName }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFlex="30" color="accent">
+        <mat-select name="ddl_AppParticipant" placeholder="Participant" [(ngModel)]="selectedNoteParticipant">
+            <mat-option [value]="0" selected>Please Select</mat-option>
+            <mat-option *ngFor="let participant of participants" [value]="participant.ID">
+                {{ participant.FullName }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFlex="30" color="accent">
+        <input matInput [matDatepicker]="picker" placeholder="Visit Date" name="dp_Date" [(ngModel)]="selectedDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    
+    
+    <!-- This block below varies depending on the Note -->
+
+    <div style="padding: 12px">
+      <div>
+        <mat-form-field fxFlex="95" color="accent">
+          <textarea matInput name="txa_General" placeholder="General" matTextareaAutosize matAutosizeMinRows="2"
+                    matAutosizeMaxRows="2" [(ngModel)]="data.General"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field fxFlex="47" color="accent">
+          <textarea matInput name="txa_Problem1" placeholder="Problem #1" matTextareaAutosize matAutosizeMinRows="3"
+                    matAutosizeMaxRows="5" [(ngModel)]="data.Problem1"></textarea>
+        </mat-form-field>
+        <mat-form-field fxFlex="47" color="accent" style="margin-left: 15px">
+          <textarea matInput name="txa_Problem2" placeholder="Problem #2" matTextareaAutosize matAutosizeMinRows="3"
+                    matAutosizeMaxRows="5" [(ngModel)]="data.Problem2"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field fxFlex="47" color="accent">
+          <textarea matInput name="txa_Problem3" placeholder="Problem #3" matTextareaAutosize matAutosizeMinRows="3"
+                    matAutosizeMaxRows="5" [(ngModel)]="data.Problem3"></textarea>
+        </mat-form-field>
+        <mat-form-field fxFlex="47" color="accent" style="margin-left: 15px">
+          <textarea matInput name="txa_Problem4" placeholder="Problem #4" matTextareaAutosize matAutosizeMinRows="3"
+                    matAutosizeMaxRows="5" [(ngModel)]="data.Problem4"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px" style="margin-top: 15px">
+        <label class="spn_detailFieldName">Client Signature {{data.Signature}}</label>
+        <image-upload name="fup_signature" class="fup_signature"
+          url="http://localhost:23049/api/ClinicalNotes/StoreSignature"
+          buttonCaption="Select"
+          dropBoxMessage="Drop Signature Here"
+          clearButtonCaption="Clear Signature"
+          [max]="1">
+        </image-upload>
+      </div>
+    </div>
+
+    <div style="padding: 12px">
+        <button mat-raised-button class="btn_side" style="margin-right: 15px" (click)="complete()">Save</button>
+        <button mat-raised-button class="btn_side" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</mat-card>
+
+
