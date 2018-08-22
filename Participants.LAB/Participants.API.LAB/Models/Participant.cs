@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace Participants.API.LAB.Models
 {
@@ -17,6 +14,7 @@ namespace Participants.API.LAB.Models
         public string SecPhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public string Address { get; set; }
+
         public string FullName
         {
             get
@@ -24,6 +22,7 @@ namespace Participants.API.LAB.Models
                 return FirstName + " " + LastName;
             }
         }
+
         public List<Appointment> Appointments { get; set; }
     }
 }

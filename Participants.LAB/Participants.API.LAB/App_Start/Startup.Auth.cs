@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using Participants.API.LAB.Providers;
 using Participants.API.LAB.Models;
+using Participants.API.LAB.Providers;
+using System;
 
 namespace Participants.API.LAB
 {

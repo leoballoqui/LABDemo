@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Participants.API.LAB.Models
 {
@@ -10,8 +7,10 @@ namespace Participants.API.LAB.Models
         public int ID { get; set; }
         public int DoctorID { get; set; }
         public int ParticipantID { get; set; }
+
         //public int GroupID { get; set; }
         public int CategoryID { get; set; }
+
         public DateTime Created { get; set; }
         public DateTime VisitDate { get; set; }
         public string Summary { get; set; }

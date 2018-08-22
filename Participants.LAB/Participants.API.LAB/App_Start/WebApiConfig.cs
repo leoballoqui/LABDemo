@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
-using System.Net.Http.Headers;
+﻿using Microsoft.Owin.Security.OAuth;
 using Participants.API.LAB.App_Start;
+using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace Participants.API.LAB
 {

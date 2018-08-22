@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using Participants.API.LAB.Models;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
 
 namespace Participants.API.LAB.Controllers
 {
-    public class ClinicalNoteCategoriesController : ApiController
+    public class ClinicalNoteCategoriesController : BaseController
     {
-        private MainDbContext db = new MainDbContext();
-
         // GET: api/ClinicalNoteCategories
         public IQueryable<ClinicalNoteCategory> GetClinicalNoteCategories()
         {
@@ -119,7 +112,6 @@ namespace Participants.API.LAB.Controllers
 
         private void FillDB()
         {
-
             if (db.ClinicalNoteCategories.Count(e => e.Name == "Cat1") > 0)
                 return;
 
@@ -131,7 +123,5 @@ namespace Participants.API.LAB.Controllers
             db.ClinicalNoteCategories.Add(cnc);
             db.SaveChanges();
         }
-
-
     }
 }

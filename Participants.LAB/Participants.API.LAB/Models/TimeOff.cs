@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
 
 namespace Participants.API.LAB.Models
 {
@@ -15,8 +11,11 @@ namespace Participants.API.LAB.Models
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public int Status { get; set; }
-        public int NumberOfDays {
-            get {
+
+        public int NumberOfDays
+        {
+            get
+            {
                 var dayDifference = (int)To.Subtract(From).TotalDays;
                 return Enumerable
                     .Range(1, dayDifference)
@@ -28,7 +27,7 @@ namespace Participants.API.LAB.Models
         public virtual Doctor Doctor { get; set; }
     }
 
-    enum TimeOffStatus
+    internal enum TimeOffStatus
     {
         Created = 1,
         Notified = 2,

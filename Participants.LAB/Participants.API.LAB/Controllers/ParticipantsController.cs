@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using Participants.API.LAB.Models;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
 
 namespace Participants.API.LAB.Controllers
 {
     [Authorize]
-    public class ParticipantsController : ApiController
+    public class ParticipantsController : BaseController
     {
-        private MainDbContext db = new MainDbContext();
-
         // GET: api/Participants
         public IQueryable<Participant> GetParticipants()
         {
@@ -28,10 +22,8 @@ namespace Participants.API.LAB.Controllers
             }
             catch (Exception e)
             {
-
                 throw;
             }
-
         }
 
         // GET: api/Participants/5
@@ -102,7 +94,7 @@ namespace Participants.API.LAB.Controllers
         // DELETE: api/Participants/5
         [ResponseType(typeof(Participant))]
         [HttpPost]
-          public IHttpActionResult DeleteParticipant([FromBody] int id)
+        public IHttpActionResult DeleteParticipant([FromBody] int id)
         {
             Participant participant = db.Participants.Find(id);
             if (participant == null)
@@ -130,8 +122,8 @@ namespace Participants.API.LAB.Controllers
             return db.Participants.Count(e => e.ID == id) > 0;
         }
 
-        private void FillDB() {
-
+        private void FillDB()
+        {
             if (db.Participants.Count(e => e.FirstName == "Leandro") > 0)
                 return;
 

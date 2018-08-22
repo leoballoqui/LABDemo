@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace Participants.API.LAB.Models
 {
@@ -19,11 +15,15 @@ namespace Participants.API.LAB.Models
         public string EmailAddress { get; set; }
         public string Address { get; set; }
         public string GraduatedFrom { get; set; }
-        public string FullName {
-            get {
-                return Suffix + " " + FirstName + " " + LastName; 
+
+        public string FullName
+        {
+            get
+            {
+                return Suffix + " " + FirstName + " " + LastName;
             }
         }
+
         public List<Appointment> Appointments { get; set; }
         public List<TimeOff> TimeOffs { get; set; }
     }

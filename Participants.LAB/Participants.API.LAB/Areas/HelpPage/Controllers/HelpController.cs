@@ -1,8 +1,8 @@
+using Participants.API.LAB.Areas.HelpPage.ModelDescriptions;
+using Participants.API.LAB.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Participants.API.LAB.Areas.HelpPage.ModelDescriptions;
-using Participants.API.LAB.Areas.HelpPage.Models;
 
 namespace Participants.API.LAB.Areas.HelpPage.Controllers
 {

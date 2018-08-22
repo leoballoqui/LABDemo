@@ -1,13 +1,10 @@
-﻿using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
+﻿using Participants.API.LAB.Models;
 using Participants.API.LAB.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -15,10 +12,8 @@ using System.Web.Http.Description;
 namespace Participants.API.LAB.Controllers
 {
     [Authorize]
-    public class AppointmentsController : ApiController
+    public class AppointmentsController : BaseController
     {
-        private MainDbContext db = new MainDbContext();
-
         [HttpPost]
         public IEnumerable<AppointmentsVM> GetAppointmentsByWeek(CalendarVM selection)
         {
@@ -129,7 +124,7 @@ namespace Participants.API.LAB.Controllers
             {
                 periods.Add(GetAppointmentSlotByClinic(1, i));
             }
-            return new {appointments = details.OrderBy(d => d.Slot), slots = periods};
+            return new { appointments = details.OrderBy(d => d.Slot), slots = periods };
         }
 
         [HttpPost]
@@ -138,7 +133,8 @@ namespace Participants.API.LAB.Controllers
             List<AppointmentDetailsVM> details = new List<AppointmentDetailsVM>();
             List<string> periods = new List<string>();
             List<Appointment> apps = new List<Appointment>();
-            if (!String.IsNullOrEmpty(selection.Name) || !String.IsNullOrEmpty(selection.Phone)) { 
+            if (!String.IsNullOrEmpty(selection.Name) || !String.IsNullOrEmpty(selection.Phone))
+            {
                 DateTime past = selection.Past ? DateTime.MinValue.Date : DateTime.Now.Date;
                 DateTime future = (selection.Future || !selection.Past) ? DateTime.MaxValue.Date : DateTime.Now.Date;
                 IQueryable<Appointment> queryWhere = db.Appointments;
@@ -189,10 +185,10 @@ namespace Participants.API.LAB.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if(db.Appointments.Where(app => app.DoctorID == appointment.DoctorID && 
-                                            app.TimeSlot == appointment.TimeSlot && 
-                                            app.Date == appointment.Date.Date &&
-                                            app.Status != (int)AppointmentStatus.Canceled).FirstOrDefault() != null)
+            if (db.Appointments.Where(app => app.DoctorID == appointment.DoctorID &&
+                                             app.TimeSlot == appointment.TimeSlot &&
+                                             app.Date == appointment.Date.Date &&
+                                             app.Status != (int)AppointmentStatus.Canceled).FirstOrDefault() != null)
                 return StatusCode(HttpStatusCode.Conflict);
 
             appointment.Status = (int)AppointmentStatus.Created;
@@ -219,7 +215,6 @@ namespace Participants.API.LAB.Controllers
                 {
                     // Notify via Email or add mechanism to notify via sms
                 }
-
             }
         }
 
@@ -302,28 +297,40 @@ namespace Participants.API.LAB.Controllers
             {
                 case 0:
                     return "6:00 am - 7:00 am";
+
                 case 1:
                     return "7:00 am - 8:00 am";
+
                 case 2:
                     return "8:00 am - 9:00 am";
+
                 case 3:
                     return "9:00 am - 10:00 am";
+
                 case 4:
                     return "10:00 am - 11:00 am";
+
                 case 5:
                     return "11:00 am - 12:00 m";
+
                 case 6:
                     return "12:00 m - 1:00 pm";
+
                 case 7:
                     return "1:00 pm - 2:00 pm";
+
                 case 8:
                     return "2:00 pm - 3:00 pm";
+
                 case 9:
                     return "3:00 pm - 4:00 pm";
+
                 case 10:
                     return "4:00 pm - 5:00 pm";
+
                 case 11:
                     return "5:00 pm - 6:00 pm";
+
                 default:
                     return "";
             }
@@ -336,16 +343,22 @@ namespace Participants.API.LAB.Controllers
             {
                 case 1:
                     return "Created";
+
                 case 2:
                     return "Notified";
+
                 case 3:
                     return "Confirmed";
+
                 case 4:
                     return "Completed";
+
                 case 5:
                     return "Missed";
+
                 case 6:
                     return "Canceled";
+
                 default:
                     return "";
             }
@@ -355,7 +368,7 @@ namespace Participants.API.LAB.Controllers
         {
             string contactInfo = "";
             string phone = participant.PhoneNumber.Trim();
-            if(String.IsNullOrEmpty(phone))
+            if (String.IsNullOrEmpty(phone))
                 phone = participant.SecPhoneNumber.Trim();
 
             if (!String.IsNullOrEmpty(phone))

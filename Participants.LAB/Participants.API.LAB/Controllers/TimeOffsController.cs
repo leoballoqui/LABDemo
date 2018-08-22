@@ -1,25 +1,19 @@
-﻿using System;
+﻿using Participants.API.LAB.Models;
+using Participants.API.LAB.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
-using Participants.API.LAB.ViewModels;
 
 namespace Participants.API.LAB.Controllers
 {
     [Authorize]
-    public class TimeOffsController : ApiController
+    public class TimeOffsController : BaseController
     {
         private DateTime min = DateTime.MinValue;
-
-        private MainDbContext db = new MainDbContext();
 
         // GET: api/TimeOffs
         public IQueryable<TimeOff> GetTimeOffs()
@@ -45,10 +39,10 @@ namespace Participants.API.LAB.Controllers
         {
             FillDB();
             List<TimeOff> doctorsTimeOff = null;
-            if(!timeOff.From.HasValue || !timeOff.To.HasValue || timeOff.From.Value.Date > timeOff.To.Value.Date)
+            if (!timeOff.From.HasValue || !timeOff.To.HasValue || timeOff.From.Value.Date > timeOff.To.Value.Date)
                 doctorsTimeOff = db.TimeOffs.Where(toff => toff.DoctorID == timeOff.DoctorID).Include("Doctor").ToList();
             else
-                doctorsTimeOff = db.TimeOffs.Where(toff => toff.DoctorID == timeOff.DoctorID && 
+                doctorsTimeOff = db.TimeOffs.Where(toff => toff.DoctorID == timeOff.DoctorID &&
                                                            toff.From.Date >= timeOff.From.Value.Date &&
                                                            toff.From.Date <= timeOff.To.Value.Date).Include("Doctor").ToList();
             return doctorsTimeOff;
@@ -98,7 +92,7 @@ namespace Participants.API.LAB.Controllers
                                                                         DbFunctions.TruncateTime(a.Date) >= timeOff.From.Date &&
                                                                         DbFunctions.TruncateTime(a.Date) <= timeOff.To.Date).ToList();
             foreach (var app in appointments)
-                app.Status = (int) AppointmentStatus.Canceled;
+                app.Status = (int)AppointmentStatus.Canceled;
 
             timeOff.Status = (int)TimeOffStatus.Confirmed;
             db.SaveChanges();
@@ -122,7 +116,7 @@ namespace Participants.API.LAB.Controllers
                 string email = app.Participant.EmailAddress;
                 // Notify via Email or add mechanism to notify via sms
             }
-            if(timeOff.Status < (int)TimeOffStatus.Notified)
+            if (timeOff.Status < (int)TimeOffStatus.Notified)
                 timeOff.Status = (int)TimeOffStatus.Notified;
             db.SaveChanges();
             return Ok();
@@ -144,7 +138,6 @@ namespace Participants.API.LAB.Controllers
 
         private void FillDB()
         {
-
             if (db.TimeOffs.Count() > 0)
                 return;
 
