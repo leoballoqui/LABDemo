@@ -4,6 +4,7 @@ import { AppCommonModule } from './common/common.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import {Request, XHRBackend, XHRConnection} from '@angular/http';
+import { ImageUploadModule } from 'angular2-image-upload';
 
 import { AppComponent } from './app.component';
 import { AppToolbarService } from './app-toolbar/app-toolbar.service';
@@ -25,6 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from './common/common.service';
 import { AjaxService  } from './common/ajax.service';
 import { ApiXHRBackend } from './common/prefix-api.util';
+
+
 
 
 @NgModule({
@@ -51,6 +54,7 @@ import { ApiXHRBackend } from './common/prefix-api.util';
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
+    ImageUploadModule.forRoot(),
     RouterModule.forRoot([{
       path: '', redirectTo: '/home', pathMatch: 'full'
     }])

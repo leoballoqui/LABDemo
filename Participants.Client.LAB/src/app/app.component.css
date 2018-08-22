@@ -57,3 +57,26 @@
   #div-week-calendar .mat-form-field-infix{
       width: 140px;
   }
+
+.fup_signature {
+    background-color: #303030;
+    border-radius: 5px;
+    margin-top:10px;
+    width: 500px;
+}
+
+.fup_signature .img-ul-upload, .fup_signature .img-ul-clear {
+    background-color: #3f51b5 !important;
+    font-size: 14px !important;
+}
+
+.fup_signature .img-ul-drag-box-msg{
+  font-weight: normal !important;
+  margin-left: 20px !important;
+}
+
+.fup_signature .img-ul-button {
+  text-transform: none !important;
+}
+
+

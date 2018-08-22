@@ -21,6 +21,7 @@ namespace Participants.API.LAB
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.Formatters.Add(new BrowserJsonFormatter());
 
+
             // Web API routes
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(

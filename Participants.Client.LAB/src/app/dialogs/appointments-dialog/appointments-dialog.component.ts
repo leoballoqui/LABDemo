@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { DialogsService } from '../../dialogs/dialogs.service';
+import { DialogsService } from '../dialogs.service';
 import { AjaxService } from '../../common/ajax.service';
 
 

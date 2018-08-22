@@ -1,0 +1,16 @@
+.spn_detailField{
+    font-size: 1.03em;
+}
+
+.spn_detailFieldName{
+    color: lightgray;
+}
+
+.div_detailRow{
+    margin-bottom: 25px;
+}
+
+/* .div_detailHalfRow{
+     max-width: 800px !important; 
+
+} */
