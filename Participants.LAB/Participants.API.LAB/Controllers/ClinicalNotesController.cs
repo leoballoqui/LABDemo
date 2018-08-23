@@ -1,20 +1,15 @@
 ﻿using Participants.API.LAB.Models;
+using Participants.API.LAB.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-<<<<<<< HEAD
-=======
-using Participants.API.LAB.Infrastructure;
-using Participants.API.LAB.Models;
-using Participants.API.LAB.ViewModels;
-using System.Web;
-using System.IO;
->>>>>>> master
 
 namespace Participants.API.LAB.Controllers
 {
