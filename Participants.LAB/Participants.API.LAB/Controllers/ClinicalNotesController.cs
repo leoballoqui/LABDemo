@@ -1,9 +1,11 @@
-﻿using Participants.API.LAB.Models;
+﻿using Participants.API.LAB.Helpers;
+using Participants.API.LAB.Models;
 using Participants.API.LAB.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -135,9 +137,6 @@ namespace Participants.API.LAB.Controllers
             string ext = Path.GetExtension(postedFile.FileName);
             string filePath = HttpContext.Current.Server.MapPath("~/TempUploads/" + name + ext);
             postedFile.SaveAs(filePath);
-            
-            // NOTE: To store in memory use postedFile.InputStream
-
             return Ok(name + ext);
         }
 
@@ -145,21 +144,15 @@ namespace Participants.API.LAB.Controllers
         [HttpPost]
         public IHttpActionResult ApproveSignature(ImageUploadVM imageUpload)
         {
-            var fullPath = HttpContext.Current.Server.MapPath("~/TempUploads/" + imageUpload.newImage);
-            if (File.Exists(fullPath))
-                File.Move(fullPath, HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.newImage));
+            string tempPath = HttpContext.Current.Server.MapPath("~/TempUploads/" + imageUpload.newImage);
+            string newPath = HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.newImage);
+            string oldPath = HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.oldImage);
 
-            fullPath = HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.oldImage);
-            if (File.Exists(fullPath))
-                File.Delete(fullPath);
-
-            DirectoryInfo dirInfo = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/TempUploads/"));
-            DateTime now = DateTime.Now;
-            foreach (FileInfo fInfo in dirInfo.GetFiles())
-            {
-                if(fInfo.CreationTime.AddDays(1) < now)
-                    fInfo.Delete();
-            }
+            ImageHelper imgHelper = new ImageHelper();
+            if(imgHelper.EncodeAndResize(tempPath, 300000, 200000, ImageFormat.Jpeg))
+                imgHelper.MoveFile(tempPath, newPath);
+            imgHelper.DeleteFile(oldPath);
+            imgHelper.MaintainFolder(HttpContext.Current.Server.MapPath("~/TempUploads/"), 1);
             return Ok();
         }
 
