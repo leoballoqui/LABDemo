@@ -257,6 +257,16 @@ export class AjaxService {
         return call;
     }
 
+    uploadSignature(img){
+        let link = '/api/ClinicalNotes/AddSignature';
+        let formData = new FormData();
+        formData.append("image", img);
+
+        let call = this.http.post(link, formData, new RequestOptions()).map(res => res).share();
+        this.addAuthFailHandler(call);
+        return call;
+    }
+
     /* Clinical Notes Categories */
 
     getAllCategories(){

@@ -149,7 +149,8 @@ namespace Participants.API.LAB.Controllers
             string oldPath = HttpContext.Current.Server.MapPath("~/Uploads/" + imageUpload.oldImage);
 
             ImageHelper imgHelper = new ImageHelper();
-            if(imgHelper.EncodeAndResize(tempPath, 300000, 200000, ImageFormat.Jpeg))
+            ImageFormat format = imageUpload.newImage.EndsWith(".png") ? ImageFormat.Png : ImageFormat.Jpeg;
+            if (imgHelper.EncodeAndResize(tempPath, 300000, 200000, format))
                 imgHelper.MoveFile(tempPath, newPath);
             imgHelper.DeleteFile(oldPath);
             imgHelper.MaintainFolder(HttpContext.Current.Server.MapPath("~/TempUploads/"), 1);

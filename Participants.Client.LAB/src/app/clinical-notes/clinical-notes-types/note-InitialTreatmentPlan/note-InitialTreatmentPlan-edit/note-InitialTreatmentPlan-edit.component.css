@@ -1,0 +1,30 @@
+.cnv_signature{
+    border: 1px solid #000;
+    margin-top: 10px; 
+    background-color: white
+}
+
+.img_signature{
+    max-width: 500px; 
+    max-height: 120px; 
+    margin-left: 20px; 
+    background-color: white;
+}
+
+.div_canvasControls{
+    width: 400px
+}
+
+.div_canvasControls button{
+    float: right;
+}
+
+.div_canvasControls button{
+    float: right;
+    line-height: 30px;
+    min-width: 85px;
+}
+
+.div_canvasControls button:first-of-type {
+    margin-left: 10px;
+}

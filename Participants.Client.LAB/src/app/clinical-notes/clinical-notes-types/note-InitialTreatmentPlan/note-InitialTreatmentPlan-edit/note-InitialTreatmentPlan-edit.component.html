@@ -57,20 +57,34 @@
       <div class="div_detailRow" layout-gt-sm="row" layout-padding fxLayoutGap="16px" style="margin-top: 15px">
         <div fxFlex="47">
           <label class="spn_detailFieldName">Client Signature</label>
-          <image-upload name="fup_signature" class="fup_signature"
-            url="http://localhost:23049/api/ClinicalNotes/AddSignature"
-            [extensions]="['jpeg','jpg','png']"
-            buttonCaption="Select"
-            dropBoxMessage="Drop Signature Here"
-            clearButtonCaption="Clear Signature"
-            [max]="1"
-            (uploadFinished)="onUploadFinished($event)"
-            (removed)="onRemoved($event)"
-            (uploadStateChanged)="onUploadStateChanged($event)">
-          </image-upload>
+          <mat-chip-list style="display:inline-block;">
+            <mat-chip [selectable]="true" [selected]="signatureType == 'Draw'" (click)="signatureType = 'Draw'">Draw</mat-chip>
+            <mat-chip [selectable]="true" [selected]="signatureType == 'Upload'" (click)="signatureType = 'Upload'">Upload</mat-chip>
+          </mat-chip-list>
+          <div [hidden]="signatureType != 'Upload'">
+            <image-upload name="fup_signature" class="fup_signature"
+              url="http://localhost:23049/api/ClinicalNotes/AddSignature"
+              [extensions]="['jpeg','jpg','png']"
+              buttonCaption="Select"
+              dropBoxMessage="Drop Signature Here"
+              clearButtonCaption="Clear Signature"
+              [max]="1"
+              (uploadFinished)="onUploadFinished($event)"
+              (removed)="onRemoved($event)"
+              (uploadStateChanged)="onUploadStateChanged($event)">
+            </image-upload>
+          </div>
+          <div [hidden]="signatureType != 'Draw'">
+            <canvas #canvas class="cnv_signature"></canvas>
+            <div class="div_canvasControls">
+              <button mat-raised-button class="btn_side" (click)="approveDraw()" [disabled]="signatureApproved">{{signatureApproved ? 'Approved' : 'Approve'}}</button>
+              <button mat-raised-button class="btn_side" (click)="resetDraw()" >Reset</button>
+            </div>
+
+          </div>
         </div>
         <div fxFlex="47">
-          <img src="http://localhost:23049/Uploads/{{signature}}" *ngIf="signature" style="max-width: 500px; max-height: 120px; margin-left: 20px"/>
+          <img src="http://localhost:23049/Uploads/{{signature}}" *ngIf="signature" class="img_signature"/>
         </div>
       </div>
     </div>

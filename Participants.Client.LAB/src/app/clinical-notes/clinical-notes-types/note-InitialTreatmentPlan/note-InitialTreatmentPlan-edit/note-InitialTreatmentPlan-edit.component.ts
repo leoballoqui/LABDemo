@@ -1,10 +1,16 @@
-import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions  } from '@angular/http';
 import { Routes, RouterModule, Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {CommonService} from '../../../../common/common.service';
 import {AjaxService} from '../../../../common/ajax.service';
 import { registerDynamicClinicNoteType } from '../../dynamic-types-registrar';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/pairwise';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-note-InitialTreatmentPlan-edit',
@@ -22,6 +28,11 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
   private note : any;
   private data : any;
   private signature : string;
+  @ViewChild('canvas') public canvas: ElementRef;
+  private cx: CanvasRenderingContext2D;
+  private signatureType: string = "Draw";
+  private signatureApproved: boolean = false;
+  
 
   constructor(
     private router: Router,
@@ -40,6 +51,19 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
       return;
     }
     this.resolveData();
+
+    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+    this.cx = canvasEl.getContext('2d');
+    canvasEl.width = 400;
+    canvasEl.height = 200;
+
+    this.cx.lineWidth = 3;
+    this.cx.lineCap = 'round';
+    this.cx.strokeStyle = '#000';
+
+    this.captureEvents(canvasEl);
+
+    //canvasEl.toDataURL();
   }
 
   resolveData(){
@@ -132,6 +156,70 @@ export class NoteInitialTreatmentPlanEditComponent implements OnInit {
 
   onRemoved(event){
     this.data.Signature = this.signature;
+  }
+
+  private captureEvents(canvasEl: HTMLCanvasElement) {
+    Observable
+      .fromEvent(canvasEl, 'mousedown')
+      .switchMap((e) => {
+        return Observable
+          .fromEvent(canvasEl, 'mousemove')
+          .takeUntil(Observable.fromEvent(canvasEl, 'mouseup'))
+          .pairwise()
+      })
+      .subscribe((res: [MouseEvent, MouseEvent]) => {
+        const rect = canvasEl.getBoundingClientRect();
+  
+        const prevPos = {
+          x: res[0].clientX - rect.left,
+          y: res[0].clientY - rect.top
+        };
+  
+        const currentPos = {
+          x: res[1].clientX - rect.left,
+          y: res[1].clientY - rect.top
+        };
+  
+        this.drawOnCanvas(prevPos, currentPos);
+      });
+  }
+
+  private drawOnCanvas(prevPos: { x: number, y: number }, currentPos: { x: number, y: number }) {
+    if (!this.cx) { return; }
+
+    this.cx.beginPath();
+
+    if (prevPos) {
+      this.cx.moveTo(prevPos.x, prevPos.y); // from
+      this.cx.lineTo(currentPos.x, currentPos.y);
+      this.cx.stroke();
+    }
+  }
+
+  approveDraw(){
+    const canvasSig: HTMLCanvasElement = this.canvas.nativeElement;
+    canvasSig.toDataURL();
+    let blob : Blob = new Blob();
+    let component = this;
+    canvasSig.toBlob( function(blob) {
+      let file : File = new File([blob], "sig.png"); 
+      component.ajaxService.uploadSignature(file).subscribe(data => {
+        component.signatureApproved = true;
+        component.data.Signature = data["_body"].replace(/"/g,"");
+        component.snackBar.open("Success!", "The signature was approved.", {
+          duration: 7000,});
+      }, error => {
+        component.snackBar.open("Error!", "Sorry, an error ocurred while trying to upload the signature.", {
+            duration: 7000,});
+        });;
+    }, 'image/png');
+  }
+
+  resetDraw(){
+    const canvasSig: HTMLCanvasElement = this.canvas.nativeElement;
+    const context = canvasSig.getContext('2d');
+    context.clearRect(0, 0, canvasSig.width, canvasSig.height);
+    this.signatureApproved = false;
   }
 
 }
